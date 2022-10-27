@@ -3,19 +3,21 @@ import { Provider } from 'react-redux'
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
 import type { AppProps } from 'next/app'
 
-import { TopNav } from '~/layouts'
+import { TopNav, Container } from '~/layouts'
 import { store } from '~/redux/store'
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => (
+const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
   <Provider store={store}>
     <ThemeProvider>
       <GlobalStyles />
 
       <TopNav />
 
-      <Component {...pageProps} />
+      <Container>
+        <Component {...pageProps} />
+      </Container>
     </ThemeProvider>
   </Provider>
 )
 
-export default App
+export default Root

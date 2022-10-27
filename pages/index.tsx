@@ -22,7 +22,6 @@ const Home: NextPage = () => (
       <meta name='description' content='SPACE Accounts' />
     </Head>
     <Main>
-      <h1>Welcome to Accounts!</h1>
     </Main>
   </Page>
 )

@@ -31,6 +31,21 @@ const TopNav: React.FC = () => (
         </li>
       ))}
     </Styled.Routes>
+
+    <Styled.Actions>
+      <Styled.Profile>
+        <Image
+          src="/avatar.png"
+          alt="Avatar of Toni Papperoni"
+          width={32}
+          height={32}
+        />
+      </Styled.Profile>
+
+      <p>Toni Papperoni</p>
+
+      <Styled.IconAction />
+    </Styled.Actions>
   </Styled.Wrapper>
 )
 
