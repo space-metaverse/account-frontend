@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import Styled from './styled'
+import Styled from './styles'
 
 const routes = [
   'token',
