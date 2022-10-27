@@ -31,7 +31,8 @@
         "ignoreCase": true 
       },
       "newlinesBetween": "always"
-    }]
+    }],
+    "import/no-anonymous-default-export": "off"
   },
 
   "plugins": [
