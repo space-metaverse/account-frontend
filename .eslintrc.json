@@ -14,7 +14,6 @@
       "nonwords": false
     }],
     "react/prop-types": "off",
-    "import/no-unresolved": "off",
     "import-helpers/order-imports": ["warn", {
       "groups": [
         "/^react/",
@@ -32,7 +31,12 @@
       },
       "newlinesBetween": "always"
     }],
-    "import/no-anonymous-default-export": "off"
+    "import/no-anonymous-default-export": "off",
+    "@typescript-eslint/triple-slash-reference": ["error", { 
+      "lib": "always",
+      "path": "always", 
+      "types": "always"
+    }]
   },
 
   "plugins": [
@@ -48,7 +52,6 @@
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "standard-with-typescript",
-    "plugin:import/recommended",
     "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended"
   ],
