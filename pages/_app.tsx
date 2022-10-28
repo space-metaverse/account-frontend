@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux'
 
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
-import TopNav from 'layouts/TopNav'
+import TopNav from 'layouts/topnav'
 import type { AppProps } from 'next/app'
 import { store } from 'redux/store'
 import styled from 'styled-components'
