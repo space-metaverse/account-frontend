@@ -1,15 +1,31 @@
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
-import { Provider } from "react-redux";
-import { store } from "../redux/store";
-import { ThemeProvider } from '@space-metaverse-ag/space-ui';
+import { Provider } from 'react-redux'
 
-function App({ Component, pageProps }: AppProps) {
-  return <Provider store={store}>
+import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
+import TopNav from 'layouts/topnav'
+import type { AppProps } from 'next/app'
+import { store } from 'redux/store'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 1.5rem; 
+  max-width: 82.5rem;
+`
+
+const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
+  <Provider store={store}>
     <ThemeProvider>
-      <Component {...pageProps} />
+      <GlobalStyles />
+
+      <TopNav />
+
+      <Container>
+        <Component {...pageProps} />
+      </Container>
     </ThemeProvider>
   </Provider>
-}
+)
 
-export default App
+export default Root
