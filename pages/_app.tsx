@@ -1,11 +1,10 @@
 import { Provider } from 'react-redux'
 
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
+import TopNav from 'layouts/TopNav'
 import type { AppProps } from 'next/app'
+import { store } from 'redux/store'
 import styled from 'styled-components'
-
-import TopNav from '~/layouts/TopNav'
-import { store } from '~/redux/store'
 
 const Container = styled.div`
   width: 100%;

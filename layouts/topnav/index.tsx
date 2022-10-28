@@ -3,12 +3,36 @@ import Image from 'next/image'
 import Styled from './styles'
 
 const routes = [
-  'token',
-  'litepaper',
-  'builder',
-  'marketplace',
-  'about',
-  'faq'
+  {
+    route: 'https://app.tryspace.com/token',
+    label: 'token',
+    isExternal: true
+  },
+  {
+    route: 'https://app.tryspace.com/litepaper',
+    label: 'litepaper',
+    isExternal: true
+  },
+  {
+    route: '/builder',
+    label: 'builder',
+    isExternal: false
+  },
+  {
+    route: '/marketplace',
+    label: 'marketplace',
+    isExternal: false
+  },
+  {
+    route: 'https://app.tryspace.com/about',
+    label: 'about',
+    isExternal: true
+  },
+  {
+    route: 'https://app.tryspace.com/faq',
+    label: 'faq',
+    isExternal: true
+  }
 ]
 
 const TopNav: React.FC = () => (
@@ -23,10 +47,13 @@ const TopNav: React.FC = () => (
     </Styled.Logo>
 
     <Styled.Routes>
-      {routes.map((route) => (
+      {routes.map(({ route, label, isExternal }) => (
         <li key={route}>
-          <Styled.Route href={route}>
-            {route}
+          <Styled.Route
+            href={route}
+            target={isExternal ? '_blank' : '_self'}
+          >
+            {label}
           </Styled.Route>
         </li>
       ))}
