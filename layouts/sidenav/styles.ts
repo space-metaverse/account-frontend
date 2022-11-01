@@ -1,12 +1,17 @@
+import { ArrowLeft } from '@space-metaverse-ag/space-ui/icons'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-const Logo = styled(Link)`
+export const BackIconButton = styled(ArrowLeft)`
+  cursor: pointer;
+`
+
+export const Logo = styled(Link)`
   padding: 1.25rem 1.5rem;
   border-right: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
 `
 
-const Route = styled(Link)`
+export const Route = styled(Link)`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark[800]};
   padding: 0 .75rem;
@@ -16,7 +21,7 @@ const Route = styled(Link)`
   text-decoration: none;
 `
 
-const Options = styled.ul`
+export const Options = styled.ul`
   display: flex;
   flex-direction: column;
   list-style-type: none;
@@ -24,15 +29,15 @@ const Options = styled.ul`
   font-size: 12px;
   padding: 0;
 `
-const Option = styled.li`
-  height: 56px;
+export const Option = styled.li`
+  padding: 16px 0;
   font-weight: bold;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `
 
-const OptionContent = styled.div`
+export const OptionContent = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
@@ -40,7 +45,7 @@ const OptionContent = styled.div`
   padding-right: 20px;
 `
 
-const Wrapper = styled.nav`
+export const Wrapper = styled.nav`
   display: flex;
   flex-direction: column;
   width: 312px;
@@ -49,17 +54,17 @@ const Wrapper = styled.nav`
   margin: 16px;
   color: #111114;
 `
-const Content = styled.div`
+export const Content = styled.div`
   padding: 0 0 0 20px;
 `
 
-const Divider = styled.div`
+export const Divider = styled.div`
   width: 100%;
   height: 1px;
   background-color: #F0F0F5;
 `
 
-const Title = styled.h1`
+export const Title = styled.h1`
   font-weight: 700;
   font-size: 20px;
   height: 63px;
@@ -68,16 +73,3 @@ const Title = styled.h1`
   align-items: center;
   gap: 12px;
 `
-
-export default {
-  Logo,
-  Title,
-  Route,
-  Options,
-  Option,
-  OptionContent,
-  Wrapper,
-  Divider,
-  Content
-}
-

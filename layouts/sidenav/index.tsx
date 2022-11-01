@@ -1,4 +1,4 @@
-import Styled from './styled'
+import * as Styled from './styles'
 import { 
   User,
   Friends,
@@ -6,17 +6,53 @@ import {
   NFT,
   Collection,
   DropDown,
-  ArrowLeft
+  Profile,
+  Avatar,
+  Security,
+  FriendsList,
+  FriendsAdd,
+  FriendsRequests
 } from "@space-metaverse-ag/space-ui/icons";
 
-const options = [
+type OptionType = { label: string, icon: any, children?: Array<{ label: string, icon: any }> }
+type OptionsType = Array<OptionType>;
+
+const options: OptionsType = [
   {
     label: "Profile",
-    icon: User
+    icon: User,
+    children: [
+      {
+        label: "Profile Information",
+        icon: Profile
+      },
+      {
+        label: "Avatars",
+        icon: Avatar
+      },
+      {
+        label: "Security Settings",
+        icon: Security
+      },
+    ]
   },
   {
     label: "Friends",
-    icon: Friends
+    icon: Friends,
+    children: [
+      {
+        label: "Your Friends",
+        icon: FriendsList
+      },
+      {
+        label: "Add Friend",
+        icon: FriendsAdd
+      },
+      {
+        label: "Manage Requests",
+        icon: FriendsRequests
+      },
+    ]
   },
   {
     label: "Connected Wallets",
@@ -37,6 +73,36 @@ function OptionIcon ({ Icon }: any) {
   return <Icon></Icon>
 }
 
+const BuildList = ({ list }: {list: OptionsType}) => {
+  return (
+    <Styled.Options>
+      {list.map((item, index) => {
+        return <Styled.Option key={item.label}>
+          <Styled.OptionContent >
+            <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+              <OptionIcon Icon={item.icon} />
+              {item.label}
+            </div>
+            <DropDown />
+          </Styled.OptionContent>
+          {item.children && 
+            <Styled.Options style={{marginLeft: "34px", paddingTop: "10px"}}>
+              {item.children.map(child => {
+                return <Styled.Option style={{padding: "10px 0"}}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                    <OptionIcon Icon={child.icon} />
+                    {child.label}
+                  </div>
+                </Styled.Option>
+              })}
+            </Styled.Options>
+          }
+          {/* { index !== list.length -1 && <Styled.Divider /> } */}
+        </Styled.Option>
+      })}
+    </Styled.Options>
+  );
+}
 
 const Sidenav: React.FC = () => {
 
@@ -44,9 +110,7 @@ const Sidenav: React.FC = () => {
       <Styled.Wrapper>
         <Styled.Content>
           <Styled.Title>
-            <button style={{backgroundColor: 'transparent', cursor: "pointer", borderWidth: 0, padding: 0}}>
-              <ArrowLeft /> 
-            </button>
+            <Styled.BackIconButton />
             Account Settings 
           </Styled.Title>
         </Styled.Content>
@@ -54,19 +118,7 @@ const Sidenav: React.FC = () => {
         <Styled.Divider />
         <Styled.Content>
           <Styled.Options>
-            {options.map((item, index) => {
-              return <Styled.Option key={item.label}>
-                <Styled.OptionContent >
-                  <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-                    <OptionIcon Icon={item.icon} />
-                    {item.label}
-                  </div>
-                  <DropDown />
-                </Styled.OptionContent>
-                { index !== options.length -1 && <Styled.Divider /> }
-              </Styled.Option>
-                
-            })}
+            <BuildList list={options}/>
           </Styled.Options>
         </Styled.Content>
       </Styled.Wrapper>
