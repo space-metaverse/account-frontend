@@ -12,11 +12,13 @@ import {
   FriendsList,
   FriendsAdd,
   FriendsRequests,
+  DropUp,
 } from "@space-metaverse-ag/space-ui/icons";
 
 type OptionType = {
   label: string;
   icon: any;
+  showChildren: boolean;
   children?: Array<{ label: string; icon: any }>;
 };
 type OptionsType = Array<OptionType>;
@@ -25,6 +27,7 @@ const options: OptionsType = [
   {
     label: "Profile",
     icon: User,
+    showChildren: true,
     children: [
       {
         label: "Profile Information",
@@ -43,6 +46,7 @@ const options: OptionsType = [
   {
     label: "Friends",
     icon: Friends,
+    showChildren: false,
     children: [
       {
         label: "Your Friends",
@@ -61,14 +65,17 @@ const options: OptionsType = [
   {
     label: "Connected Wallets",
     icon: Wallet,
+    showChildren: false,
   },
   {
     label: "NFT Inventory",
     icon: NFT,
+    showChildren: false,
   },
   {
     label: "Space Inventory",
     icon: Collection,
+    showChildren: false,
   },
 ];
 
@@ -91,9 +98,9 @@ const BuildList = ({ list }: { list: OptionsType }) => {
                   <OptionIcon Icon={item.icon} />
                   {item.label}
                 </div>
-                <DropDown />
+                { item.showChildren ? <DropUp /> : <DropDown /> }
               </Styled.OptionContent>
-              {item.children && (
+              {(item.children && item.showChildren) && (
                 <Styled.Options
                   style={{ marginLeft: "34px", paddingTop: "10px" }}
                 >
