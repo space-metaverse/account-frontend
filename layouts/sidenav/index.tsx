@@ -125,6 +125,7 @@ const Option = ({
                 child
                 onClick={() => select(item.label)}
                 selected={selected === item.label}
+                key={item.label}
               >
                 <div>
                   <item.Icon />
@@ -172,16 +173,18 @@ const Sidenav: React.FC = () => {
         <Styled.Options>
           {SideOptions.map((option, index) => {
             return (
-              <Option
-                label={option.label}
-                Icon={option.Icon}
-                showChildren={option.showChildren}
-                children={option.children}
-                noDivider={index == SideOptions.length - 1}
-                selected={OptionSelected}
-                select={selectItem}
-                toggleState={() => toggleState(index)}
-              />
+              <div key={option.label}>
+                <Option
+                  label={option.label}
+                  Icon={option.Icon}
+                  showChildren={option.showChildren}
+                  children={option.children}
+                  noDivider={index == SideOptions.length - 1}
+                  selected={OptionSelected}
+                  select={selectItem}
+                  toggleState={() => toggleState(index)}
+                />
+              </div>
             );
           })}
         </Styled.Options>
