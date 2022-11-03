@@ -13,138 +13,177 @@ import {
   FriendsAdd,
   FriendsRequests,
   DropUp,
+  ArrowLeft,
+  SVGProps,
 } from "@space-metaverse-ag/space-ui/icons";
+import { useState } from "react";
 
 type OptionType = {
   label: string;
-  icon: any;
+  Icon: (props?: SVGProps) => JSX.Element;
   showChildren: boolean;
-  children?: Array<{ label: string; icon: any }>;
+  children?: Array<{ label: string; Icon: any }>;
 };
 type OptionsType = Array<OptionType>;
 
 const options: OptionsType = [
   {
     label: "Profile",
-    icon: User,
-    showChildren: true,
+    Icon: User,
+    showChildren: false,
     children: [
       {
         label: "Profile Information",
-        icon: Profile,
+        Icon: Profile,
       },
       {
         label: "Avatars",
-        icon: Avatar,
+        Icon: Avatar,
       },
       {
         label: "Security Settings",
-        icon: Security,
+        Icon: Security,
       },
     ],
   },
   {
     label: "Friends",
-    icon: Friends,
+    Icon: Friends,
     showChildren: false,
     children: [
       {
         label: "Your Friends",
-        icon: FriendsList,
+        Icon: FriendsList,
       },
       {
         label: "Add Friend",
-        icon: FriendsAdd,
+        Icon: FriendsAdd,
       },
       {
         label: "Manage Requests",
-        icon: FriendsRequests,
+        Icon: FriendsRequests,
       },
     ],
   },
   {
     label: "Connected Wallets",
-    icon: Wallet,
+    Icon: Wallet,
     showChildren: false,
   },
   {
     label: "NFT Inventory",
-    icon: NFT,
+    Icon: NFT,
     showChildren: false,
   },
   {
     label: "Space Inventory",
-    icon: Collection,
+    Icon: Collection,
     showChildren: false,
   },
 ];
 
-function OptionIcon({ Icon }: any) {
-  if (!Icon) return <></>;
-  return <Icon></Icon>;
-}
+type OptionComponentType = OptionType & {
+  noDivider?: boolean;
+  toggleState: () => void;
+  selected: string;
+  select: (name: string) => void;
+};
 
-const BuildList = ({ list }: { list: OptionsType }) => {
+const Option = ({
+  label,
+  Icon,
+  showChildren,
+  children,
+  noDivider,
+  toggleState,
+  selected,
+  select,
+}: OptionComponentType) => {
   return (
-    <Styled.Options>
-      {list.map((item, index) => {
-        return (
-          <>
-            <Styled.Option key={item.label}>
-              <Styled.OptionContent>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
-                >
-                  <OptionIcon Icon={item.icon} />
-                  {item.label}
+    <Styled.OptionWrapper>
+      <Styled.Option
+        onClick={() => {
+          !children && select(label);
+          children &&
+            !children.map((c) => c.label).includes(selected) &&
+            toggleState();
+        }}
+        selected={label === selected && !children}
+      >
+        <div>
+          <Icon />
+          <p>{label}</p>
+        </div>
+        {showChildren && children ? <DropUp /> : <DropDown />}
+      </Styled.Option>
+
+      {children && showChildren && (
+        <Styled.Options child>
+          {children.map((item, index) => {
+            return (
+              <Styled.Option
+                child
+                onClick={() => select(item.label)}
+                selected={selected === item.label}
+              >
+                <div>
+                  <item.Icon />
+                  <p>{item.label}</p>
                 </div>
-                { item.showChildren ? <DropUp /> : <DropDown /> }
-              </Styled.OptionContent>
-              {(item.children && item.showChildren) && (
-                <Styled.Options
-                  style={{ marginLeft: "34px", paddingTop: "10px" }}
-                >
-                  {item.children.map((child) => {
-                    return (
-                      <Styled.Option style={{ padding: "10px 0" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "12px",
-                          }}
-                        >
-                          <OptionIcon Icon={child.icon} />
-                          {child.label}
-                        </div>
-                      </Styled.Option>
-                    );
-                  })}
-                </Styled.Options>
-              )}
-            </Styled.Option>
-            {index !== list.length - 1 && <Styled.Divider />}
-          </>
-        );
-      })}
-    </Styled.Options>
+              </Styled.Option>
+            );
+          })}
+        </Styled.Options>
+      )}
+
+      {!noDivider && <Styled.Divider absolute />}
+    </Styled.OptionWrapper>
   );
 };
 
 const Sidenav: React.FC = () => {
+  const [SideOptions, setSideOptions] = useState(options);
+  const [OptionSelected, setOptionSelected] = useState("");
+
+  function toggleState(index: number) {
+    const copy = [...SideOptions];
+    copy[index].showChildren = !copy[index].showChildren;
+    setSideOptions(copy);
+  }
+
+  function selectItem(name: string) {
+    setOptionSelected(name);
+  }
+
   return (
     <Styled.Wrapper>
       <Styled.Content>
         <Styled.Title>
-          <Styled.BackIconButton />
+          <Styled.BackIconButton>
+            <ArrowLeft />
+          </Styled.BackIconButton>
           Account Settings
         </Styled.Title>
       </Styled.Content>
 
       <Styled.Divider />
+
       <Styled.Content>
         <Styled.Options>
-          <BuildList list={options} />
+          {SideOptions.map((option, index) => {
+            return (
+              <Option
+                label={option.label}
+                Icon={option.Icon}
+                showChildren={option.showChildren}
+                children={option.children}
+                noDivider={index == SideOptions.length - 1}
+                selected={OptionSelected}
+                select={selectItem}
+                toggleState={() => toggleState(index)}
+              />
+            );
+          })}
         </Styled.Options>
       </Styled.Content>
     </Styled.Wrapper>
