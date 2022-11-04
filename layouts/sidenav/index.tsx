@@ -1,31 +1,24 @@
 import { useState } from 'react'
 
 import {
-  User,
-  Friends,
-  Wallet,
   NFT,
-  Collection,
-  Profile,
+  User,
+  Wallet,
   Avatar,
+  Friends,
+  Profile,
   Security,
-  FriendsList,
-  FriendsAdd,
-  FriendsRequests,
   ArrowLeft,
-  SVGProps
+  Collection,
+  FriendsAdd,
+  FriendsList,
+  FriendsRequests
 } from '@space-metaverse-ag/space-ui/icons'
 
 import * as Styled from './styles'
+import type { OptionProps, OptionComponentProps } from './types'
 
-interface OptionType {
-  label: string
-  Icon: (props?: SVGProps) => JSX.Element
-  children?: Array<{ label: string, Icon: any }>
-}
-type OptionsType = OptionType[]
-
-const options: OptionsType = [
+const options: OptionProps[] = [
   {
     Icon: User,
     label: 'Profile',
@@ -76,14 +69,7 @@ const options: OptionsType = [
   }
 ]
 
-type OptionComponentType = OptionType & {
-  show: boolean
-  select: (name: string) => void
-  selected: string
-  toggleState: () => void
-}
-
-const Option = ({
+const Option: React.FC<OptionComponentProps> = ({
   show,
   Icon,
   label,
@@ -91,21 +77,21 @@ const Option = ({
   selected,
   children,
   toggleState
-}: OptionComponentType) => (
+}) => (
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
-        (children == null) && select(label);
-        (children != null) && toggleState()
+        (!children) && select(label);
+        (children) && toggleState()
       }}
-      selected={label === selected && (children == null)}
+      selected={label === selected && !children}
     >
       <Icon width={24} height={24} />
       <p>{label}</p>
-      {children != null && <Styled.IconDropDown />}
+      {children && <Styled.IconDropDown />}
     </Styled.Option>
 
-    {show && children != null && (
+    {show && children && (
       <Styled.Options>
         {children.map((item) => (
           <Styled.Option
@@ -155,7 +141,7 @@ const Sidenav: React.FC = () => {
             label={option.label}
             select={selectItem}
             selected={optionSelected}
-            toggleState={() => toggleState(index, option.children)}
+            toggleState={() => toggleState(index, !!option?.children)}
           >
             {option.children}
           </Option>
