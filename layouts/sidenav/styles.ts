@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -9,26 +9,26 @@ export const Wrapper = styled.div`
   margin: 16px;
   color: #111114;
   font-size: 12px;
-`;
+`
 
 export const Content = styled.div`
   padding: 0 0 0 20px;
-`;
+`
 
 export const BackIconButton = styled.button`
   cursor: pointer;
   background-color: transparent;
   border-width: 0;
   padding: 0;
-`;
+`
 
 export const Divider = styled.div<{ absolute?: boolean }>`
   width: 100%;
   height: 1px;
   background-color: #f0f0f5;
   bottom: 0;
-  ${({ absolute }) => absolute && "position: absolute"};
-`;
+  ${({ absolute }) => absolute && 'position: absolute'};
+`
 
 export const Title = styled.h1`
   font-weight: 700;
@@ -38,7 +38,7 @@ export const Title = styled.h1`
   display: flex;
   align-items: center;
   gap: 12px;
-`;
+`
 
 export const Options = styled.ul<{ child?: boolean }>`
   display: flex;
@@ -47,19 +47,19 @@ export const Options = styled.ul<{ child?: boolean }>`
   text-transform: uppercase;
   padding: 0;
   margin: 0;
-`;
+`
 
 export const OptionWrapper = styled.li`
   padding: 10px 0 10px 0;
   position: relative;
-`;
+`
 
-export const Option = styled.div<{ child?: boolean; selected?: boolean }>`
+export const Option = styled.div<{ child?: boolean, selected?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ child }) => (child ? "0" : "0px 20px 0px 0")};
-  margin-left: ${({ child }) => child && "33px"};
+  padding: ${({ child }) => (child ? '0' : '0px 20px 0px 0')};
+  margin-left: ${({ child }) => child && '33px'};
   font-weight: bold;
   cursor: pointer;
   user-select: none;
@@ -80,6 +80,6 @@ export const Option = styled.div<{ child?: boolean; selected?: boolean }>`
   }
 
   svg * {
-    ${({ selected }) => selected && "stroke: #00D9F5;"}
+    ${({ selected }) => selected && 'stroke: #00D9F5;'}
   }
-`;
+`

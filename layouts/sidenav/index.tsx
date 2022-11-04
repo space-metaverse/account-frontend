@@ -1,4 +1,5 @@
-import * as Styled from "./styles";
+import { useState } from 'react'
+
 import {
   User,
   Friends,
@@ -14,80 +15,81 @@ import {
   FriendsRequests,
   DropUp,
   ArrowLeft,
-  SVGProps,
-} from "@space-metaverse-ag/space-ui/icons";
-import { useState } from "react";
+  SVGProps
+} from '@space-metaverse-ag/space-ui/icons'
 
-type OptionType = {
-  label: string;
-  Icon: (props?: SVGProps) => JSX.Element;
-  showChildren: boolean;
-  children?: Array<{ label: string; Icon: any }>;
-};
-type OptionsType = Array<OptionType>;
+import * as Styled from './styles'
+
+interface OptionType {
+  label: string
+  Icon: (props?: SVGProps) => JSX.Element
+  showChildren: boolean
+  children?: Array<{ label: string, Icon: any }>
+}
+type OptionsType = OptionType[]
 
 const options: OptionsType = [
   {
-    label: "Profile",
+    label: 'Profile',
     Icon: User,
     showChildren: false,
     children: [
       {
-        label: "Profile Information",
-        Icon: Profile,
+        label: 'Profile Information',
+        Icon: Profile
       },
       {
-        label: "Avatars",
-        Icon: Avatar,
+        label: 'Avatars',
+        Icon: Avatar
       },
       {
-        label: "Security Settings",
-        Icon: Security,
-      },
-    ],
+        label: 'Security Settings',
+        Icon: Security
+      }
+    ]
   },
   {
-    label: "Friends",
+    label: 'Friends',
     Icon: Friends,
     showChildren: false,
     children: [
       {
-        label: "Your Friends",
-        Icon: FriendsList,
+        label: 'Your Friends',
+        Icon: FriendsList
       },
       {
-        label: "Add Friend",
-        Icon: FriendsAdd,
+        label: 'Add Friend',
+        Icon: FriendsAdd
       },
       {
-        label: "Manage Requests",
-        Icon: FriendsRequests,
-      },
-    ],
+        label: 'Manage Requests',
+        Icon: FriendsRequests
+      }
+    ]
   },
   {
-    label: "Connected Wallets",
+    label: 'Connected Wallets',
     Icon: Wallet,
-    showChildren: false,
+    showChildren: false
   },
   {
-    label: "NFT Inventory",
+    label: 'NFT Inventory',
     Icon: NFT,
-    showChildren: false,
+    showChildren: false
   },
   {
-    label: "Space Inventory",
+    label: 'Space Inventory',
     Icon: Collection,
-    showChildren: false,
-  },
-];
+    showChildren: false
+  }
+]
 
 type OptionComponentType = OptionType & {
-  noDivider?: boolean;
-  toggleState: () => void;
-  selected: string;
-  select: (name: string) => void;
-};
+  noDivider?: boolean
+  toggleState: () => void
+  selected: string
+  select: (name: string) => void
+}
 
 const Option = ({
   label,
@@ -97,27 +99,27 @@ const Option = ({
   noDivider,
   toggleState,
   selected,
-  select,
+  select
 }: OptionComponentType) => {
   return (
     <Styled.OptionWrapper>
       <Styled.Option
         onClick={() => {
-          !children && select(label);
-          children &&
+          (children == null) && select(label)
+          ;(children != null) &&
             !children.map((c) => c.label).includes(selected) &&
-            toggleState();
+            toggleState()
         }}
-        selected={label === selected && !children}
+        selected={label === selected && (children == null)}
       >
         <div>
           <Icon />
           <p>{label}</p>
         </div>
-        {showChildren && children ? <DropUp /> : <DropDown />}
+        {showChildren && (children != null) ? <DropUp /> : <DropDown />}
       </Styled.Option>
 
-      {children && showChildren && (
+      {(children != null) && showChildren && (
         <Styled.Options child>
           {children.map((item, index) => {
             return (
@@ -132,28 +134,28 @@ const Option = ({
                   <p>{item.label}</p>
                 </div>
               </Styled.Option>
-            );
+            )
           })}
         </Styled.Options>
       )}
 
       {!noDivider && <Styled.Divider absolute />}
     </Styled.OptionWrapper>
-  );
-};
+  )
+}
 
 const Sidenav: React.FC = () => {
-  const [SideOptions, setSideOptions] = useState(options);
-  const [OptionSelected, setOptionSelected] = useState("");
+  const [SideOptions, setSideOptions] = useState(options)
+  const [OptionSelected, setOptionSelected] = useState('')
 
-  function toggleState(index: number) {
-    const copy = [...SideOptions];
-    copy[index].showChildren = !copy[index].showChildren;
-    setSideOptions(copy);
+  function toggleState (index: number) {
+    const copy = [...SideOptions]
+    copy[index].showChildren = !copy[index].showChildren
+    setSideOptions(copy)
   }
 
-  function selectItem(name: string) {
-    setOptionSelected(name);
+  function selectItem (name: string) {
+    setOptionSelected(name)
   }
 
   return (
@@ -185,12 +187,12 @@ const Sidenav: React.FC = () => {
                   toggleState={() => toggleState(index)}
                 />
               </div>
-            );
+            )
           })}
         </Styled.Options>
       </Styled.Content>
     </Styled.Wrapper>
-  );
-};
+  )
+}
 
-export default Sidenav;
+export default Sidenav

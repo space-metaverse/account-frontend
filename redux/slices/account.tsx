@@ -5,7 +5,7 @@ interface AccountState {
 }
 
 const initialState: AccountState = {
-  username: "Not Logged In"
+  username: 'Not Logged In'
 }
 
 export const accountSlice = createSlice({

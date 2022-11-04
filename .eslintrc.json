@@ -36,7 +36,10 @@
       "lib": "always",
       "path": "always", 
       "types": "always"
-    }]
+    }],
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/space-before-function-paren": "off"
   },
 
   "plugins": [

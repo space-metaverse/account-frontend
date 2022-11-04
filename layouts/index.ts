@@ -1,7 +1,7 @@
 export {
   default as TopNav
-} from "./topnav";
+} from './topnav'
 
 export {
   default as SideNav
-} from "./sidenav";
+} from './sidenav'

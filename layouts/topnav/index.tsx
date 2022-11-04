@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useAppSelector } from 'redux/hooks';
+import { useAppSelector } from 'redux/hooks'
 
 import Styled from './styles'
 
@@ -37,7 +37,7 @@ const routes = [
 ]
 
 const TopNav: React.FC = () => {
-  const { username } = useAppSelector(state => state.account);
+  const { username } = useAppSelector(state => state.account)
 
   return (
     <Styled.Wrapper>
