@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import type { OptionStylesProps, OptionsStylesProps } from './types'
 
 export const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   max-width: 19.5rem;
   flex-direction: column;
