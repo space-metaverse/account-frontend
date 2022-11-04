@@ -5,6 +5,7 @@ import { TopNav, SideNav } from '../layouts'
 import type { AppProps } from 'next/app'
 import { store } from 'redux/store'
 import styled from 'styled-components'
+import Auth from '../components/Auth'
 
 const Container = styled.div`
   width: 100%;
@@ -18,10 +19,9 @@ const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
   <Provider store={store}>
     <ThemeProvider>
       <GlobalStyles />
-
       <TopNav />
       <SideNav />
-
+      <Auth />
       <Container>
         <Component {...pageProps} />
       </Container>
