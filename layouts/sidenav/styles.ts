@@ -1,6 +1,8 @@
 import { DropDown } from '@space-metaverse-ag/space-ui/icons'
 import styled, { css } from 'styled-components'
 
+import type { OptionStylesProps, OptionsStylesProps } from './types'
+
 export const Wrapper = styled.div`
   display: flex;
   max-width: 19.5rem;
@@ -39,12 +41,20 @@ export const Title = styled.h2`
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
 `
 
-export const Options = styled.ul`
+export const Options = styled.ul<OptionsStylesProps>`
   margin: 0;
   padding: .5rem 1.25rem;
   display: flex;
+  transition: ${({ theme }) => theme.transitions.ease};
   flex-direction: column;
   text-transform: uppercase;
+
+  ${({ show, animate }) => animate && css`
+    opacity: ${show ? 1 : 0};
+    position: ${show ? 'relative' : 'absolute'};
+    transform: ${show ? 'translateY(0)' : 'translateY(-.5rem)'};
+    pointer-events: ${show ? 'auto' : 'none'};
+  `}
 `
 
 export const OptionWrapper = styled.li`
@@ -56,7 +66,18 @@ export const OptionWrapper = styled.li`
   }
 `
 
-export const Option = styled.div<{ child?: boolean, selected?: boolean }>`
+export const IconDropDown = styled(DropDown)`
+  position: relative;
+  transition: ${({ theme }) => theme.transitions.ease};
+  margin-left: auto;
+
+  path {
+    stroke: ${({ theme }) => theme.colors.dark['500']} !important;
+    stroke-width: 1.5px !important;
+  }
+`
+
+export const Option = styled.div<OptionStylesProps>`
   gap: .75rem;
   cursor: pointer;
   display: flex;
@@ -89,13 +110,10 @@ export const Option = styled.div<{ child?: boolean, selected?: boolean }>`
       stroke: ${({ theme }) => theme.colors.blue['400']};
     }
   `}
-`
 
-export const IconDropDown = styled(DropDown)`
-  margin-left: auto;
-
-  path {
-    stroke: ${({ theme }) => theme.colors.dark['500']};
-    stroke-width: 1.5px;
-  }
+  ${({ animate = false }) => css`
+    ${IconDropDown} {
+      transform: ${animate ? 'rotate(180deg)' : 'rotate(0)'};
+    }
+  `}
 `

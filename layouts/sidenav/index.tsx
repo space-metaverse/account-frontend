@@ -81,9 +81,10 @@ const Option: React.FC<OptionComponentProps> = ({
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
-        (!children) && select(label);
-        (children) && toggleState()
+        (!children) && select(label)
+        toggleState()
       }}
+      animate={show}
       selected={label === selected && !children}
     >
       <Icon width={24} height={24} />
@@ -91,8 +92,8 @@ const Option: React.FC<OptionComponentProps> = ({
       {children && <Styled.IconDropDown />}
     </Styled.Option>
 
-    {show && children && (
-      <Styled.Options>
+    {children && (
+      <Styled.Options show={show} animate>
         {children.map((item) => (
           <Styled.Option
             key={item.label}
@@ -113,8 +114,8 @@ const Sidenav: React.FC = () => {
   const [show, setShow] = useState(-1)
   const [optionSelected, setOptionSelected] = useState('')
 
-  const toggleState = (index: number, hasChildren: boolean): void => {
-    if (hasChildren) setShow((prev) => prev !== index ? index : -1)
+  const toggleState = (index: number): void => {
+    setShow((prev) => prev !== index ? index : -1)
   }
 
   const selectItem = (name: string): void => {
@@ -132,7 +133,7 @@ const Sidenav: React.FC = () => {
         </Styled.Title>
       </Styled.Content>
 
-      <Styled.Options>
+      <Styled.Options animate={false}>
         {options.map((option, index) => (
           <Option
             key={option.label}
@@ -141,7 +142,7 @@ const Sidenav: React.FC = () => {
             label={option.label}
             select={selectItem}
             selected={optionSelected}
-            toggleState={() => toggleState(index, !!option?.children)}
+            toggleState={() => toggleState(index)}
           >
             {option.children}
           </Option>

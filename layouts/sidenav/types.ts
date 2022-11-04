@@ -6,8 +6,8 @@ interface ChildrenProps {
 }
 
 export interface OptionProps {
-  label: string
   Icon: (props?: SVGProps) => JSX.Element
+  label: string
   children?: ChildrenProps[]
 }
 
@@ -15,5 +15,16 @@ export type OptionComponentProps = OptionProps & {
   show: boolean
   select: (name: string) => void
   selected: string
-  toggleState: () => void
+  toggleState: VoidFunction
+}
+
+export interface OptionStylesProps {
+  child?: boolean
+  animate?: boolean
+  selected?: boolean
+}
+
+export interface OptionsStylesProps {
+  show?: boolean
+  animate: boolean
 }
