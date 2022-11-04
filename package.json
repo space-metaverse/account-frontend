@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.6",
-    "@space-metaverse-ag/space-ui": "^0.2.13",
-    "next": "^13.0.0",
+    "@space-metaverse-ag/space-ui": "^0.2.16",
+    "next": "^13.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.4",

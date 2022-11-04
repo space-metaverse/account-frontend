@@ -1,196 +1,168 @@
-import * as Styled from "./styles";
+import { useState } from 'react'
+
 import {
   User,
   Friends,
   Wallet,
   NFT,
   Collection,
-  DropDown,
   Profile,
   Avatar,
   Security,
   FriendsList,
   FriendsAdd,
   FriendsRequests,
-  DropUp,
   ArrowLeft,
-  SVGProps,
-} from "@space-metaverse-ag/space-ui/icons";
-import { useState } from "react";
+  SVGProps
+} from '@space-metaverse-ag/space-ui/icons'
 
-type OptionType = {
-  label: string;
-  Icon: (props?: SVGProps) => JSX.Element;
-  showChildren: boolean;
-  children?: Array<{ label: string; Icon: any }>;
-};
-type OptionsType = Array<OptionType>;
+import * as Styled from './styles'
+
+interface OptionType {
+  label: string
+  Icon: (props?: SVGProps) => JSX.Element
+  children?: Array<{ label: string, Icon: any }>
+}
+type OptionsType = OptionType[]
 
 const options: OptionsType = [
   {
-    label: "Profile",
     Icon: User,
-    showChildren: false,
+    label: 'Profile',
     children: [
       {
-        label: "Profile Information",
-        Icon: Profile,
+        label: 'Profile Information',
+        Icon: Profile
       },
       {
-        label: "Avatars",
-        Icon: Avatar,
+        label: 'Avatars',
+        Icon: Avatar
       },
       {
-        label: "Security Settings",
-        Icon: Security,
-      },
-    ],
+        label: 'Security Settings',
+        Icon: Security
+      }
+    ]
   },
   {
-    label: "Friends",
     Icon: Friends,
-    showChildren: false,
+    label: 'Friends',
     children: [
       {
-        label: "Your Friends",
-        Icon: FriendsList,
+        label: 'Your Friends',
+        Icon: FriendsList
       },
       {
-        label: "Add Friend",
-        Icon: FriendsAdd,
+        label: 'Add Friend',
+        Icon: FriendsAdd
       },
       {
-        label: "Manage Requests",
-        Icon: FriendsRequests,
-      },
-    ],
+        label: 'Manage Requests',
+        Icon: FriendsRequests
+      }
+    ]
   },
   {
-    label: "Connected Wallets",
     Icon: Wallet,
-    showChildren: false,
+    label: 'Connected Wallets'
   },
   {
-    label: "NFT Inventory",
-    Icon: NFT,
-    showChildren: false,
+    label: 'NFT Inventory',
+    Icon: NFT
   },
   {
-    label: "Space Inventory",
-    Icon: Collection,
-    showChildren: false,
-  },
-];
+    label: 'Space Inventory',
+    Icon: Collection
+  }
+]
 
 type OptionComponentType = OptionType & {
-  noDivider?: boolean;
-  toggleState: () => void;
-  selected: string;
-  select: (name: string) => void;
-};
+  show: boolean
+  select: (name: string) => void
+  selected: string
+  toggleState: () => void
+}
 
 const Option = ({
-  label,
+  show,
   Icon,
-  showChildren,
-  children,
-  noDivider,
-  toggleState,
-  selected,
+  label,
   select,
-}: OptionComponentType) => {
-  return (
-    <Styled.OptionWrapper>
-      <Styled.Option
-        onClick={() => {
-          !children && select(label);
-          children &&
-            !children.map((c) => c.label).includes(selected) &&
-            toggleState();
-        }}
-        selected={label === selected && !children}
-      >
-        <div>
-          <Icon />
-          <p>{label}</p>
-        </div>
-        {showChildren && children ? <DropUp /> : <DropDown />}
-      </Styled.Option>
+  selected,
+  children,
+  toggleState
+}: OptionComponentType) => (
+  <Styled.OptionWrapper>
+    <Styled.Option
+      onClick={() => {
+        (children == null) && select(label);
+        (children != null) && toggleState()
+      }}
+      selected={label === selected && (children == null)}
+    >
+      <Icon width={24} height={24} />
+      <p>{label}</p>
+      {children != null && <Styled.IconDropDown />}
+    </Styled.Option>
 
-      {children && showChildren && (
-        <Styled.Options child>
-          {children.map((item, index) => {
-            return (
-              <Styled.Option
-                child
-                onClick={() => select(item.label)}
-                selected={selected === item.label}
-                key={item.label}
-              >
-                <div>
-                  <item.Icon />
-                  <p>{item.label}</p>
-                </div>
-              </Styled.Option>
-            );
-          })}
-        </Styled.Options>
-      )}
-
-      {!noDivider && <Styled.Divider absolute />}
-    </Styled.OptionWrapper>
-  );
-};
+    {show && children != null && (
+      <Styled.Options>
+        {children.map((item) => (
+          <Styled.Option
+            key={item.label}
+            child
+            onClick={() => select(item.label)}
+            selected={selected === item.label}
+          >
+            <item.Icon width={24} height={24} />
+            <p>{item.label}</p>
+          </Styled.Option>
+        ))}
+      </Styled.Options>
+    )}
+  </Styled.OptionWrapper>
+)
 
 const Sidenav: React.FC = () => {
-  const [SideOptions, setSideOptions] = useState(options);
-  const [OptionSelected, setOptionSelected] = useState("");
+  const [show, setShow] = useState(-1)
+  const [optionSelected, setOptionSelected] = useState('')
 
-  function toggleState(index: number) {
-    const copy = [...SideOptions];
-    copy[index].showChildren = !copy[index].showChildren;
-    setSideOptions(copy);
+  const toggleState = (index: number, hasChildren: boolean): void => {
+    if (hasChildren) setShow((prev) => prev !== index ? index : -1)
   }
 
-  function selectItem(name: string) {
-    setOptionSelected(name);
+  const selectItem = (name: string): void => {
+    setOptionSelected(name)
   }
 
   return (
     <Styled.Wrapper>
       <Styled.Content>
+        <Styled.BackIconButton>
+          <ArrowLeft />
+        </Styled.BackIconButton>
         <Styled.Title>
-          <Styled.BackIconButton>
-            <ArrowLeft />
-          </Styled.BackIconButton>
           Account Settings
         </Styled.Title>
       </Styled.Content>
 
-      <Styled.Divider />
-
-      <Styled.Content>
-        <Styled.Options>
-          {SideOptions.map((option, index) => {
-            return (
-              <div key={option.label}>
-                <Option
-                  label={option.label}
-                  Icon={option.Icon}
-                  showChildren={option.showChildren}
-                  children={option.children}
-                  noDivider={index == SideOptions.length - 1}
-                  selected={OptionSelected}
-                  select={selectItem}
-                  toggleState={() => toggleState(index)}
-                />
-              </div>
-            );
-          })}
-        </Styled.Options>
-      </Styled.Content>
+      <Styled.Options>
+        {options.map((option, index) => (
+          <Option
+            key={option.label}
+            show={show === index}
+            Icon={option.Icon}
+            label={option.label}
+            select={selectItem}
+            selected={optionSelected}
+            toggleState={() => toggleState(index, option.children)}
+          >
+            {option.children}
+          </Option>
+        ))}
+      </Styled.Options>
     </Styled.Wrapper>
-  );
-};
+  )
+}
 
-export default Sidenav;
+export default Sidenav
