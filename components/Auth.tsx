@@ -75,10 +75,10 @@ const Auth: React.FC = () => {
   }, [isGetVerifyCodeSuccess, getVerifyCodeData])
 
   useEffect(() => {
-    if (isGetVerifyTokenSuccess && getVerifyCodeData?.username) {
-      dispatch(setAccountUsername({ username: getVerifyCodeData?.username }))
+    if (isGetVerifyTokenSuccess && getVerifyTokenData?.username) {
+      dispatch(setAccountUsername({ username: getVerifyTokenData?.username }))
     }
-  }, [isGetVerifyCodeSuccess, getVerifyCodeData])
+  }, [isGetVerifyTokenSuccess, getVerifyTokenData])
 
   useEffect(() => {
     if (isGetVerifyTokenError) {
