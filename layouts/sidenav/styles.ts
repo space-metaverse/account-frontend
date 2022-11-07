@@ -5,6 +5,7 @@ import type { OptionStylesProps, OptionsStylesProps } from './types'
 
 export const Wrapper = styled.div`
   width: 100%;
+  height: fit-content;
   display: flex;
   max-width: 19.5rem;
   flex-direction: column;
