@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   NFT,
@@ -14,6 +14,7 @@ import {
   FriendsList,
   FriendsRequests
 } from '@space-metaverse-ag/space-ui/icons'
+import { useRouter } from 'next/router'
 
 import * as Styled from './styles'
 import type { OptionProps, OptionComponentProps } from './types'
@@ -22,56 +23,68 @@ const options: OptionProps[] = [
   {
     Icon: User,
     label: 'Profile',
+    route: null,
     children: [
       {
-        label: 'Profile Information',
-        Icon: Profile
+        Icon: Profile,
+        route: '/profile/information',
+        label: 'Profile Information'
       },
       {
-        label: 'Avatars',
-        Icon: Avatar
+        Icon: Avatar,
+        route: '/profile/avatars',
+        label: 'Avatars'
       },
       {
-        label: 'Security Settings',
-        Icon: Security
+        Icon: Security,
+        route: '/profile/security',
+        label: 'Security Settings'
       }
     ]
   },
   {
     Icon: Friends,
     label: 'Friends',
+    route: null,
     children: [
       {
-        label: 'Your Friends',
-        Icon: FriendsList
+        Icon: FriendsList,
+        route: '/friends/your-friends',
+        label: 'Your Friends'
       },
       {
-        label: 'Add Friend',
-        Icon: FriendsAdd
+        Icon: FriendsAdd,
+        route: '/friends/add-friend',
+        label: 'Add Friend'
       },
       {
-        label: 'Manage Requests',
-        Icon: FriendsRequests
+        Icon: FriendsRequests,
+        route: '/friends/manage',
+        label: 'Manage Requests'
       }
     ]
   },
   {
     Icon: Wallet,
+    route: '/wallet',
     label: 'Connected Wallets'
   },
   {
+    Icon: NFT,
     label: 'NFT Inventory',
-    Icon: NFT
+    route: '/nft-inventory'
   },
   {
+    Icon: Collection,
     label: 'Space Inventory',
-    Icon: Collection
+    route: '/space-inventory'
   }
 ]
 
 const Option: React.FC<OptionComponentProps> = ({
   show,
   Icon,
+  route,
   label,
   select,
   selected,
@@ -81,7 +94,7 @@ const Option: React.FC<OptionComponentProps> = ({
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
-        (!children) && select(label)
+        (!children) && select(label, route)
         toggleState()
       }}
       animate={show}
@@ -98,7 +111,7 @@ const Option: React.FC<OptionComponentProps> = ({
           <Styled.Option
             key={item.label}
             child
-            onClick={() => select(item.label)}
+            onClick={() => select(item.label, item.route)}
             selected={selected === item.label}
           >
             <item.Icon width={24} height={24} />
@@ -114,13 +127,44 @@ const Sidenav: React.FC = () => {
   const [show, setShow] = useState(-1)
   const [optionSelected, setOptionSelected] = useState('')
 
-  const toggleState = (index: number): void => {
-    setShow((prev) => prev !== index ? index : -1)
+  const {
+    push,
+    pathname
+  } = useRouter()
+
+  const navigate = (name: string, route: string | null): void => {
+    setOptionSelected(name)
+
+    if (route) push(route)
   }
 
-  const selectItem = (name: string): void => {
-    setOptionSelected(name)
-  }
+  useEffect(() => {
+    options.forEach(({ route, label, children }, index) => {
+      if (route) {
+        const path = pathname.includes(route)
+
+        if (path) {
+          setOptionSelected(label)
+
+          setShow(index)
+        }
+      }
+
+      if (children) {
+        children.forEach((child) => {
+          const path = pathname.includes(child.route)
+
+          if (path) {
+            setOptionSelected(child.label)
+
+            setShow(index)
+          }
+        })
+      }
+
+      return false
+    })
+  }, [pathname])
 
   return (
     <Styled.Wrapper>
@@ -134,17 +178,16 @@ const Sidenav: React.FC = () => {
       </Styled.Content>
 
       <Styled.Options animate={false}>
-        {options.map((option, index) => (
+        {options.map((props, index) => (
           <Option
-            key={option.label}
+            {...props}
+            key={props.label}
             show={show === index}
-            Icon={option.Icon}
-            label={option.label}
-            select={selectItem}
+            select={navigate}
             selected={optionSelected}
-            toggleState={() => toggleState(index)}
+            toggleState={() => setShow((prev) => prev !== index ? index : -1)}
           >
-            {option.children}
+            {props.children}
           </Option>
         ))}
       </Styled.Options>
