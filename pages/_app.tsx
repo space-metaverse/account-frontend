@@ -1,35 +1,30 @@
 import { Provider } from 'react-redux'
 
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
+import TopNav from 'layouts/topnav'
 import type { AppProps } from 'next/app'
 import { store } from 'redux/store'
-import styled from 'styled-components'
 
-import { TopNav, SideNav } from '../layouts'
+import type { NextPageWithLayout } from '../types'
 
-const Container = styled.div`
-  gap: 3rem;
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  display: flex;
-  padding: 1.5rem 4rem;
-`
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
 
-const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
-  <Provider store={store}>
-    <ThemeProvider>
-      <GlobalStyles />
+const Root = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
+  const layout = Component.getLayout ?? ((page) => page)
 
-      <TopNav />
+  return (
+    <Provider store={store}>
+      <ThemeProvider>
+        <GlobalStyles />
 
-      <Container>
-        <SideNav />
+        <TopNav />
 
-        <Component {...pageProps} />
-      </Container>
-    </ThemeProvider>
-  </Provider>
-)
+        {layout(<Component {...pageProps} />)}
+      </ThemeProvider>
+    </Provider>
+  )
+}
 
 export default Root

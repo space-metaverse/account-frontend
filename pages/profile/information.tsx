@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, type ReactElement } from 'react'
 
 import { Button, TextInput, ImageInput } from '@space-metaverse-ag/space-ui'
-import type { NextPage } from 'next'
+import validate from 'helpers/validate'
+import Layout from 'layouts/profile'
 import Head from 'next/head'
 import styled from 'styled-components'
 import { string } from 'yup'
 
-import { validate } from '../../helpers'
+import type { NextPageWithLayout } from '../../types'
 
 const Page = styled.div`
   width: 100%;
@@ -66,7 +67,7 @@ const initialFields = {
   firstName: ''
 }
 
-const Information: NextPage = () => {
+const Information: NextPageWithLayout = () => {
   const [file, setFile] = useState<File | null>(null)
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
@@ -89,11 +90,6 @@ const Information: NextPage = () => {
 
   return (
     <Page>
-      <Head>
-        <title>Accounts | SPACE</title>
-        <meta name='description' content='SPACE Accounts' />
-      </Head>
-
       <Title>Profile Information</Title>
 
       <Container>
@@ -104,7 +100,8 @@ const Information: NextPage = () => {
           button={{
             size: 'small',
             label: 'Change Avatar',
-            color: 'blue'
+            color: 'blue',
+            outline: true
           }}
           showDummyAvatar
           changeLabelWhenFileSelected
@@ -160,12 +157,23 @@ const Information: NextPage = () => {
 
         <Button
           size="medium"
-          color="white"
+          color="white-red"
           label="Discard"
         />
       </Actions>
     </Page>
   )
 }
+
+Information.getLayout = (page: ReactElement) => (
+  <Layout>
+    <Head>
+      <title>Accounts | SPACE</title>
+      <meta name='description' content='SPACE Accounts' />
+    </Head>
+
+    {page}
+  </Layout>
+)
 
 export default Information

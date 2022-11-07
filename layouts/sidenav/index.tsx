@@ -143,11 +143,7 @@ const Sidenav: React.FC = () => {
       if (route) {
         const path = pathname.includes(route)
 
-        if (path) {
-          setOptionSelected(label)
-
-          setShow(index)
-        }
+        if (path) setOptionSelected(label)
       }
 
       if (children) {
