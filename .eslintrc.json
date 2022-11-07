@@ -32,6 +32,7 @@
       "newlinesBetween": "always"
     }],
     "import/no-anonymous-default-export": "off",
+    "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/triple-slash-reference": ["error", { 
       "lib": "always",
       "path": "always", 
