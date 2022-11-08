@@ -8,9 +8,18 @@ export const Wrapper = styled.div`
   height: fit-content;
   display: flex;
   max-width: 19.5rem;
-  flex-direction: column;
   border-radius: ${({ theme }) => theme.radius['2xl']};
+  flex-direction: column;
   background-color: ${({ theme }) => theme.colors.dark['100']};
+
+  @media screen and (max-width: 1024px) {
+    height: 3.5rem;
+    max-width: 100%;
+
+    * {
+      display: none;
+    }
+  }
 `
 
 export const Content = styled.div`

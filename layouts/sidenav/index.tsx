@@ -29,7 +29,8 @@ const options: OptionProps[] = [
       {
         Icon: Profile,
         route: '/profile/information',
-        label: 'Profile Information'
+        label: 'Profile Information',
+        disabled: false
       },
       {
         Icon: Avatar,
