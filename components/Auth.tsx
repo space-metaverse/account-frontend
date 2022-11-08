@@ -25,22 +25,17 @@ const Auth: React.FC = () => {
   const [immerToken, setImmerToken] = useState('')
 
   const {
-    isLoading: isGetVerifyCodeLoading,
     isSuccess: isGetVerifyCodeSuccess,
-    isError: isGetVerifyCodeError,
-    data: getVerifyCodeData,
-    error: getVerifyCodeError
+    data: getVerifyCodeData
   } = useGetVerifyCodeQuery({ loginCode },
     {
       skip: !loginCode
     })
 
   const {
-    isLoading: isGetVerifyTokenLoading,
     isSuccess: isGetVerifyTokenSuccess,
     isError: isGetVerifyTokenError,
-    data: getVerifyTokenData,
-    error: getVerifyTokenError
+    data: getVerifyTokenData
   } = useGetVerifyTokenQuery({ immerToken },
     {
       skip: !immerToken
@@ -57,7 +52,7 @@ const Auth: React.FC = () => {
         window.location.href = `${getAuthURL()}/?redirect=${window.location.href}`
       }
     } else {
-      setImmerToken(localImmerToken);
+      setImmerToken(localImmerToken)
     }
   }, [])
 
@@ -72,7 +67,7 @@ const Auth: React.FC = () => {
     if (isGetVerifyTokenSuccess && getVerifyTokenData?.username) {
       dispatch(setAccountUsername({ username: getVerifyTokenData?.username }))
     }
-  }, [isGetVerifyTokenSuccess, getVerifyTokenData])
+  }, [isGetVerifyTokenSuccess, getVerifyTokenData, dispatch])
 
   useEffect(() => {
     if (isGetVerifyTokenError) {
