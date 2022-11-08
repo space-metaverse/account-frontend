@@ -52,3 +52,4 @@ jobs:
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
           NEXT_ENV_FILE: ${{ secrets[format('NEXT_ENV_{0}', github.ref_name)] }}
           DO_DESTROY: ${{ secrets.DO_DESTROY }}
+          HEALTH_CHECK_PATH: ${{ secrets.HEALTH_CHECK_PATH }}
