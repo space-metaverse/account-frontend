@@ -24,6 +24,7 @@ const options: OptionProps[] = [
     Icon: User,
     label: 'Profile',
     route: null,
+    disabled: false,
     children: [
       {
         Icon: Profile,
@@ -46,6 +47,7 @@ const options: OptionProps[] = [
     Icon: Friends,
     label: 'Friends',
     route: null,
+    disabled: true,
     children: [
       {
         Icon: FriendsList,
@@ -67,17 +69,20 @@ const options: OptionProps[] = [
   {
     Icon: Wallet,
     route: '/wallet',
-    label: 'Connected Wallets'
+    label: 'Connected Wallets',
+    disabled: true
   },
   {
     Icon: NFT,
     label: 'NFT Inventory',
-    route: '/nft-inventory'
+    route: '/nft-inventory',
+    disabled: true
   },
   {
     Icon: Collection,
     label: 'Space Inventory',
-    route: '/space-inventory'
+    route: '/space-inventory',
+    disabled: true
   }
 ]
 
@@ -87,6 +92,7 @@ const Option: React.FC<OptionComponentProps> = ({
   route,
   label,
   select,
+  disabled,
   selected,
   children,
   toggleState
@@ -94,10 +100,13 @@ const Option: React.FC<OptionComponentProps> = ({
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
-        (!children) && select(label, route)
-        toggleState()
+        if (!disabled) {
+          (!children) && select(label, route)
+          toggleState()
+        }
       }}
       animate={show}
+      disabled={disabled}
       selected={label === selected && !children}
     >
       <Icon width={24} height={24} />

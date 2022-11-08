@@ -9,31 +9,37 @@ const routes = [
   {
     route: 'https://app.tryspace.com/token',
     label: 'token',
+    disabled: true,
     isExternal: true
   },
   {
     route: 'https://app.tryspace.com/litepaper',
     label: 'litepaper',
+    disabled: true,
     isExternal: true
   },
   {
     route: '/builder',
     label: 'builder',
+    disabled: false,
     isExternal: false
   },
   {
     route: '/marketplace',
     label: 'marketplace',
+    disabled: true,
     isExternal: false
   },
   {
     route: 'https://app.tryspace.com/about',
     label: 'about',
+    disabled: true,
     isExternal: true
   },
   {
     route: 'https://app.tryspace.com/faq',
     label: 'faq',
+    disabled: false,
     isExternal: true
   }
 ]
@@ -55,11 +61,17 @@ const TopNav: React.FC = () => {
       </Styled.Logo>
 
       <Styled.Routes>
-        {routes.map(({ route, label, isExternal }) => (
+        {routes.map(({
+          route,
+          label,
+          disabled,
+          isExternal
+        }) => (
           <li key={route}>
             <Styled.Route
               href={route}
               target={isExternal ? '_blank' : '_self'}
+              disabled={disabled}
             >
               {label}
             </Styled.Route>

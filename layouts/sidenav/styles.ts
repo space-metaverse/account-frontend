@@ -81,20 +81,20 @@ export const IconDropDown = styled(DropDown)`
 
 export const Option = styled.div<OptionStylesProps>`
   gap: .75rem;
-  cursor: pointer;
+  cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
   display: flex;
   user-select: none;
   align-items: center;
 
   p {
     ${({ theme }) => theme.fonts.size.sm};
-    color: ${({ theme }) => theme.colors.dark['800']};
+    color: ${({ theme, disabled }) => disabled ? theme.colors.dark['400'] : theme.colors.dark['800']};
     font-weight: ${({ theme }) => theme.fonts.weight.bold};
     letter-spacing: 1px;
   }
 
   path {
-    stroke: ${({ theme }) => theme.colors.dark['800']};
+    stroke: ${({ theme, disabled }) => disabled ? theme.colors.dark['400'] : theme.colors.dark['800']};
     stroke-width: 2px;
   }
 
