@@ -34,12 +34,14 @@ const options: OptionProps[] = [
       {
         Icon: Avatar,
         route: '/profile/avatars',
-        label: 'Avatars'
+        label: 'Avatars',
+        disabled: true
       },
       {
         Icon: Security,
         route: '/profile/security',
-        label: 'Security Settings'
+        label: 'Security Settings',
+        disabled: true
       }
     ]
   },
@@ -120,8 +122,11 @@ const Option: React.FC<OptionComponentProps> = ({
           <Styled.Option
             key={item.label}
             child
-            onClick={() => select(item.label, item.route)}
+            onClick={() => {
+              !item.disabled && select(item.label, item.route)
+            }}
             selected={selected === item.label}
+            disabled={item.disabled}
           >
             <item.Icon width={24} height={24} />
             <p>{item.label}</p>

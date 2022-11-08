@@ -19,10 +19,10 @@ const routes = [
     isExternal: true
   },
   {
-    route: '/builder',
+    route: 'https://app.tryspace.com/create-space',
     label: 'builder',
     disabled: false,
-    isExternal: false
+    isExternal: true
   },
   {
     route: '/marketplace',

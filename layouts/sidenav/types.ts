@@ -4,6 +4,7 @@ interface ChildrenProps {
   Icon: (props?: SVGProps) => JSX.Element
   route: string
   label: string
+  disabled?: boolean
 }
 
 export interface OptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {
