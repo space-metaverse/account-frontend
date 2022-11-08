@@ -3,16 +3,9 @@ import Head from 'next/head'
 import styled from 'styled-components'
 
 const Page = styled.div`
-  height: 100%;
-  width: 100%;
-`
-
-const Main = styled.main`
-  height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 `
 
 const Home: NextPage = () => (
@@ -21,8 +14,8 @@ const Home: NextPage = () => (
       <title>Accounts | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
-    <Main>
-    </Main>
+
+    <h1>Accounts</h1>
   </Page>
 )
 
