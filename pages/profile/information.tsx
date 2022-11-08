@@ -9,12 +9,6 @@ import { string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
 
-const Page = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
 const Form = styled.div`
   gap: 1rem;
   display: flex;
@@ -35,14 +29,6 @@ const Actions = styled.div`
   display: flex;
   border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   align-items: center;
-`
-
-const Title = styled.h1`
-  ${({ theme }) => theme.fonts.size['3xl']};
-  font-weight: ${({ theme }) => theme.fonts.weight.bold};
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
 `
 
 const Container = styled.div`
@@ -89,9 +75,7 @@ const Information: NextPageWithLayout = () => {
   }
 
   return (
-    <Page>
-      <Title>Profile Information</Title>
-
+    <>
       <Container>
         <ImageInput
           file={file}
@@ -161,14 +145,14 @@ const Information: NextPageWithLayout = () => {
           label="Discard"
         />
       </Actions>
-    </Page>
+    </>
   )
 }
 
 Information.getLayout = (page: ReactElement) => (
-  <Layout>
+  <Layout title="Profile Information">
     <Head>
-      <title>Accounts | SPACE</title>
+      <title>Profile Information | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 

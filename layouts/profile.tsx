@@ -5,6 +5,20 @@ import styled from 'styled-components'
 
 import SideNav from './sidenav'
 
+const Title = styled.h1`
+  ${({ theme }) => theme.fonts.size['3xl']};
+  font-weight: ${({ theme }) => theme.fonts.weight.bold};
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+`
+
+const Content = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
 const Container = styled.div`
   gap: 3rem;
   width: 100%;
@@ -14,11 +28,22 @@ const Container = styled.div`
   padding: 1.5rem 4rem;
 `
 
-const Wrapper: NextPage<PropsWithChildren> = ({ children }) => (
+interface ProfileLayoutProps extends PropsWithChildren {
+  title: string
+}
+
+const Wrapper: NextPage<ProfileLayoutProps> = ({
+  title,
+  children
+}) => (
   <Container>
     <SideNav />
 
-    {children}
+    <Content>
+      <Title>{title}</Title>
+
+      {children}
+    </Content>
   </Container>
 )
 
