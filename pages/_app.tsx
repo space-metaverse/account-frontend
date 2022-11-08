@@ -22,7 +22,7 @@ const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
       <GlobalStyles />
       <TopNav />
       <SideNav />
-      <Auth />
+      {/* <Auth /> */}
       <Container>
         <Component {...pageProps} />
       </Container>
