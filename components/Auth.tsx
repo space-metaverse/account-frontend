@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAppDispatch } from 'redux/hooks'
 import { setAccountUsername } from 'redux/slices/account'
 
-import { useGetVerifyCodeMutation, useGetVerifyTokenMutation } from '../api/auth'
+import { useGetVerifyCodeQuery, useGetVerifyTokenQuery } from '../api/auth'
 
 function getAuthURL(): string {
   switch (process.env.NEXT_PUBLIC_ENV) {
@@ -19,38 +19,32 @@ function getAuthURL(): string {
   }
 }
 
-function getAccountURL(): string {
-  switch (process.env.NEXT_PUBLIC_ENV) {
-    case 'local':
-      return 'http://localhost:3000'
-    case 'dev':
-      return 'https://account.dev.tryspace.com'
-    case 'prod':
-      return 'https://account.tryspace.com'
-    default:
-      console.log('No ENV set')
-      return 'https://account.dev.tryspace.com'
-  }
-}
-
 const Auth: React.FC = () => {
   const dispatch = useAppDispatch()
+  const [loginCode, setLoginCode] = useState('')
+  const [immerToken, setImmerToken] = useState('')
 
-  const [getVerifyCode, {
+  const {
     isLoading: isGetVerifyCodeLoading,
     isSuccess: isGetVerifyCodeSuccess,
     isError: isGetVerifyCodeError,
     data: getVerifyCodeData,
     error: getVerifyCodeError
-  }] = useGetVerifyCodeMutation()
+  } = useGetVerifyCodeQuery({ loginCode },
+    {
+      skip: !loginCode
+    })
 
-  const [getVerifyToken, {
+  const {
     isLoading: isGetVerifyTokenLoading,
     isSuccess: isGetVerifyTokenSuccess,
     isError: isGetVerifyTokenError,
     data: getVerifyTokenData,
     error: getVerifyTokenError
-  }] = useGetVerifyTokenMutation()
+  } = useGetVerifyTokenQuery({ immerToken },
+    {
+      skip: !immerToken
+    })
 
   useEffect(() => {
     const localImmerToken = localStorage.getItem('immerToken')
@@ -58,12 +52,12 @@ const Auth: React.FC = () => {
       const urlSearchParams = new URLSearchParams(window.location.search)
       const loginCode = urlSearchParams.get('loginCode')
       if (loginCode) {
-        getVerifyCode({ loginCode })
+        setLoginCode(loginCode)
       } else {
-        window.location.href = `${getAuthURL()}/?redirect=${getAccountURL()}`
+        window.location.href = `${getAuthURL()}/?redirect=${window.location.href}`
       }
     } else {
-      getVerifyToken({ immerToken: localImmerToken })
+      setImmerToken(localImmerToken);
     }
   }, [])
 

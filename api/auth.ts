@@ -38,7 +38,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURL() }),
   endpoints: (builder) => ({
-    getVerifyCode: builder.mutation<VerifyCodeResponse, VerifyCodeRequest>({
+    getVerifyCode: builder.query<VerifyCodeResponse, VerifyCodeRequest>({
       query: ({ loginCode }) => ({
         url: '/verifyCode',
         method: 'GET',
@@ -47,7 +47,7 @@ export const authApi = createApi({
         }
       })
     }),
-    getVerifyToken: builder.mutation<VerifyTokenResponse, VerifyTokenRequest>({
+    getVerifyToken: builder.query<VerifyTokenResponse, VerifyTokenRequest>({
       query: ({ immerToken }) => ({
         url: '/verifyToken',
         method: 'GET',
@@ -60,6 +60,6 @@ export const authApi = createApi({
 })
 
 export const {
-  useGetVerifyCodeMutation,
-  useGetVerifyTokenMutation
+  useGetVerifyCodeQuery,
+  useGetVerifyTokenQuery
 } = authApi
