@@ -9,11 +9,7 @@ import Auth from '../components/Auth'
 import { TopNav, SideNav } from '../layouts'
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 1.5rem; 
-  max-width: 82.5rem;
+  margin-top: 6rem;
 `
 
 const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
@@ -21,9 +17,10 @@ const Root: React.FC<AppProps> = ({ Component, pageProps }) => (
     <ThemeProvider>
       <GlobalStyles />
       <TopNav />
-      <SideNav />
-      {/* <Auth /> */}
+      <Auth />
       <Container>
+        <SideNav />
+
         <Component {...pageProps} />
       </Container>
     </ThemeProvider>

@@ -76,7 +76,7 @@ const Hamburger = styled.div<ResponsiveProps>`
 
   div {
     width: 100%;
-    height: 1.5px;
+    height: 2px;
     position: absolute;
     transition: ${({ theme }) => theme.transitions.ease};
     background-color: ${({ theme }) => theme.colors.dark['800']};
@@ -120,9 +120,12 @@ const IconAction = styled(Dots)`
 `
 
 const Wrapper = styled.nav<ResponsiveProps>`
+  top: 0;
   width: 100%;
   height: 4rem;
   display: flex;
+  z-index: 99;
+  position: fixed;
   align-items: center;
   border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   background-color: ${({ theme }) => theme.colors.white};
@@ -169,10 +172,6 @@ const Wrapper = styled.nav<ResponsiveProps>`
     }
 
     ${({ show }) => show && css`
-      top: 0;
-      z-index: 99;
-      position: fixed;
-
       ${Routes},
       ${Actions} {
         display: flex;
