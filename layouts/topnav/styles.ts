@@ -2,6 +2,10 @@ import { Dots } from '@space-metaverse-ag/space-ui/icons'
 import Link from 'next/link'
 import styled, { css } from 'styled-components'
 
+interface RouteProps {
+  disabled: boolean
+}
+
 interface ResponsiveProps {
   show: boolean
 }
@@ -12,19 +16,22 @@ const Logo = styled(Link)`
   border-right: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
 `
 
-const Route = styled(Link)`
+const Route = styled(Link)<RouteProps>`
   ${({ theme }) => theme.fonts.size.sm};
-  color: ${({ theme }) => theme.colors.dark[800]};
+  color: ${({ theme, disabled }) => disabled ? theme.colors.dark['400'] : theme.colors.dark['800']};
   padding: 0 .75rem;
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   transition: ${({ theme }) => `all .3s ${theme.transitions.ease}`};
   letter-spacing: 2px;
+  pointer-events: ${({ disabled }) => disabled ? 'none' : 'auto'};
   text-transform: uppercase;
   text-decoration: none;
 
-  :hover {
-    color: ${({ theme }) => theme.colors.blue[400]};
-  }
+  ${({ disabled }) => !disabled && css`
+    :hover {
+      color: ${({ theme }) => theme.colors.blue[400]};
+    }
+  `}
 `
 
 const Routes = styled.ul`

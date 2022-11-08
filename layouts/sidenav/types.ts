@@ -4,10 +4,12 @@ interface ChildrenProps {
   Icon: (props?: SVGProps) => JSX.Element
   route: string
   label: string
+  disabled?: boolean
 }
 
 export interface OptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {
   route: string | null
+  disabled: boolean
   children?: ChildrenProps[]
 }
 
@@ -21,6 +23,7 @@ export type OptionComponentProps = OptionProps & {
 export interface OptionStylesProps {
   child?: boolean
   animate?: boolean
+  disabled?: boolean
   selected?: boolean
 }
 
