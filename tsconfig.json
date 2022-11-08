@@ -18,6 +18,9 @@
       ],
       "layouts/*": [
         "./layouts/*"
+      ],
+      "components/*": [
+        "./components/*"
       ]
     },
     "allowJs": true,

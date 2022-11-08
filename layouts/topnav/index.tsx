@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useAppSelector } from 'redux/hooks'
 
 import Styled from './styles'
 
@@ -35,45 +36,49 @@ const routes = [
   }
 ]
 
-const TopNav: React.FC = () => (
-  <Styled.Wrapper>
-    <Styled.Logo href="/">
-      <Image
-        src="/space-logo.png"
-        alt="Logo space"
-        width={58}
-        height={24}
-      />
-    </Styled.Logo>
+const TopNav: React.FC = () => {
+  const { username } = useAppSelector(state => state.account)
 
-    <Styled.Routes>
-      {routes.map(({ route, label, isExternal }) => (
-        <li key={route}>
-          <Styled.Route
-            href={route}
-            target={isExternal ? '_blank' : '_self'}
-          >
-            {label}
-          </Styled.Route>
-        </li>
-      ))}
-    </Styled.Routes>
-
-    <Styled.Actions>
-      <Styled.Profile>
+  return (
+    <Styled.Wrapper>
+      <Styled.Logo href="/">
         <Image
-          src="/avatar.png"
-          alt="Avatar of Toni Papperoni"
-          width={32}
-          height={32}
+          src="/space-logo.png"
+          alt="Logo space"
+          width={58}
+          height={24}
         />
-      </Styled.Profile>
+      </Styled.Logo>
 
-      <p>Toni Papperoni</p>
+      <Styled.Routes>
+        {routes.map(({ route, label, isExternal }) => (
+          <li key={route}>
+            <Styled.Route
+              href={route}
+              target={isExternal ? '_blank' : '_self'}
+            >
+              {label}
+            </Styled.Route>
+          </li>
+        ))}
+      </Styled.Routes>
 
-      <Styled.IconAction />
-    </Styled.Actions>
-  </Styled.Wrapper>
-)
+      <Styled.Actions>
+        <Styled.Profile>
+          <Image
+            src="/avatar.png"
+            alt="Avatar of Toni Papperoni"
+            width={32}
+            height={32}
+          />
+        </Styled.Profile>
+
+        <p>{username}</p>
+
+        <Styled.IconAction />
+      </Styled.Actions>
+    </Styled.Wrapper>
+  )
+}
 
 export default TopNav
