@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import Image from 'next/image'
 import { useAppSelector } from 'redux/hooks'
 
@@ -37,10 +39,12 @@ const routes = [
 ]
 
 const TopNav: React.FC = () => {
+  const [responsive, setResponsive] = useState(false)
+
   const { username } = useAppSelector(state => state.account)
 
   return (
-    <Styled.Wrapper>
+    <Styled.Wrapper show={responsive}>
       <Styled.Logo href="/">
         <Image
           src="/space-logo.png"
@@ -77,6 +81,15 @@ const TopNav: React.FC = () => {
 
         <Styled.IconAction />
       </Styled.Actions>
+
+      <Styled.Hamburger
+        show={responsive}
+        onClick={() => setResponsive((prev) => !prev)}
+      >
+        <div />
+        <div />
+        <div />
+      </Styled.Hamburger>
     </Styled.Wrapper>
   )
 }

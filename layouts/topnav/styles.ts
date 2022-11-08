@@ -1,6 +1,10 @@
 import { Dots } from '@space-metaverse-ag/space-ui/icons'
 import Link from 'next/link'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+interface ResponsiveProps {
+  show: boolean
+}
 
 const Logo = styled(Link)`
   padding: 1.25rem 1.5rem;
@@ -27,13 +31,6 @@ const Routes = styled.ul`
   gap: 1.5rem;
   display: flex;
   align-items: center;
-`
-
-const Wrapper = styled.nav`
-  height: 4rem;
-  display: flex;
-  align-items: center;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
 `
 
 const Actions = styled.div`
@@ -66,8 +63,121 @@ const Profile = styled.div`
   }
 `
 
+const Hamburger = styled.div<ResponsiveProps>`
+  top: 1.25rem;
+  width: 1rem;
+  right: 1.25rem;
+  height: .875rem;
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+
+  div {
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    transition: ${({ theme }) => theme.transitions.ease};
+    background-color: ${({ theme }) => theme.colors.dark['800']};
+  
+    &:last-of-type {
+      bottom: 0;
+    }
+
+    :nth-of-type(2) {
+      left: 0;
+      opacity: 1;
+    }
+
+    &:first-of-type {
+      top: 0;
+    }
+  }
+
+  ${({ show }) => show && css`
+    div {
+      &:last-of-type {
+        bottom: .375rem;
+        transform: rotate(-135deg)
+      }
+
+      &:first-of-type {
+        top: .375rem;
+        transform: rotate(135deg)
+      }
+
+      :nth-of-type(2) {
+        left: -.75rem;
+        opacity: 0;
+      }
+    } 
+  `}
+`
+
 const IconAction = styled(Dots)`
   cursor: pointer;
+`
+
+const Wrapper = styled.nav<ResponsiveProps>`
+  top: 0;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  z-index: 99;
+  position: fixed;
+  align-items: center;
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+  background-color: ${({ theme }) => theme.colors.white};
+
+  @media screen and (max-width: 1124px) {
+    ${Routes} {
+      gap: 1rem;
+      padding-left: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    height: ${({ show }) => show ? '100vh' : '3.5rem'};
+    transition: ${({ theme }) => theme.transitions.ease};
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+
+    ${Logo} {
+      top: .25rem;
+      padding: .75rem 1.25rem;
+      position: absolute;
+      border-right: transparent
+    }
+
+    ${Routes} {
+      gap: 2rem;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    ${Routes},
+    ${Actions} {
+      display: none;
+    }
+
+    ${Actions} {
+      height: fit-content;
+      margin: 2rem 0 0 0;
+    }
+
+    ${Hamburger} {
+      display: flex;
+    }
+
+    ${({ show }) => show && css`
+      ${Routes},
+      ${Actions} {
+        display: flex;
+      }
+    `}
+  }
 `
 
 export default {
@@ -77,5 +187,6 @@ export default {
   Wrapper,
   Actions,
   Profile,
+  Hamburger,
   IconAction
 }
