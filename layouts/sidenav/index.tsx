@@ -1,5 +1,6 @@
-import { useState, useEffect, Component } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
+import { useOutsideClick } from '@space-metaverse-ag/space-ui/hooks'
 import {
   NFT,
   User,
@@ -17,7 +18,7 @@ import {
 import { useRouter } from 'next/router'
 
 import * as Styled from './styles'
-import type { OptionProps, OptionComponentProps } from './types'
+import type { OptionProps, SimpleOptionProps, OptionComponentProps } from './types'
 
 const options: OptionProps[] = [
   {
@@ -104,13 +105,13 @@ const Option: React.FC<OptionComponentProps> = ({
     <Styled.Option
       onClick={() => {
         if (!disabled) {
-          (!children) && select(label, Icon, route)
+          (!children) && select({ label, Icon }, route)
           toggleState()
         }
       }}
       animate={show}
       disabled={disabled}
-      selected={label === selected?.label && !children}
+      selected={label === selected && !children}
     >
       <Icon width={24} height={24} />
       <p>{label}</p>
@@ -124,7 +125,7 @@ const Option: React.FC<OptionComponentProps> = ({
             key={item.label}
             child
             onClick={() => {
-              !item.disabled && select(item.label, item.route)
+              !item.disabled && select({ Icon: item.Icon, label: item.label }, item.route)
             }}
             selected={selected === item.label}
             disabled={item.disabled}
@@ -141,15 +142,17 @@ const Option: React.FC<OptionComponentProps> = ({
 const Sidenav: React.FC = () => {
   const [show, setShow] = useState(-1)
   const [dropdown, setDropdown] = useState(false)
-  const [optionSelected, setOptionSelected] = useState<Pick<OptionProps, 'Icon' | 'label'> | null>(null)
+  const [optionSelected, setOptionSelected] = useState<SimpleOptionProps | null>(null)
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const {
     push,
     pathname
   } = useRouter()
 
-  const navigate = (name: string, icon: JSX.Element, route: string | null): void => {
-    setOptionSelected({ label: name, Icon: icon })
+  const navigate = (option: SimpleOptionProps, route: string | null): void => {
+    setOptionSelected(option)
 
     if (route) push(route)
   }
@@ -178,14 +181,19 @@ const Sidenav: React.FC = () => {
     })
   }, [pathname])
 
+  useOutsideClick(dropdownRef, () => setDropdown(false))
+
   return (
-    <Styled.Wrapper dropdown={dropdown}>
+    <Styled.Wrapper
+      ref={dropdownRef}
+      dropdown={dropdown}
+    >
       <Styled.Preview
         as={Styled.Option}
         animate={dropdown}
         onClick={() => setDropdown((prev) => !prev)}
       >
-        <Component as={optionSelected?.Icon} />
+        {optionSelected?.Icon && <Styled.Title as={optionSelected?.Icon} />}
 
         <p>{optionSelected?.label}</p>
 
@@ -208,7 +216,7 @@ const Sidenav: React.FC = () => {
             key={props.label}
             show={show === index}
             select={navigate}
-            selected={optionSelected}
+            selected={optionSelected?.label}
             toggleState={() => setShow((prev) => prev !== index ? index : -1)}
           >
             {props.children}

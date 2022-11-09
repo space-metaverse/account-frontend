@@ -7,7 +7,9 @@ interface ChildrenProps {
   disabled?: boolean
 }
 
-export interface OptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {
+export interface SimpleOptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {}
+
+export interface OptionProps extends SimpleOptionProps {
   route: string | null
   disabled: boolean
   children?: ChildrenProps[]
@@ -15,8 +17,8 @@ export interface OptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {
 
 export type OptionComponentProps = OptionProps & {
   show: boolean
-  select: (name: string, icon: JSX.Element, route: string | null) => void
-  selected: Pick<ChildrenProps, 'Icon' | 'label'> | null
+  select: (option: SimpleOptionProps, route: string | null) => void
+  selected?: string
   toggleState: VoidFunction
 }
 
