@@ -15,8 +15,8 @@ export interface OptionProps extends Pick<ChildrenProps, 'Icon' | 'label'> {
 
 export type OptionComponentProps = OptionProps & {
   show: boolean
-  select: (name: string, route: string | null) => void
-  selected: string
+  select: (name: string, icon: JSX.Element, route: string | null) => void
+  selected: Pick<ChildrenProps, 'Icon' | 'label'> | null
   toggleState: VoidFunction
 }
 
@@ -25,6 +25,10 @@ export interface OptionStylesProps {
   animate?: boolean
   disabled?: boolean
   selected?: boolean
+}
+
+export interface WrapperStylesProps {
+  dropdown: boolean
 }
 
 export interface OptionsStylesProps {

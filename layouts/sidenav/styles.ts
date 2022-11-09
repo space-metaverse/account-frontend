@@ -1,26 +1,7 @@
 import { DropDown } from '@space-metaverse-ag/space-ui/icons'
 import styled, { css } from 'styled-components'
 
-import type { OptionStylesProps, OptionsStylesProps } from './types'
-
-export const Wrapper = styled.div`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  max-width: 19.5rem;
-  border-radius: ${({ theme }) => theme.radius['2xl']};
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.dark['100']};
-
-  @media screen and (max-width: 1024px) {
-    height: 3.5rem;
-    max-width: 100%;
-
-    * {
-      display: none;
-    }
-  }
-`
+import type { OptionStylesProps, OptionsStylesProps, WrapperStylesProps } from './types'
 
 export const Content = styled.div`
   gap: .75rem;
@@ -94,6 +75,7 @@ export const Option = styled.div<OptionStylesProps>`
   display: flex;
   user-select: none;
   align-items: center;
+  text-transform: uppercase;
 
   p {
     ${({ theme }) => theme.fonts.size.sm};
@@ -127,4 +109,51 @@ export const Option = styled.div<OptionStylesProps>`
       transform: ${animate ? 'rotate(180deg)' : 'rotate(0)'};
     }
   `}
+`
+
+export const Preview = styled.div`
+  display: none;
+  padding: 1rem;
+`
+
+export const Wrapper = styled.div<WrapperStylesProps>`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  position: relative;
+  max-width: 19.5rem;
+  border-radius: ${({ theme }) => theme.radius['2xl']};
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.dark['100']};
+
+  @media screen and (max-width: 1024px) {
+    height: 3.5rem;
+    max-width: 100%;
+
+    ${Content} {
+      display: none;
+    }
+
+    ${Preview} {
+      display: flex;
+    }
+
+    & > ${Options} {
+      top: 3.5rem;
+      width: 100%;
+      opacity: 0;
+      position: absolute;
+      border-radius: ${({ theme }) => theme.radius['2xl']};
+      pointer-events: none;
+      background-color: ${({ theme }) => theme.colors.dark['100']};
+    }
+
+    ${({ dropdown }) => dropdown && css`
+      & > ${Options} {
+        top: 4.5rem;
+        opacity: 1;
+        pointer-events: auto;
+      }
+    `}
+  }
 `

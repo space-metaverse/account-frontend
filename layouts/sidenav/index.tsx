@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Component } from 'react'
 
 import {
   NFT,
@@ -104,13 +104,13 @@ const Option: React.FC<OptionComponentProps> = ({
     <Styled.Option
       onClick={() => {
         if (!disabled) {
-          (!children) && select(label, route)
+          (!children) && select(label, Icon, route)
           toggleState()
         }
       }}
       animate={show}
       disabled={disabled}
-      selected={label === selected && !children}
+      selected={label === selected?.label && !children}
     >
       <Icon width={24} height={24} />
       <p>{label}</p>
@@ -140,25 +140,26 @@ const Option: React.FC<OptionComponentProps> = ({
 
 const Sidenav: React.FC = () => {
   const [show, setShow] = useState(-1)
-  const [optionSelected, setOptionSelected] = useState('')
+  const [dropdown, setDropdown] = useState(false)
+  const [optionSelected, setOptionSelected] = useState<Pick<OptionProps, 'Icon' | 'label'> | null>(null)
 
   const {
     push,
     pathname
   } = useRouter()
 
-  const navigate = (name: string, route: string | null): void => {
-    setOptionSelected(name)
+  const navigate = (name: string, icon: JSX.Element, route: string | null): void => {
+    setOptionSelected({ label: name, Icon: icon })
 
     if (route) push(route)
   }
 
   useEffect(() => {
-    options.forEach(({ route, label, children }, index) => {
+    options.forEach(({ Icon, route, label, children }, index) => {
       if (route) {
         const path = pathname.includes(route)
 
-        if (path) setOptionSelected(label)
+        if (path) setOptionSelected({ Icon, label })
       }
 
       if (children) {
@@ -166,7 +167,7 @@ const Sidenav: React.FC = () => {
           const path = pathname.includes(child.route)
 
           if (path) {
-            setOptionSelected(child.label)
+            setOptionSelected({ Icon: child.Icon, label: child.label })
 
             setShow(index)
           }
@@ -178,7 +179,19 @@ const Sidenav: React.FC = () => {
   }, [pathname])
 
   return (
-    <Styled.Wrapper>
+    <Styled.Wrapper dropdown={dropdown}>
+      <Styled.Preview
+        as={Styled.Option}
+        animate={dropdown}
+        onClick={() => setDropdown((prev) => !prev)}
+      >
+        <Component as={optionSelected?.Icon} />
+
+        <p>{optionSelected?.label}</p>
+
+        <Styled.IconDropDown />
+      </Styled.Preview>
+
       <Styled.Content>
         <Styled.BackIconButton>
           <ArrowLeft />
