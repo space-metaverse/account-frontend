@@ -91,6 +91,11 @@ const Information: NextPageWithLayout = () => {
       })
   }
 
+  const discard = (): void => {
+    setErrors(initialFields)
+    setFields(initialFields)
+  }
+
   return (
     <>
       <Container>
@@ -160,6 +165,7 @@ const Information: NextPageWithLayout = () => {
           size="medium"
           color="white-red"
           label="Discard"
+          onClick={discard}
         />
       </Actions>
     </>

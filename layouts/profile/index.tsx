@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react'
 import type { NextPage } from 'next'
 import styled from 'styled-components'
 
-import SideNav from './sidenav'
+import SideNav from '../sidenav'
 
 const Title = styled.h1`
   ${({ theme }) => theme.fonts.size['3xl']};
