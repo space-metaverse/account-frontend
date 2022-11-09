@@ -2,49 +2,19 @@ import { useState, type ReactElement } from 'react'
 
 import { Button, TextInput } from '@space-metaverse-ag/space-ui'
 import validate from 'helpers/validate'
-import Layout from 'layouts/profile'
+import Profile from 'layouts/profile'
 import Head from 'next/head'
 import styled from 'styled-components'
 import { ref, string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
 
-const Form = styled.div`
-  gap: 1rem;
-  display: flex;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
-  flex-direction: column;
-
-  .is-grid {
-    gap: 1rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-`
-
-const Actions = styled.div`
-  gap: 0.75rem;
-  padding: 1.25rem 0;
-  display: flex;
-  border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
-  align-items: center;
-`
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  max-width: 37.5rem;
-  flex-direction: column;
-`
-
 const Label = styled.label`
-  color: #111114;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 16px;
-  letter-spacing: 0.04em;
+  ${({ theme }) => theme.fonts.size.sm};
+  color: ${({ theme }) => theme.colors.dark['800']};
+  margin-top: 1rem;
+  font-weight: ${({ theme }) => theme.fonts.weight.bold};
+  letter-spacing: 1px;
   text-transform: uppercase;
 `
 
@@ -91,10 +61,10 @@ const Security: NextPageWithLayout = () => {
 
   return (
     <>
-      <Container>
+      <Profile.SharedStyles.Container>
         <Label>Change Password</Label>
 
-        <Form>
+        <Profile.SharedStyles.Form>
           <div className='is-grid'>
             <TextInput
               type='password'
@@ -125,37 +95,37 @@ const Security: NextPageWithLayout = () => {
               placeholder='Re-enter new password'
             />
           </div>
-        </Form>
+        </Profile.SharedStyles.Form>
+      </Profile.SharedStyles.Container>
 
-        <Actions>
-          <Button
-            size="medium"
-            color="blue"
-            label="Update password"
-            onClick={submit}
-          />
+      <Profile.SharedStyles.Actions>
+        <Button
+          size="medium"
+          color="blue"
+          label="Update password"
+          onClick={submit}
+        />
 
-          <Button
-            size="medium"
-            color="white-red"
-            label="Discard"
-            onClick={discard}
-          />
-        </Actions>
-      </Container>
+        <Button
+          size="medium"
+          color="white-red"
+          label="Discard"
+          onClick={discard}
+        />
+      </Profile.SharedStyles.Actions>
     </>
   )
 }
 
 Security.getLayout = (page: ReactElement) => (
-  <Layout title='Security Settings'>
+  <Profile.Layout title='Security Settings'>
     <Head>
       <title>Security Settings | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Layout>
+  </Profile.Layout>
 )
 
 export default Security
