@@ -21,6 +21,14 @@ const Form = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
+
+  @media screen and (max-width: 640px) {
+    padding-bottom: 4rem;
+
+    .is-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
 `
 
 const Actions = styled.div`
@@ -29,6 +37,15 @@ const Actions = styled.div`
   display: flex;
   border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   align-items: center;
+
+  @media screen and (max-width: 640px) {
+    left: 0;
+    width: 100%;
+    padding: 1.25rem;
+    bottom: 0;
+    position: fixed;
+    background-color: ${({ theme }) => theme.colors.white};
+  }
 `
 
 const Container = styled.div`
