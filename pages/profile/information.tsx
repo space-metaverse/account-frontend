@@ -2,11 +2,58 @@ import { useState, type ReactElement } from 'react'
 
 import { Button, TextInput, ImageInput } from '@space-metaverse-ag/space-ui'
 import validate from 'helpers/validate'
-import Profile from 'layouts/profile'
+import Layout from 'layouts/profile'
 import Head from 'next/head'
+import styled from 'styled-components'
 import { string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
+
+const Form = styled.div`
+  gap: 1rem;
+  display: flex;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  flex-direction: column;
+
+  .is-grid {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (max-width: 640px) {
+    padding-bottom: 4rem;
+
+    .is-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+`
+
+const Actions = styled.div`
+  gap: .75rem;
+  padding: 1.25rem 0;
+  display: flex;
+  border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+  align-items: center;
+
+  @media screen and (max-width: 640px) {
+    left: 0;
+    width: 100%;
+    padding: 1.25rem;
+    bottom: 0;
+    position: fixed;
+    background-color: ${({ theme }) => theme.colors.white};
+  }
+`
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  max-width: 37.5rem;
+  flex-direction: column;
+`
 
 const shape = {
   email: string()
@@ -44,14 +91,9 @@ const Information: NextPageWithLayout = () => {
       })
   }
 
-  const discard = (): void => {
-    setErrors(initialFields)
-    setFields(initialFields)
-  }
-
   return (
     <>
-      <Profile.SharedStyles.Container>
+      <Container>
         <ImageInput
           file={file}
           header="Toni Papperoni"
@@ -66,7 +108,7 @@ const Information: NextPageWithLayout = () => {
           changeLabelWhenFileSelected
         />
 
-        <Profile.SharedStyles.Form>
+        <Form>
           <div className="is-grid">
             <TextInput
               label="First name"
@@ -103,10 +145,10 @@ const Information: NextPageWithLayout = () => {
               placeholder="(XX) XXXX-XXXX"
             />
           </div>
-        </Profile.SharedStyles.Form>
-      </Profile.SharedStyles.Container>
+        </Form>
+      </Container>
 
-      <Profile.SharedStyles.Actions>
+      <Actions>
         <Button
           size="medium"
           color="blue"
@@ -118,22 +160,21 @@ const Information: NextPageWithLayout = () => {
           size="medium"
           color="white-red"
           label="Discard"
-          onClick={discard}
         />
-      </Profile.SharedStyles.Actions>
+      </Actions>
     </>
   )
 }
 
 Information.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="Profile Information">
+  <Layout title="Profile Information">
     <Head>
       <title>Profile Information | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout>
 )
 
 export default Information
