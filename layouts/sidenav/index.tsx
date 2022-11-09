@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from 'react'
 
+import { useOutsideClick } from '@space-metaverse-ag/space-ui/hooks'
 import {
   NFT,
   User,
@@ -16,8 +17,8 @@ import {
 } from "@space-metaverse-ag/space-ui/icons";
 import { useRouter } from "next/router";
 
-import * as Styled from "./styles";
-import type { OptionProps, OptionComponentProps } from "./types";
+import * as Styled from './styles'
+import type { OptionProps, SimpleOptionProps, OptionComponentProps } from './types'
 
 const options: OptionProps[] = [
   {
@@ -28,8 +29,9 @@ const options: OptionProps[] = [
     children: [
       {
         Icon: Profile,
-        route: "/profile/information",
-        label: "Profile Information",
+        route: '/profile/information',
+        label: 'Profile Information',
+        disabled: false
       },
       {
         Icon: Avatar,
@@ -103,8 +105,8 @@ const Option: React.FC<OptionComponentProps> = ({
     <Styled.Option
       onClick={() => {
         if (!disabled) {
-          !children && select(label, route);
-          toggleState();
+          (!children) && select({ label, Icon }, route)
+          toggleState()
         }
       }}
       animate={show}
@@ -123,7 +125,7 @@ const Option: React.FC<OptionComponentProps> = ({
             key={item.label}
             child
             onClick={() => {
-              !item.disabled && select(item.label, item.route);
+              !item.disabled && select({ Icon: item.Icon, label: item.label }, item.route)
             }}
             selected={selected === item.label}
             disabled={item.disabled}
@@ -138,23 +140,26 @@ const Option: React.FC<OptionComponentProps> = ({
 );
 
 const Sidenav: React.FC = () => {
-  const [show, setShow] = useState(-1);
-  const [optionSelected, setOptionSelected] = useState("");
+  const [show, setShow] = useState(-1)
+  const [dropdown, setDropdown] = useState(false)
+  const [optionSelected, setOptionSelected] = useState<SimpleOptionProps | null>(null)
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const { push, pathname } = useRouter();
 
-  const navigate = (name: string, route: string | null): void => {
-    setOptionSelected(name);
+  const navigate = (option: SimpleOptionProps, route: string | null): void => {
+    setOptionSelected(option)
 
     if (route) push(route);
   };
 
   useEffect(() => {
-    options.forEach(({ route, label, children }, index) => {
+    options.forEach(({ Icon, route, label, children }, index) => {
       if (route) {
         const path = pathname.includes(route);
 
-        if (path) setOptionSelected(label);
+        if (path) setOptionSelected({ Icon, label })
       }
 
       if (children) {
@@ -162,7 +167,7 @@ const Sidenav: React.FC = () => {
           const path = pathname.includes(child.route);
 
           if (path) {
-            setOptionSelected(child.label);
+            setOptionSelected({ Icon: child.Icon, label: child.label })
 
             setShow(index);
           }
@@ -173,8 +178,25 @@ const Sidenav: React.FC = () => {
     });
   }, [pathname]);
 
+  useOutsideClick(dropdownRef, () => setDropdown(false))
+
   return (
-    <Styled.Wrapper>
+    <Styled.Wrapper
+      ref={dropdownRef}
+      dropdown={dropdown}
+    >
+      <Styled.Preview
+        as={Styled.Option}
+        animate={dropdown}
+        onClick={() => setDropdown((prev) => !prev)}
+      >
+        {optionSelected?.Icon && <Styled.Title as={optionSelected?.Icon} />}
+
+        <p>{optionSelected?.label}</p>
+
+        <Styled.IconDropDown />
+      </Styled.Preview>
+
       <Styled.Content>
         <Styled.BackIconButton>
           <ArrowLeft />
@@ -189,8 +211,8 @@ const Sidenav: React.FC = () => {
             key={props.label}
             show={show === index}
             select={navigate}
-            selected={optionSelected}
-            toggleState={() => setShow((prev) => (prev !== index ? index : -1))}
+            selected={optionSelected?.label}
+            toggleState={() => setShow((prev) => prev !== index ? index : -1)}
           >
             {props.children}
           </Option>

@@ -5,17 +5,12 @@ import Auth from 'components/Auth'
 import TopNav from 'layouts/topnav'
 import type { AppProps } from 'next/app'
 import { store } from 'redux/store'
-import styled from 'styled-components'
 
 import type { NextPageWithLayout } from '../types'
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
-
-const Container = styled.div`
-  margin-top: 6rem;
-`
 
 const Root = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
   const layout = Component.getLayout ?? ((page) => page)
@@ -29,9 +24,7 @@ const Root = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
 
         <TopNav />
 
-        <Container>
-          {layout(<Component {...pageProps} />)}
-        </Container>
+        {layout(<Component {...pageProps} />)}
       </ThemeProvider>
     </Provider>
   )

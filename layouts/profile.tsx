@@ -26,6 +26,19 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   padding: 1.5rem 4rem;
+  position: relative;
+  margin-top: 6rem;
+
+  @media screen and (max-width: 1024px) {
+    gap: 1rem;
+    padding: 0 1.25rem 2rem 1.25rem;
+    margin-top: 5rem;
+    flex-direction: column;
+
+    ${Title} {
+      display: none;
+    }
+  }
 `
 
 interface ProfileLayoutProps extends PropsWithChildren {
