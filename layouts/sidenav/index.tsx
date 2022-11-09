@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 import {
   NFT,
@@ -12,81 +12,81 @@ import {
   Collection,
   FriendsAdd,
   FriendsList,
-  FriendsRequests
-} from '@space-metaverse-ag/space-ui/icons'
-import { useRouter } from 'next/router'
+  FriendsRequests,
+} from "@space-metaverse-ag/space-ui/icons";
+import { useRouter } from "next/router";
 
-import * as Styled from './styles'
-import type { OptionProps, OptionComponentProps } from './types'
+import * as Styled from "./styles";
+import type { OptionProps, OptionComponentProps } from "./types";
 
 const options: OptionProps[] = [
   {
     Icon: User,
-    label: 'Profile',
+    label: "Profile",
     route: null,
     disabled: false,
     children: [
       {
         Icon: Profile,
-        route: '/profile/information',
-        label: 'Profile Information'
+        route: "/profile/information",
+        label: "Profile Information",
       },
       {
         Icon: Avatar,
-        route: '/profile/avatars',
-        label: 'Avatars',
-        disabled: true
+        route: "/profile/avatars",
+        label: "Avatars",
+        disabled: true,
       },
       {
         Icon: Security,
-        route: '/profile/security',
-        label: 'Security Settings',
-        disabled: true
-      }
-    ]
+        route: "/profile/security",
+        label: "Security Settings",
+        disabled: false,
+      },
+    ],
   },
   {
     Icon: Friends,
-    label: 'Friends',
+    label: "Friends",
     route: null,
     disabled: true,
     children: [
       {
         Icon: FriendsList,
-        route: '/friends/your-friends',
-        label: 'Your Friends'
+        route: "/friends/your-friends",
+        label: "Your Friends",
       },
       {
         Icon: FriendsAdd,
-        route: '/friends/add-friend',
-        label: 'Add Friend'
+        route: "/friends/add-friend",
+        label: "Add Friend",
       },
       {
         Icon: FriendsRequests,
-        route: '/friends/manage',
-        label: 'Manage Requests'
-      }
-    ]
+        route: "/friends/manage",
+        label: "Manage Requests",
+      },
+    ],
   },
   {
     Icon: Wallet,
-    route: '/wallet',
-    label: 'Connected Wallets',
-    disabled: true
+    route: "/wallet",
+    label: "Connected Wallets",
+    disabled: true,
   },
   {
     Icon: NFT,
-    label: 'NFT Inventory',
-    route: '/nft-inventory',
-    disabled: true
+    label: "NFT Inventory",
+    route: "/nft-inventory",
+    disabled: true,
   },
   {
     Icon: Collection,
-    label: 'Space Inventory',
-    route: '/space-inventory',
-    disabled: true
-  }
-]
+    label: "Space Inventory",
+    route: "/space-inventory",
+    disabled: true,
+  },
+];
 
 const Option: React.FC<OptionComponentProps> = ({
   show,
@@ -97,14 +97,14 @@ const Option: React.FC<OptionComponentProps> = ({
   disabled,
   selected,
   children,
-  toggleState
+  toggleState,
 }) => (
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
         if (!disabled) {
-          (!children) && select(label, route)
-          toggleState()
+          !children && select(label, route);
+          toggleState();
         }
       }}
       animate={show}
@@ -123,7 +123,7 @@ const Option: React.FC<OptionComponentProps> = ({
             key={item.label}
             child
             onClick={() => {
-              !item.disabled && select(item.label, item.route)
+              !item.disabled && select(item.label, item.route);
             }}
             selected={selected === item.label}
             disabled={item.disabled}
@@ -135,46 +135,43 @@ const Option: React.FC<OptionComponentProps> = ({
       </Styled.Options>
     )}
   </Styled.OptionWrapper>
-)
+);
 
 const Sidenav: React.FC = () => {
-  const [show, setShow] = useState(-1)
-  const [optionSelected, setOptionSelected] = useState('')
+  const [show, setShow] = useState(-1);
+  const [optionSelected, setOptionSelected] = useState("");
 
-  const {
-    push,
-    pathname
-  } = useRouter()
+  const { push, pathname } = useRouter();
 
   const navigate = (name: string, route: string | null): void => {
-    setOptionSelected(name)
+    setOptionSelected(name);
 
-    if (route) push(route)
-  }
+    if (route) push(route);
+  };
 
   useEffect(() => {
     options.forEach(({ route, label, children }, index) => {
       if (route) {
-        const path = pathname.includes(route)
+        const path = pathname.includes(route);
 
-        if (path) setOptionSelected(label)
+        if (path) setOptionSelected(label);
       }
 
       if (children) {
         children.forEach((child) => {
-          const path = pathname.includes(child.route)
+          const path = pathname.includes(child.route);
 
           if (path) {
-            setOptionSelected(child.label)
+            setOptionSelected(child.label);
 
-            setShow(index)
+            setShow(index);
           }
-        })
+        });
       }
 
-      return false
-    })
-  }, [pathname])
+      return false;
+    });
+  }, [pathname]);
 
   return (
     <Styled.Wrapper>
@@ -182,9 +179,7 @@ const Sidenav: React.FC = () => {
         <Styled.BackIconButton>
           <ArrowLeft />
         </Styled.BackIconButton>
-        <Styled.Title>
-          Account Settings
-        </Styled.Title>
+        <Styled.Title>Account Settings</Styled.Title>
       </Styled.Content>
 
       <Styled.Options animate={false}>
@@ -195,14 +190,14 @@ const Sidenav: React.FC = () => {
             show={show === index}
             select={navigate}
             selected={optionSelected}
-            toggleState={() => setShow((prev) => prev !== index ? index : -1)}
+            toggleState={() => setShow((prev) => (prev !== index ? index : -1))}
           >
             {props.children}
           </Option>
         ))}
       </Styled.Options>
     </Styled.Wrapper>
-  )
-}
+  );
+};
 
-export default Sidenav
+export default Sidenav;
