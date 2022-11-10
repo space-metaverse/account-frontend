@@ -57,6 +57,10 @@ const Actions = styled.div`
     letter-spacing: 2px;
     text-transform: uppercase;
   }
+
+  .is-popover + div {
+    right: 0;
+  }
 `
 
 const Profile = styled.div`
@@ -172,6 +176,10 @@ const Wrapper = styled.nav<ResponsiveProps>`
     ${Actions} {
       height: fit-content;
       margin: 2rem 0 0 0;
+
+      .is-popover + div {
+        right: inherit;
+      }
     }
 
     ${Hamburger} {

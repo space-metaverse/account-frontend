@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { Popover } from '@space-metaverse-ag/space-ui'
+import { Logout as IconLogout } from '@space-metaverse-ag/space-ui/icons'
 import Image from 'next/image'
 import { useAppSelector } from 'redux/hooks'
 
@@ -49,6 +51,12 @@ const TopNav: React.FC = () => {
 
   const { username } = useAppSelector(state => state.account)
 
+  const logout = (): void => {
+    window.localStorage.removeItem('immerToken')
+
+    location.reload()
+  }
+
   return (
     <Styled.Wrapper show={responsive}>
       <Styled.Logo href="/">
@@ -91,7 +99,18 @@ const TopNav: React.FC = () => {
 
         <p>{username}</p>
 
-        <Styled.IconAction />
+        <Popover
+          options={[
+            {
+              icon: IconLogout,
+              label: 'Logout',
+              callback: logout
+            }
+          ]}
+          className="is-popover"
+        >
+          <Styled.IconAction />
+        </Popover>
       </Styled.Actions>
 
       <Styled.Hamburger
