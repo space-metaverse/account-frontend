@@ -12,15 +12,16 @@ const shape = {
   email: string()
     .email('Enter a valid email address')
     .required('Enter your email'),
-  lastName: string().required('Enter your last name'),
-  firstName: string().required('Enter your first name')
+  displayName: string().required('Enter your public name')
 }
 
 const initialFields = {
   email: '',
   phone: '',
+  username: '',
   lastName: '',
-  firstName: ''
+  firstName: '',
+  displayName: ''
 }
 
 const Information: NextPageWithLayout = () => {
@@ -69,9 +70,25 @@ const Information: NextPageWithLayout = () => {
         <Profile.SharedStyles.Form>
           <div className="is-grid">
             <TextInput
+              label="Username"
+              value={fields.username}
+              disabled
+              onChange={({ target }) => setFields((prev) => ({ ...prev, username: target.value }))}
+              placeholder="Your unique Username"
+            />
+
+            <TextInput
+              label="Display Name"
+              value={fields.displayName}
+              isError={!!errors.displayName}
+              onChange={({ target }) => setFields((prev) => ({ ...prev, displayName: target.value }))}
+              placeholder="Public name displayed across the platform"
+            />
+          </div>
+          <div className="is-grid">
+            <TextInput
               label="First name"
               value={fields.firstName}
-              isError={!!errors.firstName}
               onChange={({ target }) => setFields((prev) => ({ ...prev, firstName: target.value }))}
               placeholder="Enter your first name"
             />
@@ -79,7 +96,6 @@ const Information: NextPageWithLayout = () => {
             <TextInput
               label="Last name"
               value={fields.lastName}
-              isError={!!errors.lastName}
               onChange={({ target }) => setFields((prev) => ({ ...prev, lastName: target.value }))}
               placeholder="Enter your last name"
             />
@@ -90,6 +106,7 @@ const Information: NextPageWithLayout = () => {
               label="Email"
               value={fields.email}
               isError={!!errors.email}
+              disabled
               onChange={({ target }) => setFields((prev) => ({ ...prev, email: target.value }))}
               placeholder="Enter your email"
             />
