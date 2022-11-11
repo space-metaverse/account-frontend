@@ -1,9 +1,10 @@
-import { useState, type ReactElement } from 'react'
+import { useState, useEffect, type ReactElement } from 'react'
 
 import { Button, TextInput, ImageInput } from '@space-metaverse-ag/space-ui'
 import validate from 'helpers/validate'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
+import { useAppSelector } from 'redux/hooks'
 import { string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
@@ -29,6 +30,8 @@ const Information: NextPageWithLayout = () => {
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
 
+  const { username } = useAppSelector(state => state.account)
+
   const submit = async (): Promise<void> => {
     await validate.request(fields, shape)
       .then(() => {
@@ -49,6 +52,17 @@ const Information: NextPageWithLayout = () => {
     setErrors(initialFields)
     setFields(initialFields)
   }
+
+  useEffect(() => {
+    if (username) {
+      console.log(username)
+
+      setFields((prev) => ({
+        ...prev,
+        username
+      }))
+    }
+  }, [])
 
   return (
     <>
