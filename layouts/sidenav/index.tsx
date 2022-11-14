@@ -13,7 +13,9 @@ import {
   Collection,
   FriendsAdd,
   FriendsList,
-  FriendsRequests
+  FriendsRequests,
+  ConnectedWallets,
+  ConnectNewWallet
 } from '@space-metaverse-ag/space-ui/icons'
 import { useRouter } from 'next/router'
 
@@ -72,9 +74,21 @@ const options: OptionProps[] = [
   },
   {
     Icon: Wallet,
-    route: '/wallet',
+    route: null,
     label: 'Connected Wallets',
-    disabled: true
+    disabled: false,
+    children: [
+      {
+        Icon: ConnectedWallets,
+        route: '/wallet',
+        label: 'Active Wallets'
+      },
+      {
+        Icon: ConnectNewWallet,
+        route: '/wallet/connect',
+        label: 'Connect New Wallet'
+      }
+    ]
   },
   {
     Icon: NFT,
