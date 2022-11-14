@@ -65,6 +65,7 @@ const TopNav: React.FC = () => {
           alt="Logo space"
           width={58}
           height={24}
+          priority
         />
       </Styled.Logo>
 

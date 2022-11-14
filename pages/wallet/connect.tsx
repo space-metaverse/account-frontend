@@ -18,7 +18,7 @@ import type { NextPageWithLayout } from '../../types'
 const Card = styled.div`
   border: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
   display: flex;
-  padding: 1rem;
+  padding: 1.5rem 1.25rem;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.xl};
   justify-content: space-between;
@@ -50,11 +50,11 @@ const Badge = styled.span`
 
 const icons = {
   binance: '/icons/icon-binance.svg',
-  coinbase: '/icons/icon-coinbase.svg',
   metaMask: '/icons/icon-metamask.svg',
   trustWallet: '/icons/icon-trust-wallet.svg',
   walletConnect: '/icons/icon-wallet-connect.svg',
-  myEtherWallet: '/icons/icon-my-ether-wallet.svg'
+  myEtherWallet: '/icons/icon-my-ether-wallet.svg',
+  coinbaseWallet: '/icons/icon-coinbase.svg'
 }
 
 const comingSoon = [

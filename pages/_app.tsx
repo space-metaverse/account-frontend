@@ -11,7 +11,9 @@ import {
   defaultChains,
   configureChains
 } from 'wagmi'
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 import type { NextPageWithLayout } from '../types'
@@ -29,7 +31,19 @@ const {
 const client = createClient({
   provider,
   connectors: [
-    new MetaMaskConnector({ chains })
+    new MetaMaskConnector({ chains }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true
+      }
+    }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: 'Space'
+      }
+    })
   ],
   autoConnect: true,
   webSocketProvider
