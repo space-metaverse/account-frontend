@@ -6,7 +6,7 @@ import Profile from 'layouts/profile'
 import Head from 'next/head'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { useAccount, useConnect, useSignMessage } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
 
@@ -15,6 +15,7 @@ const Card = styled.div<{ disabled: boolean }>`
   cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
   display: flex;
   padding: 1.5rem 1.25rem;
+  position: relative;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.xl};
   justify-content: space-between;
@@ -34,6 +35,23 @@ const Title = styled.h6`
   text-transform: uppercase;
 `
 
+const Loading = styled.span`
+  ${({ theme }) => theme.fonts.size.sm};
+  color: ${({ theme }) => theme.colors.dark['600']};
+  font-weight: ${({ theme }) => theme.fonts.weight.medium};
+  font-family: ${({ theme }) => theme.fonts.family.body};
+`
+
+const Error = styled.p`
+  ${({ theme }) => theme.fonts.size.sm};
+  color: ${({ theme }) => theme.colors.red['400']};
+  width: fit-content;
+  padding: .25rem .75rem;
+  margin-top: .75rem;
+  border-radius: ${({ theme }) => theme.radius.lg};
+  background-color: ${({ theme }) => theme.colors.red['100']};
+`
+
 const Badge = styled.span`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark['600']};
@@ -42,6 +60,15 @@ const Badge = styled.span`
   font-family: ${({ theme }) => theme.fonts.family.body};
   border-radius: ${({ theme }) => theme.radius.full};
   background-color: ${({ theme }) => rgba(theme.colors.dark['600'], '.12')};
+`
+
+const IconCheck = styled(Check)`
+  right: 1.5rem;
+  position: absolute;
+
+  path {
+    stroke: ${({ theme }) => theme.colors.green['400']}
+  }
 `
 
 const icons = {
@@ -70,29 +97,18 @@ const comingSoon = [
 
 const Wallet: NextPageWithLayout = () => {
   const {
+    reset,
     error,
+    isError,
     connect,
     isLoading,
     connectors,
-    connectAsync,
     pendingConnector
   } = useConnect()
 
   const {
-    connector: activeConnector,
-    isConnected
+    connector: activeConnector
   } = useAccount()
-
-  const {
-    signMessageAsync
-  } = useSignMessage()
-
-  console.log({
-    isLoading,
-    isConnected,
-    connectors,
-    activeConnector
-  })
 
   return (
     <Profile.SharedStyles.Container style={{ gap: '.75rem' }}>
@@ -102,10 +118,18 @@ const Wallet: NextPageWithLayout = () => {
           name
         } = connector
 
+        const connected = activeConnector?.id === id
+
         return (
           <Card
             key={id}
-            onClick={() => connect({ connector })}
+            onClick={() => {
+              if (!connected) {
+                reset()
+
+                connect({ connector })
+              }
+            }}
             disabled={false}
           >
             <div>
@@ -120,9 +144,9 @@ const Wallet: NextPageWithLayout = () => {
             </div>
 
             {isLoading && pendingConnector?.id === connector.id &&
-            <p> (connecting)</p>}
+            <Loading> (connecting)</Loading>}
 
-            {activeConnector?.id === id && <Check />}
+            {connected && <IconCheck />}
           </Card>
         )
       })}
@@ -146,6 +170,8 @@ const Wallet: NextPageWithLayout = () => {
           <Badge>Coming soon</Badge>
         </Card>
       ))}
+
+      {isError && error && <Error>{error.message}</Error>}
     </Profile.SharedStyles.Container>
   )
 }
