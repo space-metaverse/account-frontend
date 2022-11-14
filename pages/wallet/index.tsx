@@ -10,7 +10,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
 
@@ -115,6 +115,10 @@ const Wallet: NextPageWithLayout = () => {
     connector
   } = useAccount()
 
+  const {
+    disconnectAsync
+  } = useDisconnect()
+
   return (
     <Profile.SharedStyles.Container>
       {address && connector && (
@@ -129,7 +133,7 @@ const Wallet: NextPageWithLayout = () => {
 
             <WalletConnected.Name>{connector.name}</WalletConnected.Name>
 
-            <WalletConnected.Badge>{truncate(address)}</WalletConnected.Badge>
+            <WalletConnected.Badge title={address}>{truncate(address)}</WalletConnected.Badge>
           </div>
 
           <div>
@@ -138,7 +142,7 @@ const Wallet: NextPageWithLayout = () => {
               color="red"
               label="Disconnect"
               outline
-              onClick={async () => await connector.disconnect()}
+              onClick={async () => await disconnectAsync()}
             />
 
             <WalletConnected.Icon />
