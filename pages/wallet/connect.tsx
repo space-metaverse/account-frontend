@@ -1,22 +1,18 @@
 import { type ReactElement } from 'react'
 
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
-import { ExternalLink } from '@space-metaverse-ag/space-ui/icons'
+import { Check } from '@space-metaverse-ag/space-ui/icons'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
 import Image from 'next/image'
 import styled from 'styled-components'
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useSignMessage
-} from 'wagmi'
+import { useAccount, useConnect, useSignMessage } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
 
-const Card = styled.div`
+const Card = styled.div<{ disabled: boolean }>`
   border: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
+  cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
   display: flex;
   padding: 1.5rem 1.25rem;
   align-items: center;
@@ -74,18 +70,18 @@ const comingSoon = [
 
 const Wallet: NextPageWithLayout = () => {
   const {
+    error,
+    connect,
     isLoading,
     connectors,
-    connectAsync
+    connectAsync,
+    pendingConnector
   } = useConnect()
 
   const {
+    connector: activeConnector,
     isConnected
   } = useAccount()
-
-  const {
-    disconnectAsync
-  } = useDisconnect()
 
   const {
     signMessageAsync
@@ -94,28 +90,48 @@ const Wallet: NextPageWithLayout = () => {
   console.log({
     isLoading,
     isConnected,
-    connectors
+    connectors,
+    activeConnector
   })
 
   return (
     <Profile.SharedStyles.Container style={{ gap: '.75rem' }}>
-      {connectors.map(({ id, name }) => (
-        <Card key={id}>
-          <div>
-            <Image
-              src={icons[id as keyof typeof icons]}
-              alt={name}
-              width={32}
-              height={32}
-            />
+      {connectors.map((connector) => {
+        const {
+          id,
+          name
+        } = connector
 
-            <Title>{name}</Title>
-          </div>
-        </Card>
-      ))}
+        return (
+          <Card
+            key={id}
+            onClick={() => connect({ connector })}
+            disabled={false}
+          >
+            <div>
+              <Image
+                src={icons[id as keyof typeof icons]}
+                alt={name}
+                width={32}
+                height={32}
+              />
+
+              <Title>{name}</Title>
+            </div>
+
+            {isLoading && pendingConnector?.id === connector.id &&
+            <p> (connecting)</p>}
+
+            {activeConnector?.id === id && <Check />}
+          </Card>
+        )
+      })}
 
       {comingSoon.map(({ id, name }) => (
-        <Card key={id}>
+        <Card
+          key={id}
+          disabled
+        >
           <div>
             <Image
               src={icons[id as keyof typeof icons]}
