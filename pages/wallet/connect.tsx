@@ -2,6 +2,7 @@ import { type ReactElement } from 'react'
 
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { Check } from '@space-metaverse-ag/space-ui/icons'
+import wallets from 'data/wallets'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -71,15 +72,6 @@ const IconCheck = styled(Check)`
   }
 `
 
-const icons = {
-  binance: '/icons/icon-binance.svg',
-  metaMask: '/icons/icon-metamask.svg',
-  trustWallet: '/icons/icon-trust-wallet.svg',
-  walletConnect: '/icons/icon-wallet-connect.svg',
-  myEtherWallet: '/icons/icon-my-ether-wallet.svg',
-  coinbaseWallet: '/icons/icon-coinbase.svg'
-}
-
 const comingSoon = [
   {
     id: 'binance',
@@ -134,7 +126,7 @@ const Wallet: NextPageWithLayout = () => {
           >
             <div>
               <Image
-                src={icons[id as keyof typeof icons]}
+                src={wallets[id as keyof typeof wallets]}
                 alt={name}
                 width={32}
                 height={32}
@@ -158,7 +150,7 @@ const Wallet: NextPageWithLayout = () => {
         >
           <div>
             <Image
-              src={icons[id as keyof typeof icons]}
+              src={wallets[id as keyof typeof wallets]}
               alt={name}
               width={32}
               height={32}

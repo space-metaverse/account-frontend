@@ -3,11 +3,14 @@ import { type ReactElement } from 'react'
 import { Button } from '@space-metaverse-ag/space-ui'
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { ExternalLink } from '@space-metaverse-ag/space-ui/icons'
+import wallets from 'data/wallets'
+import truncate from 'helpers/truncate'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { useAccount } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
 
@@ -29,7 +32,6 @@ const Message = styled.p`
 const ConnectWallet = styled.div`
   display: flex;
   padding: 1rem 1rem 1rem 1.5rem;
-  margin-top: 2rem;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.xl};
   justify-content: space-between;
@@ -56,6 +58,7 @@ const WalletConnected = {
     display: flex;
     padding: 1rem;
     align-items: center;
+    margin-bottom: 2rem;
     border-radius: ${({ theme }) => theme.radius.xl};
     justify-content: space-between;
   
@@ -106,54 +109,64 @@ const WalletConnected = {
   `
 }
 
-const Wallet: NextPageWithLayout = () => (
-  <Profile.SharedStyles.Container>
-    <WalletConnected.Base>
-      <div>
-        <Image
-          src="/icons/icon-metamask.svg"
-          alt="Metamask"
-          width={32}
-          height={32}
-        />
+const Wallet: NextPageWithLayout = () => {
+  const {
+    address,
+    connector
+  } = useAccount()
 
-        <WalletConnected.Name>Metamask</WalletConnected.Name>
+  return (
+    <Profile.SharedStyles.Container>
+      {address && connector && (
+        <WalletConnected.Base>
+          <div>
+            <Image
+              src={wallets[connector.id as keyof typeof wallets]}
+              alt={connector.name}
+              width={32}
+              height={32}
+            />
 
-        <WalletConnected.Badge>0x12r45... 6HJ9</WalletConnected.Badge>
-      </div>
+            <WalletConnected.Name>{connector.name}</WalletConnected.Name>
 
-      <div>
-        <Button
-          size="small"
-          color="red"
-          label="Disconnect"
-          outline
-        />
+            <WalletConnected.Badge>{truncate(address)}</WalletConnected.Badge>
+          </div>
 
-        <WalletConnected.Icon />
-      </div>
-    </WalletConnected.Base>
+          <div>
+            <Button
+              size="small"
+              color="red"
+              label="Disconnect"
+              outline
+              onClick={async () => await connector.disconnect()}
+            />
 
-    <ConnectWallet>
-      <p>
-        You can connect more wallets to your account
-      </p>
+            <WalletConnected.Icon />
+          </div>
+        </WalletConnected.Base>
+      )}
 
-      <Link href="/wallet/connect">
-        <Button
-          size="small"
-          color="blue"
-          label="CONNECT"
-        />
-      </Link>
-    </ConnectWallet>
+      <ConnectWallet>
+        <p>
+          You can connect more wallets to your account
+        </p>
 
-    <Message>
-      Dont Have a wallet? <br />
-      No Problem, Check our <b>step by step guides</b> how to create wallet
-    </Message>
-  </Profile.SharedStyles.Container>
-)
+        <Link href="/wallet/connect">
+          <Button
+            size="small"
+            color="blue"
+            label="CONNECT"
+          />
+        </Link>
+      </ConnectWallet>
+
+      <Message>
+        Dont Have a wallet? <br />
+        No Problem, Check our <b>step by step guides</b> how to create wallet
+      </Message>
+    </Profile.SharedStyles.Container>
+  )
+}
 
 Wallet.getLayout = (page: ReactElement) => (
   <Profile.Layout title="Active Wallets">
