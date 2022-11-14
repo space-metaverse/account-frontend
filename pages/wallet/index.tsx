@@ -139,7 +139,7 @@ const Wallet: NextPageWithLayout = () => (
         You can connect more wallets to your account
       </p>
 
-      <Link href="connect">
+      <Link href="/wallet/connect">
         <Button
           size="small"
           color="blue"
