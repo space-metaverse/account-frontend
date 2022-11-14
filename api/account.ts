@@ -31,7 +31,7 @@ export const accountApi = createApi({
         url: '/me',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken')}`
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
         }
       })
     })

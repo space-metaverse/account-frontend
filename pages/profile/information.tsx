@@ -55,14 +55,12 @@ const Information: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (username) {
-      console.log(username)
-
       setFields((prev) => ({
         ...prev,
         username
       }))
     }
-  }, [])
+  }, [username])
 
   return (
     <>
