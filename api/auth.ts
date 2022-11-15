@@ -20,7 +20,23 @@ interface VerifyTokenResponse {
   message: string
 }
 
-function getBaseURL () {
+interface SendSMSCodeRequest {
+  phoneNumber: string
+}
+
+interface SendSMSCodeResponse {
+  message: string
+}
+
+interface VerifySMSCodeRequest {
+  code: string
+}
+
+interface VerifySMSCodeResponse {
+  message: string
+}
+
+function getBaseURL() {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'https://api.dev.tryspace.com/auth'
@@ -55,11 +71,37 @@ export const authApi = createApi({
           Authorization: `Bearer ${immerToken}`
         }
       })
+    }),
+    sendSMSCode: builder.mutation<SendSMSCodeResponse, SendSMSCodeRequest>({
+      query: ({ phoneNumber }) => ({
+        url: '/sendSMSCode',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken')}`
+        },
+        body: {
+          phoneNumber
+        }
+      })
+    }),
+    verifySMSCode: builder.mutation<VerifySMSCodeResponse, VerifySMSCodeRequest>({
+      query: ({ code }) => ({
+        url: '/verifySMSCode',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken')}`
+        },
+        body: {
+          code
+        }
+      })
     })
   })
 })
 
 export const {
   useGetVerifyCodeQuery,
-  useGetVerifyTokenQuery
+  useGetVerifyTokenQuery,
+  useSendSMSCodeMutation,
+  useVerifySMSCodeMutation
 } = authApi
