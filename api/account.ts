@@ -9,6 +9,8 @@ interface GetMeResponse {
   tryspaceEmail?: string
   userEmail?: string
   phoneNumber?: string
+  firstName?: string
+  lastName?: string
   message: string
 }
 
