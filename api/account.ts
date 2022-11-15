@@ -1,14 +1,28 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface GetMyAccountRequest {
+interface GetMeRequest {
 
 }
 
-interface GetMyAccountResponse {
+interface GetMeResponse {
   username: string
+  tryspaceEmail?: string
+  userEmail?: string
+  phoneNumber?: string
+  message: string
 }
 
-function getBaseURl () {
+interface PostMeRequest {
+  firstName?: string
+  lastName?: string
+  email?: string
+}
+
+interface PostMeResponse {
+  message: string
+}
+
+function getBaseURl() {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'http://localhost:3001/account'
@@ -26,7 +40,7 @@ export const accountApi = createApi({
   reducerPath: 'accountApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURl() }),
   endpoints: (builder) => ({
-    getMyAccount: builder.mutation<GetMyAccountResponse, GetMyAccountRequest>({
+    getMe: builder.query<GetMeResponse, GetMeRequest>({
       query: () => ({
         url: '/me',
         method: 'GET',
@@ -34,10 +48,24 @@ export const accountApi = createApi({
           Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
         }
       })
+    }),
+    postMe: builder.mutation<PostMeResponse, PostMeRequest>({
+      query: ({ firstName, lastName, email }) => ({
+        url: '/me',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        },
+        body: {
+          firstName,
+          lastName,
+          email
+        }
+      })
     })
   })
 })
 
 export const {
-  useGetMyAccountMutation
+  useGetMeQuery,
 } = accountApi
