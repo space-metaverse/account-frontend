@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from "react";
 
-import { useOutsideClick } from '@space-metaverse-ag/space-ui/hooks'
+import { useOutsideClick } from "@space-metaverse-ag/space-ui/hooks";
 import {
   NFT,
   User,
@@ -15,94 +15,119 @@ import {
   FriendsList,
   FriendsRequests,
   ConnectedWallets,
-  ConnectNewWallet
-} from '@space-metaverse-ag/space-ui/icons'
-import { useRouter } from 'next/router'
+  ConnectNewWallet,
+  Orders,
+  OrdersList,
+  ReturnAndRefund,
+} from "@space-metaverse-ag/space-ui/icons";
+import { useRouter } from "next/router";
 
-import * as Styled from './styles'
-import type { OptionProps, SimpleOptionProps, OptionComponentProps } from './types'
+import * as Styled from "./styles";
+import type {
+  OptionProps,
+  SimpleOptionProps,
+  OptionComponentProps,
+} from "./types";
 
 const options: OptionProps[] = [
   {
     Icon: User,
-    label: 'Profile',
+    label: "Profile",
     route: null,
     disabled: false,
     children: [
       {
         Icon: Profile,
-        route: '/profile/information',
-        label: 'Profile Information',
-        disabled: false
+        route: "/profile/information",
+        label: "Profile Information",
+        disabled: false,
       },
       {
         Icon: Avatar,
-        route: '/profile/avatars',
-        label: 'Avatars',
-        disabled: true
+        route: "/profile/avatars",
+        label: "Avatars",
+        disabled: true,
       },
       {
         Icon: Security,
-        route: '/profile/security',
-        label: 'Security Settings',
-        disabled: false
-      }
-    ]
+        route: "/profile/security",
+        label: "Security Settings",
+        disabled: false,
+      },
+    ],
   },
   {
     Icon: Friends,
-    label: 'Friends',
+    label: "Friends",
     route: null,
     disabled: true,
     children: [
       {
         Icon: FriendsList,
-        route: '/friends/your-friends',
-        label: 'Your Friends'
+        route: "/friends/your-friends",
+        label: "Your Friends",
       },
       {
         Icon: FriendsAdd,
-        route: '/friends/add-friend',
-        label: 'Add Friend'
+        route: "/friends/add-friend",
+        label: "Add Friend",
       },
       {
         Icon: FriendsRequests,
-        route: '/friends/manage',
-        label: 'Manage Requests'
-      }
-    ]
+        route: "/friends/manage",
+        label: "Manage Requests",
+      },
+    ],
   },
   {
     Icon: Wallet,
     route: null,
-    label: 'Connected Wallets',
+    label: "Connected Wallets",
     disabled: false,
     children: [
       {
         Icon: ConnectedWallets,
-        route: '/wallet',
-        label: 'Active Wallets'
+        route: "/wallet",
+        label: "Active Wallets",
       },
       {
         Icon: ConnectNewWallet,
-        route: '/wallet/connect',
-        label: 'Connect New Wallet'
-      }
-    ]
+        route: "/wallet/connect",
+        label: "Connect New Wallet",
+      },
+    ],
+  },
+  {
+    Icon: Orders,
+    route: null,
+    label: "My Orders",
+    disabled: false,
+    children: [
+      {
+        Icon: OrdersList,
+        route: "/orders/list",
+        label: "Orders List",
+      },
+      {
+        Icon: ReturnAndRefund,
+        route: "/orders/return-requests",
+        label: "Return Requests",
+      },
+    ],
   },
   {
     Icon: NFT,
-    label: 'NFT Inventory',
-    route: '/nft-inventory',
-    disabled: true
+    label: "NFT Inventory",
+    route: "/nft-inventory",
+    disabled: true,
   },
   {
     Icon: Collection,
-    label: 'Space Inventory',
-    route: '/space-inventory',
-    disabled: true
-  }
-]
+    label: "Space Inventory",
+    route: "/space-inventory",
+    disabled: true,
+  },
+];
 
 const Option: React.FC<OptionComponentProps> = ({
   show,
@@ -113,14 +138,14 @@ const Option: React.FC<OptionComponentProps> = ({
   disabled,
   selected,
   children,
-  toggleState
+  toggleState,
 }) => (
   <Styled.OptionWrapper>
     <Styled.Option
       onClick={() => {
         if (!disabled) {
-          (!children) && select({ label, Icon }, route)
-          toggleState()
+          !children && select({ label, Icon }, route);
+          toggleState();
         }
       }}
       animate={show}
@@ -139,7 +164,8 @@ const Option: React.FC<OptionComponentProps> = ({
             key={item.label}
             child
             onClick={() => {
-              !item.disabled && select({ Icon: item.Icon, label: item.label }, item.route)
+              !item.disabled &&
+                select({ Icon: item.Icon, label: item.label }, item.route);
             }}
             selected={selected === item.label}
             disabled={item.disabled}
@@ -151,56 +177,54 @@ const Option: React.FC<OptionComponentProps> = ({
       </Styled.Options>
     )}
   </Styled.OptionWrapper>
-)
+);
 
 const Sidenav: React.FC = () => {
-  const [show, setShow] = useState(-1)
-  const [dropdown, setDropdown] = useState(false)
-  const [optionSelected, setOptionSelected] = useState<SimpleOptionProps | null>(null)
+  const [show, setShow] = useState(-1);
+  const [dropdown, setDropdown] = useState(false);
+  const [optionSelected, setOptionSelected] =
+    useState<SimpleOptionProps | null>(null);
 
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { push, pathname } = useRouter()
+  const { push, pathname } = useRouter();
 
   const navigate = (option: SimpleOptionProps, route: string | null): void => {
-    setOptionSelected(option)
+    setOptionSelected(option);
 
-    setDropdown(false)
+    setDropdown(false);
 
-    if (route) push(route)
-  }
+    if (route) push(route);
+  };
 
   useEffect(() => {
     options.forEach(({ Icon, route, label, children }, index) => {
       if (route) {
-        const path = pathname.includes(route)
+        const path = pathname.includes(route);
 
-        if (path) setOptionSelected({ Icon, label })
+        if (path) setOptionSelected({ Icon, label });
       }
 
       if (children) {
         children.forEach((child) => {
-          const path = pathname.includes(child.route)
+          const path = pathname.includes(child.route);
 
           if (path) {
-            setOptionSelected({ Icon: child.Icon, label: child.label })
+            setOptionSelected({ Icon: child.Icon, label: child.label });
 
-            setShow(index)
+            setShow(index);
           }
-        })
+        });
       }
 
-      return false
-    })
-  }, [pathname])
+      return false;
+    });
+  }, [pathname]);
 
-  useOutsideClick(dropdownRef, () => setDropdown(false))
+  useOutsideClick(dropdownRef, () => setDropdown(false));
 
   return (
-    <Styled.Wrapper
-      ref={dropdownRef}
-      dropdown={dropdown}
-    >
+    <Styled.Wrapper ref={dropdownRef} dropdown={dropdown}>
       <Styled.Preview
         as={Styled.Option}
         animate={dropdown}
@@ -228,14 +252,14 @@ const Sidenav: React.FC = () => {
             show={show === index}
             select={navigate}
             selected={optionSelected?.label}
-            toggleState={() => setShow((prev) => prev !== index ? index : -1)}
+            toggleState={() => setShow((prev) => (prev !== index ? index : -1))}
           >
             {props.children}
           </Option>
         ))}
       </Styled.Options>
     </Styled.Wrapper>
-  )
-}
+  );
+};
 
-export default Sidenav
+export default Sidenav;
