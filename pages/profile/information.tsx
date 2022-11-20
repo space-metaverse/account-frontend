@@ -1,66 +1,72 @@
-import { useState, useEffect, type ReactElement } from 'react'
+import { useState, useEffect, type ReactElement } from "react";
 
-import { Button, TextInput, ImageInput } from '@space-metaverse-ag/space-ui'
-import validate from 'helpers/validate'
-import Profile from 'layouts/profile'
-import Head from 'next/head'
-import { useAppSelector } from 'redux/hooks'
-import { string } from 'yup'
+import {
+  Button,
+  TextInput,
+  ImageInput,
+  PhoneInput,
+} from "@space-metaverse-ag/space-ui";
+import validate from "helpers/validate";
+import Profile from "layouts/profile";
+import Head from "next/head";
+import { useAppSelector } from "redux/hooks";
+import { string } from "yup";
 
-import type { NextPageWithLayout } from '../../types'
+import type { NextPageWithLayout } from "../../types";
 
 const shape = {
   email: string()
-    .email('Enter a valid email address')
-    .required('Enter your email'),
-  displayName: string().required('Enter your public name')
-}
+    .email("Enter a valid email address")
+    .required("Enter your email"),
+  displayName: string().required("Enter your public name"),
+};
 
 const initialFields = {
-  email: '',
-  phone: '',
-  username: '',
-  lastName: '',
-  firstName: '',
-  displayName: ''
-}
+  email: "",
+  phone: "",
+  username: "",
+  lastName: "",
+  firstName: "",
+  displayName: "",
+};
 
 const Information: NextPageWithLayout = () => {
-  const [file, setFile] = useState<File | null>(null)
-  const [fields, setFields] = useState(initialFields)
-  const [errors, setErrors] = useState(initialFields)
+  const [file, setFile] = useState<File | null>(null);
+  const [fields, setFields] = useState(initialFields);
+  const [errors, setErrors] = useState(initialFields);
 
-  const { username } = useAppSelector(state => state.account)
+  const { username } = useAppSelector((state) => state.account);
 
   const submit = async (): Promise<void> => {
-    await validate.request(fields, shape)
+    await validate
+      .request(fields, shape)
       .then(() => {
-        setErrors(initialFields)
+        setErrors(initialFields);
 
         /**
          * Send request to backend.
          */
       })
       .catch((err: Error) => {
-        const messages = validate.error(err)
+        const messages = validate.error(err);
 
-        if (messages) setErrors(messages as typeof initialFields)
-      })
-  }
+        if (messages) setErrors(messages as typeof initialFields);
+      });
+  };
 
   const discard = (): void => {
-    setErrors(initialFields)
-    setFields(initialFields)
-  }
+    setErrors(initialFields);
+    setFields(initialFields);
+  };
 
   useEffect(() => {
     if (username) {
       setFields((prev) => ({
         ...prev,
-        username
-      }))
+        username,
+      }));
     }
-  }, [username])
+  }, [username]);
 
   return (
     <>
@@ -70,10 +76,10 @@ const Information: NextPageWithLayout = () => {
           header="Toni Papperoni"
           onFile={setFile}
           button={{
-            size: 'small',
-            label: 'Change Avatar',
-            color: 'blue',
-            outline: true
+            size: "small",
+            label: "Change Avatar",
+            color: "blue",
+            outline: true,
           }}
           showDummyAvatar
           changeLabelWhenFileSelected
@@ -85,7 +91,9 @@ const Information: NextPageWithLayout = () => {
               label="Username"
               value={fields.username}
               disabled
-              onChange={({ target }) => setFields((prev) => ({ ...prev, username: target.value }))}
+              onChange={({ target }) =>
+                setFields((prev) => ({ ...prev, username: target.value }))
+              }
               placeholder="Your unique Username"
             />
 
@@ -93,7 +101,9 @@ const Information: NextPageWithLayout = () => {
               label="Display Name"
               value={fields.displayName}
               isError={!!errors.displayName}
-              onChange={({ target }) => setFields((prev) => ({ ...prev, displayName: target.value }))}
+              onChange={({ target }) =>
+                setFields((prev) => ({ ...prev, displayName: target.value }))
+              }
               placeholder="Public name displayed across the platform"
             />
           </div>
@@ -101,14 +111,18 @@ const Information: NextPageWithLayout = () => {
             <TextInput
               label="First name"
               value={fields.firstName}
-              onChange={({ target }) => setFields((prev) => ({ ...prev, firstName: target.value }))}
+              onChange={({ target }) =>
+                setFields((prev) => ({ ...prev, firstName: target.value }))
+              }
               placeholder="Enter your first name"
             />
 
             <TextInput
               label="Last name"
               value={fields.lastName}
-              onChange={({ target }) => setFields((prev) => ({ ...prev, lastName: target.value }))}
+              onChange={({ target }) =>
+                setFields((prev) => ({ ...prev, lastName: target.value }))
+              }
               placeholder="Enter your last name"
             />
           </div>
@@ -119,17 +133,20 @@ const Information: NextPageWithLayout = () => {
               value={fields.email}
               isError={!!errors.email}
               disabled
-              onChange={({ target }) => setFields((prev) => ({ ...prev, email: target.value }))}
+              onChange={(newValue) =>
+                setFields((prev) => ({ ...prev, email: newValue }))
+              }
               placeholder="Enter your email"
             />
           </div>
 
           <div className="is-grid">
-            <TextInput
+            <PhoneInput
               label="Phone number"
               value={fields.phone}
-              onChange={({ target }) => setFields((prev) => ({ ...prev, phone: target.value }))}
-              placeholder="(XX) XXXX-XXXX"
+              onChange={({ target }) =>
+                setFields((prev) => ({ ...prev, phone: target.value }))
+              }
             />
           </div>
         </Profile.SharedStyles.Form>
@@ -151,18 +168,18 @@ const Information: NextPageWithLayout = () => {
         />
       </Profile.SharedStyles.Actions>
     </>
-  )
-}
+  );
+};
 
 Information.getLayout = (page: ReactElement) => (
   <Profile.Layout title="Profile Information">
     <Head>
       <title>Profile Information | SPACE</title>
-      <meta name='description' content='SPACE Accounts' />
+      <meta name="description" content="SPACE Accounts" />
     </Head>
 
     {page}
   </Profile.Layout>
-)
+);
 
-export default Information
+export default Information;
