@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface AccountState {
-  username?: string
+  username?: string,
+  phoneNumber?: string
 }
 
 const initialState: AccountState = {
-  username: 'Not Logged In'
+  username: 'Not Logged In',
+  phoneNumber: ''
 }
 
 export const accountSlice = createSlice({
@@ -14,12 +16,16 @@ export const accountSlice = createSlice({
   reducers: {
     setAccountUsername: (state: AccountState, action: PayloadAction<{ username: string }>) => {
       state.username = action.payload.username
+    },
+    setAccountPhoneNumber: (state: AccountState, action: PayloadAction<{ phoneNumber: string}>) => {
+      state.phoneNumber = action.payload.phoneNumber
     }
   }
 })
 
 export const {
-  setAccountUsername
+  setAccountUsername,
+  setAccountPhoneNumber
 } = accountSlice.actions
 
 export default accountSlice.reducer
