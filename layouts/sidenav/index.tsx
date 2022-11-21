@@ -112,6 +112,7 @@ const options: OptionProps[] = [
         Icon: ReturnAndRefund,
         route: "/orders/return-requests",
         label: "Return Requests",
+        disabled: true,
       },
     ],
   },
