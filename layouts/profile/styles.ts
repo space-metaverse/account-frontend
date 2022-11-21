@@ -78,6 +78,9 @@ const Actions = styled.div`
 const PhoneAction = styled.div`
   height: fit-content;
   padding-top: 1.25rem;
+  @media screen and (max-width: 640px) {
+    padding-top: 0;
+  }
 `
 
 const Alert = styled.div`

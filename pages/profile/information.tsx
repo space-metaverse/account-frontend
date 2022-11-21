@@ -66,12 +66,12 @@ const Information: NextPageWithLayout = () => {
 
   const [
     sendSMSCode, // This is the mutation trigger
-    { error: isSendSMSCodeError, isSuccess: isSendSMSCodeSuccess, data: sendSMSCodeData } // This is the destructured mutation result
+    { isLoading: isSendSMSCodeLoading, error: isSendSMSCodeError, isSuccess: isSendSMSCodeSuccess, data: sendSMSCodeData } // This is the destructured mutation result
   ] = useSendSMSCodeMutation()
 
   const [
     verifySMSCode,
-    { isSuccess: isVerifySMSCodeSuccess, error: isVerifySMSCodeError, data: verifySMSCodeData }
+    { isLoading: isVerifySMSCodeLoading, isSuccess: isVerifySMSCodeSuccess, error: isVerifySMSCodeError, data: verifySMSCodeData }
   ] = useVerifySMSCodeMutation()
 
   const submit = async (): Promise<void> => {
@@ -136,7 +136,7 @@ const Information: NextPageWithLayout = () => {
       ...prev,
       isSendCode: isVerifySMSCodeSuccess || !!isSendSMSCodeError || !isSendSMSCodeSuccess,
       phoneInputInvalid: !!isSendSMSCodeError,
-      isAlertShow: isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError,
+      isAlertShow: !isSendSMSCodeLoading && !isVerifySMSCodeLoading && (isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError),
       alertStatus: (!!isSendSMSCodeError || !!isVerifySMSCodeError) ? 'error' : 'success',
       alertMessage
     }))
