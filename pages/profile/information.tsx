@@ -105,7 +105,7 @@ const Information: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (isGetMeSuccess && getMeData?.phoneNumber) {
-      setFields({...fields, phone: getMeData?.phoneNumber})
+      setFields({ ...fields, phone: getMeData?.phoneNumber })
       dispatch(setAccountPhone({ phone: getMeData?.phoneNumber }))
     }
   }, [isGetMeSuccess, getMeData, dispatch])
@@ -228,7 +228,7 @@ const Information: NextPageWithLayout = () => {
                       mainCountry='ca'
                       isError={phoneVerifyStatus.phoneInputInvalid}
                       onChange={(value) => {
-                        setFields((prev) => ({...prev, phone: value}))
+                        setFields((prev) => ({ ...prev, phone: value }))
                       }}
                       value={fields.phone}
                     />
