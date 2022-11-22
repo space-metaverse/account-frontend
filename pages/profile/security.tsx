@@ -70,7 +70,7 @@ const Security: NextPageWithLayout = () => {
               type='password'
               label='Current Password'
               value={fields.password}
-              isError={!!errors.password}
+              isError={errors.password}
               onChange={({ target }) => setFields((prev) => ({ ...prev, password: target.value }))}
               placeholder='Enter your current password'
             />
@@ -81,7 +81,7 @@ const Security: NextPageWithLayout = () => {
               type='password'
               label='New Password'
               value={fields.newPassword}
-              isError={!!errors.newPassword}
+              isError={errors.newPassword}
               onChange={({ target }) => setFields((prev) => ({ ...prev, newPassword: target.value }))}
               placeholder='Enter new password'
             />
@@ -90,7 +90,7 @@ const Security: NextPageWithLayout = () => {
               type='password'
               label='Confirm New Password'
               value={fields.confirmNewPassword}
-              isError={!!errors.confirmNewPassword}
+              isError={errors.confirmNewPassword}
               onChange={({ target }) => setFields((prev) => ({ ...prev, confirmNewPassword: target.value }))}
               placeholder='Re-enter new password'
             />
