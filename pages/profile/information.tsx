@@ -12,7 +12,7 @@ import validate from 'helpers/validate'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
 import { useAppSelector, useAppDispatch } from 'redux/hooks'
-import { setAccountPhoneNumber } from 'redux/slices/account'
+import { setAccountPhone } from 'redux/slices/account'
 import { string } from 'yup'
 
 import { useGetMeQuery } from '../../api/account'
@@ -46,10 +46,9 @@ interface PhoneVerifyStatusProps {
 
 const Information: NextPageWithLayout = () => {
   const dispatch = useAppDispatch()
-  const { username, phoneNumber } = useAppSelector((state) => state.account)
+  const { username, phone } = useAppSelector((state) => state.account)
   const [file, setFile] = useState<File | null>(null)
   const [fields, setFields] = useState(initialFields)
-  const [phoneNumberInput, setPhoneNumberInput] = useState(phoneNumber)
   const [errors, setErrors] = useState(initialFields)
   const [phoneVerifyStatus, setPhoneVerifyStatus] = useState<PhoneVerifyStatusProps>({
     isSendCode: true,
@@ -97,7 +96,7 @@ const Information: NextPageWithLayout = () => {
   }
 
   const sendCode = (): void => {
-    sendSMSCode({ phoneNumber: phoneNumberInput ?? '' })
+    sendSMSCode({ phoneNumber: fields.phone ?? '' })
   }
 
   const verifyCode = (): void => {
@@ -106,8 +105,8 @@ const Information: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (isGetMeSuccess && getMeData?.phoneNumber) {
-      setPhoneNumberInput(getMeData?.phoneNumber)
-      dispatch(setAccountPhoneNumber({ phoneNumber: getMeData?.phoneNumber }))
+      setFields({...fields, phone: getMeData?.phoneNumber})
+      dispatch(setAccountPhone({ phone: getMeData?.phoneNumber }))
     }
   }, [isGetMeSuccess, getMeData, dispatch])
 
@@ -118,7 +117,13 @@ const Information: NextPageWithLayout = () => {
         username
       }))
     }
-  }, [username])
+    if (phone) {
+      setFields((prev) => ({
+        ...prev,
+        phone
+      }))
+    }
+  }, [username, phone])
 
   useEffect(() => {
     let alertMessage = ''
@@ -134,7 +139,7 @@ const Information: NextPageWithLayout = () => {
     }
     setPhoneVerifyStatus((prev) => ({
       ...prev,
-      isSendCode: isVerifySMSCodeSuccess || !!isSendSMSCodeError || !isSendSMSCodeSuccess,
+      isSendCode: !!isSendSMSCodeError || !isSendSMSCodeSuccess,
       phoneInputInvalid: !!isSendSMSCodeError,
       isAlertShow: !isSendSMSCodeLoading && !isVerifySMSCodeLoading && (isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError),
       alertStatus: (!!isSendSMSCodeError || !!isVerifySMSCodeError) ? 'error' : 'success',
@@ -220,16 +225,12 @@ const Information: NextPageWithLayout = () => {
                 phoneVerifyStatus.isSendCode
                   ? <PhoneInput
                       label='Phone'
-                      preferredCountries={[
-                        'us',
-                        'ca',
-                        'br'
-                      ]}
+                      mainCountry='ca'
                       isError={phoneVerifyStatus.phoneInputInvalid}
                       onChange={(value) => {
-                        setPhoneNumberInput(value)
+                        setFields((prev) => ({...prev, phone: value}))
                       }}
-                      value={phoneNumberInput}
+                      value={fields.phone}
                     />
                   : <TextInput
                       label='Verify Code'

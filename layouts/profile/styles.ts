@@ -76,10 +76,13 @@ const Actions = styled.div`
 `
 
 const PhoneAction = styled.div`
-  height: fit-content;
-  padding-top: 1.25rem;
+  align-items: center;
+  display: flex;
+  padding-top: 1.5rem;
+  height: 4.375rem;
   @media screen and (max-width: 640px) {
     padding-top: 0;
+    height: fit-content;
   }
 `
 
