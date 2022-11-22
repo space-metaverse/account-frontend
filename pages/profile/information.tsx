@@ -92,7 +92,7 @@ const Information: NextPageWithLayout = () => {
             <TextInput
               label="Display Name"
               value={fields.displayName}
-              isError={!!errors.displayName}
+              isError={errors.displayName}
               onChange={({ target }) => setFields((prev) => ({ ...prev, displayName: target.value }))}
               placeholder="Public name displayed across the platform"
             />
@@ -117,7 +117,7 @@ const Information: NextPageWithLayout = () => {
             <TextInput
               label="Email"
               value={fields.email}
-              isError={!!errors.email}
+              isError={errors.email}
               disabled
               onChange={({ target }) => setFields((prev) => ({ ...prev, email: target.value }))}
               placeholder="Enter your email"
