@@ -160,7 +160,7 @@ const Information: NextPageWithLayout = () => {
       ...prev,
       isAlertShow: !isSendSMSCodeLoading && !isVerifySMSCodeLoading && (isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError),
       alertStatus: (!!isSendSMSCodeError || !!isVerifySMSCodeError) ? 'error' : 'success',
-      isVerifyCode: (prev.prevSendSMSLoading && isSendSMSCodeSuccess) || !!isVerifySMSCodeError || isVerifySMSCodeLoading,
+      isVerifyCode: isSendSMSCodeSuccess && !isVerifySMSCodeSuccess,
       alertMessage,
       phoneInputInvalid: !!isSendSMSCodeError,
       prevSendSMSLoading: isSendSMSCodeLoading,

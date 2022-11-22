@@ -36,7 +36,7 @@ interface VerifySMSCodeResponse {
   message: string
 }
 
-function getBaseURL() {
+const getBaseURL = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'https://api.dev.tryspace.com/auth'
@@ -77,10 +77,10 @@ export const authApi = createApi({
         url: '/sendSMSCode',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken')}`
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
         },
         body: {
-          phoneNumber
+          phoneNumber,
         }
       })
     }),
@@ -89,7 +89,7 @@ export const authApi = createApi({
         url: '/verifySMSCode',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken')}`
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
         },
         body: {
           code
