@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux'
 
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
+import "@space-metaverse-ag/space-ui/index.css"
 import Auth from 'components/Auth'
 import TopNav from 'layouts/topnav'
 import type { AppProps } from 'next/app'
