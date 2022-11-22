@@ -37,11 +37,12 @@ const initialFields = {
 }
 
 interface PhoneVerifyStatusProps {
-  isSendCode: boolean
+  isVerifyCode: boolean
   phoneInputInvalid: boolean
   alertStatus: AlertProps['type']
   alertMessage: string
   isAlertShow: boolean
+  prevSendSMSLoading: boolean
 }
 
 const Information: NextPageWithLayout = () => {
@@ -51,11 +52,12 @@ const Information: NextPageWithLayout = () => {
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
   const [phoneVerifyStatus, setPhoneVerifyStatus] = useState<PhoneVerifyStatusProps>({
-    isSendCode: true,
+    isVerifyCode: false,
     phoneInputInvalid: false,
     alertStatus: 'error',
     alertMessage: '',
-    isAlertShow: false
+    isAlertShow: false,
+    prevSendSMSLoading: false
   })
 
   const {
@@ -129,8 +131,9 @@ const Information: NextPageWithLayout = () => {
     let alertMessage = ''
     if (isSendSMSCodeSuccess) {
       alertMessage = sendSMSCodeData?.message ?? 'Sent SMS code successfully'
-      if (isVerifySMSCodeSuccess) {
+      if (isVerifySMSCodeSuccess && !phoneVerifyStatus.prevSendSMSLoading) {
         alertMessage = verifySMSCodeData?.message ?? 'Verified SMS code successfully'
+        setFields({ ...fields, code: '' });
       } else if (isVerifySMSCodeError) {
         alertMessage = 'Issue with verifying SMS code'
       }
@@ -139,13 +142,14 @@ const Information: NextPageWithLayout = () => {
     }
     setPhoneVerifyStatus((prev) => ({
       ...prev,
-      isSendCode: !!isSendSMSCodeError || !isSendSMSCodeSuccess,
+      isVerifyCode: (prev.prevSendSMSLoading && isSendSMSCodeSuccess) || !!isVerifySMSCodeError || isVerifySMSCodeLoading,
       phoneInputInvalid: !!isSendSMSCodeError,
       isAlertShow: !isSendSMSCodeLoading && !isVerifySMSCodeLoading && (isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError),
       alertStatus: (!!isSendSMSCodeError || !!isVerifySMSCodeError) ? 'error' : 'success',
+      prevSendSMSLoading: isSendSMSCodeLoading,
       alertMessage
     }))
-  }, [isSendSMSCodeError, isSendSMSCodeSuccess, sendSMSCodeData, isVerifySMSCodeSuccess, isVerifySMSCodeError, verifySMSCodeData])
+  }, [isSendSMSCodeError, isSendSMSCodeSuccess, isSendSMSCodeLoading, sendSMSCodeData, isVerifySMSCodeSuccess, isVerifySMSCodeLoading, isVerifySMSCodeError, verifySMSCodeData])
 
   return (
     <>
@@ -222,8 +226,14 @@ const Information: NextPageWithLayout = () => {
           <div className='is-grid'>
             <div>
               {
-                phoneVerifyStatus.isSendCode
-                  ? <PhoneInput
+                phoneVerifyStatus.isVerifyCode
+                  ? <TextInput
+                    label='Verify Code'
+                    value={fields.code}
+                    onChange={({ target }) => setFields((prev) => ({ ...prev, code: target.value }))}
+                    placeholder='XXXXXX'
+                  />
+                  : <PhoneInput
                       label='Phone'
                       mainCountry='ca'
                       isError={phoneVerifyStatus.phoneInputInvalid}
@@ -231,12 +241,6 @@ const Information: NextPageWithLayout = () => {
                         setFields((prev) => ({ ...prev, phone: value }))
                       }}
                       value={fields.phone}
-                    />
-                  : <TextInput
-                      label='Verify Code'
-                      value={fields.code}
-                      onChange={({ target }) => setFields((prev) => ({ ...prev, code: target.value }))}
-                      placeholder='XXXXXX'
                     />
               }
               {
@@ -251,20 +255,20 @@ const Information: NextPageWithLayout = () => {
             </div>
             <Profile.SharedStyles.PhoneAction>
               {
-                phoneVerifyStatus.isSendCode
+                phoneVerifyStatus.isVerifyCode
                   ? <Button
                     color='blue'
-                    label='Send Code'
+                    label='Verify Code'
                     size='small'
                     outline
-                    onClick={sendCode}
+                    onClick={verifyCode}
                   />
                   : <Button
                       color='blue'
-                      label='Verify Code'
+                      label='Send Code'
                       size='small'
                       outline
-                      onClick={verifyCode}
+                      onClick={sendCode}
                     />
               }
             </Profile.SharedStyles.PhoneAction>
