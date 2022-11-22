@@ -75,6 +75,21 @@ const Actions = styled.div`
   }
 `
 
+const PhoneAction = styled.div`
+  align-items: center;
+  display: flex;
+  padding-top: 1.5rem;
+  height: 4.375rem;
+  @media screen and (max-width: 640px) {
+    padding-top: 0;
+    height: fit-content;
+  }
+`
+
+const Alert = styled.div`
+  padding-top: 0.5rem;
+`
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -91,6 +106,8 @@ const MainStyles = {
 const SharedStyles = {
   Form,
   Actions,
+  PhoneAction,
+  Alert,
   Container
 }
 
