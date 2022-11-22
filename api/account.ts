@@ -1,9 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface GetMeRequest {
-
-}
-
 interface GetMeResponse {
   message: string
   username: string
@@ -24,7 +20,7 @@ interface PostMeResponse {
   message: string
 }
 
-function getBaseURl() {
+const getBaseURl = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'http://localhost:3001/account'
@@ -42,7 +38,7 @@ export const accountApi = createApi({
   reducerPath: 'accountApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURl() }),
   endpoints: (builder) => ({
-    getMe: builder.query<GetMeResponse, GetMeRequest>({
+    getMe: builder.query<GetMeResponse, unknown>({
       query: () => ({
         url: '/me',
         method: 'GET',
