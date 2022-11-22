@@ -1,10 +1,10 @@
 import { useState, useEffect, type ReactElement } from 'react'
 
 import { Button, TextInput, ImageInput } from '@space-metaverse-ag/space-ui'
+import { useGetMeQuery, usePostMeMutation } from 'api/account'
 import validate from 'helpers/validate'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
-import { useAppSelector } from 'redux/hooks'
 import { string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
@@ -13,6 +13,7 @@ const shape = {
   email: string()
     .email('Enter a valid email address')
     .required('Enter your email'),
+  username: string().required('Enter your username'),
   displayName: string().required('Enter your public name')
 }
 
@@ -30,16 +31,31 @@ const Information: NextPageWithLayout = () => {
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
 
-  const { username } = useAppSelector(state => state.account)
+  const {
+    data,
+    isLoading
+  } = useGetMeQuery({})
+
+  const [
+    postMe
+  ] = usePostMeMutation()
 
   const submit = async (): Promise<void> => {
     await validate.request(fields, shape)
-      .then(() => {
+      .then(async () => {
         setErrors(initialFields)
 
-        /**
-         * Send request to backend.
-         */
+        const {
+          email,
+          lastName,
+          firstName,
+        } = fields;
+
+        await postMe({
+          email,
+          lastName,
+          firstName,
+        })
       })
       .catch((err: Error) => {
         const messages = validate.error(err)
@@ -54,13 +70,25 @@ const Information: NextPageWithLayout = () => {
   }
 
   useEffect(() => {
-    if (username) {
+    if (data && !isLoading) {
+      const {
+        lastName,
+        username,
+        userEmail,
+        firstName,
+        phoneNumber,
+      } = data;
+
       setFields((prev) => ({
         ...prev,
-        username
+        email: userEmail ?? '',
+        phone: phoneNumber ?? '',
+        username,
+        lastName: lastName ?? '',
+        firstName: firstName ?? '',
       }))
     }
-  }, [username])
+  }, [data, isLoading])
 
   return (
     <>
@@ -118,7 +146,7 @@ const Information: NextPageWithLayout = () => {
               label="Email"
               value={fields.email}
               isError={!!errors.email}
-              disabled
+              disabled={!!data?.userEmail}
               onChange={({ target }) => setFields((prev) => ({ ...prev, email: target.value }))}
               placeholder="Enter your email"
             />

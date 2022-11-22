@@ -5,13 +5,13 @@ interface GetMeRequest {
 }
 
 interface GetMeResponse {
-  username: string
-  tryspaceEmail?: string
-  userEmail?: string
-  phoneNumber?: string
-  firstName?: string
-  lastName?: string
   message: string
+  username: string
+  lastName?: string
+  userEmail?: string
+  firstName?: string
+  phoneNumber?: string
+  tryspaceEmail?: string
 }
 
 interface PostMeRequest {
@@ -70,4 +70,5 @@ export const accountApi = createApi({
 
 export const {
   useGetMeQuery,
+  usePostMeMutation,
 } = accountApi
