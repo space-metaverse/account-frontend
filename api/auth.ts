@@ -80,7 +80,7 @@ export const authApi = createApi({
           Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
         },
         body: {
-          phoneNumber,
+          phoneNumber: phoneNumber.includes('+') ? phoneNumber : `+${phoneNumber}`,
         }
       })
     }),
