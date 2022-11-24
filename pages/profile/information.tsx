@@ -1,28 +1,29 @@
 import { useState, useEffect, type ReactElement } from 'react'
 
 import {
+  Alert,
   Button,
   TextInput,
   ImageInput,
   PhoneInput,
-  Alert
+  type AlertProps
 } from '@space-metaverse-ag/space-ui'
-import type { AlertProps } from '@space-metaverse-ag/space-ui'
+import { useGetMeQuery, usePostMeMutation } from 'api/account'
+import { useSendSMSCodeMutation, useVerifySMSCodeMutation } from 'api/auth'
 import validate from 'helpers/validate'
 import Profile from 'layouts/profile'
 import Head from 'next/head'
-import { useAppSelector, useAppDispatch } from 'redux/hooks'
+import { useAppDispatch } from 'redux/hooks'
 import { setAccountPhone } from 'redux/slices/account'
 import { string } from 'yup'
 
-import { useGetMeQuery } from '../../api/account'
-import { useSendSMSCodeMutation, useVerifySMSCodeMutation } from '../../api/auth'
 import type { NextPageWithLayout } from '../../types'
 
 const shape = {
   email: string()
     .email('Enter a valid email address')
     .required('Enter your email'),
+  username: string().required('Enter your username'),
   displayName: string().required('Enter your public name')
 }
 
@@ -37,33 +38,37 @@ const initialFields = {
 }
 
 interface PhoneVerifyStatusProps {
-  isVerifyCode: boolean
-  phoneInputInvalid: boolean
   alertStatus: AlertProps['type']
-  alertMessage: string
   isAlertShow: boolean
+  isVerifyCode: boolean
+  alertMessage: string
+  phoneInputInvalid: boolean
   prevSendSMSLoading: boolean
 }
 
 const Information: NextPageWithLayout = () => {
   const dispatch = useAppDispatch()
-  const { username, phone } = useAppSelector((state) => state.account)
+
   const [file, setFile] = useState<File | null>(null)
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
   const [phoneVerifyStatus, setPhoneVerifyStatus] = useState<PhoneVerifyStatusProps>({
-    isVerifyCode: false,
-    phoneInputInvalid: false,
     alertStatus: 'error',
-    alertMessage: '',
     isAlertShow: false,
+    isVerifyCode: false,
+    alertMessage: '',
+    phoneInputInvalid: false,
     prevSendSMSLoading: false
   })
 
   const {
-    isSuccess: isGetMeSuccess,
-    data: getMeData
-  } = useGetMeQuery({ undefined })
+    data,
+    isSuccess,
+  } = useGetMeQuery({})
+
+  const [
+    postMe
+  ] = usePostMeMutation()
 
   const [
     sendSMSCode, // This is the mutation trigger
@@ -78,12 +83,20 @@ const Information: NextPageWithLayout = () => {
   const submit = async (): Promise<void> => {
     await validate
       .request(fields, shape)
-      .then(() => {
+      .then(async () => {
         setErrors(initialFields)
 
-        /**
-         * Send request to backend.
-         */
+        const {
+          email,
+          lastName,
+          firstName,
+        } = fields;
+
+        await postMe({
+          email,
+          lastName,
+          firstName,
+        })
       })
       .catch((err: Error) => {
         const messages = validate.error(err)
@@ -106,26 +119,29 @@ const Information: NextPageWithLayout = () => {
   }
 
   useEffect(() => {
-    if (isGetMeSuccess && getMeData?.phoneNumber) {
-      setFields({ ...fields, phone: getMeData?.phoneNumber })
-      dispatch(setAccountPhone({ phone: getMeData?.phoneNumber }))
-    }
-  }, [isGetMeSuccess, getMeData, dispatch])
+    if (data && isSuccess) {
+      const {
+        lastName,
+        username,
+        userEmail,
+        firstName,
+        phoneNumber,
+      } = data;
 
-  useEffect(() => {
-    if (username) {
       setFields((prev) => ({
         ...prev,
-        username
+        email: userEmail ?? '',
+        phone: phoneNumber ?? '',
+        username,
+        lastName: lastName ?? '',
+        firstName: firstName ?? '',
       }))
+
+      if (phoneNumber) {
+        dispatch(setAccountPhone({ phone: phoneNumber }))
+      }
     }
-    if (phone) {
-      setFields((prev) => ({
-        ...prev,
-        phone
-      }))
-    }
-  }, [username, phone])
+  }, [dispatch, data, isSuccess])
 
   useEffect(() => {
     let alertMessage = ''
@@ -133,7 +149,7 @@ const Information: NextPageWithLayout = () => {
       alertMessage = sendSMSCodeData?.message ?? 'Sent SMS code successfully'
       if (isVerifySMSCodeSuccess && !phoneVerifyStatus.prevSendSMSLoading) {
         alertMessage = verifySMSCodeData?.message ?? 'Verified SMS code successfully'
-        setFields({ ...fields, code: '' });
+        setFields((prev) => ({ ...prev, code: '' }));
       } else if (isVerifySMSCodeError) {
         alertMessage = 'Issue with verifying SMS code'
       }
@@ -142,14 +158,14 @@ const Information: NextPageWithLayout = () => {
     }
     setPhoneVerifyStatus((prev) => ({
       ...prev,
-      isVerifyCode: (prev.prevSendSMSLoading && isSendSMSCodeSuccess) || !!isVerifySMSCodeError || isVerifySMSCodeLoading,
-      phoneInputInvalid: !!isSendSMSCodeError,
       isAlertShow: !isSendSMSCodeLoading && !isVerifySMSCodeLoading && (isSendSMSCodeSuccess || !!isSendSMSCodeError || isVerifySMSCodeSuccess || !!isVerifySMSCodeError),
       alertStatus: (!!isSendSMSCodeError || !!isVerifySMSCodeError) ? 'error' : 'success',
+      isVerifyCode: isSendSMSCodeSuccess && !isVerifySMSCodeSuccess,
+      alertMessage,
+      phoneInputInvalid: !!isSendSMSCodeError,
       prevSendSMSLoading: isSendSMSCodeLoading,
-      alertMessage
     }))
-  }, [isSendSMSCodeError, isSendSMSCodeSuccess, isSendSMSCodeLoading, sendSMSCodeData, isVerifySMSCodeSuccess, isVerifySMSCodeLoading, isVerifySMSCodeError, verifySMSCodeData])
+  }, [isSendSMSCodeError, isSendSMSCodeSuccess, isSendSMSCodeLoading, sendSMSCodeData, isVerifySMSCodeSuccess, isVerifySMSCodeLoading, isVerifySMSCodeError, verifySMSCodeData, phoneVerifyStatus.prevSendSMSLoading])
 
   return (
     <>
@@ -213,11 +229,9 @@ const Information: NextPageWithLayout = () => {
               label='Email'
               value={fields.email}
               isError={errors.email}
-              disabled
-              onChange={({ target }) =>
-                setFields((prev) => ({ ...prev, email: target.value }))
-              }
-              placeholder='Enter your email'
+              disabled={!!data?.userEmail}
+              onChange={({ target }) => setFields((prev) => ({ ...prev, email: target.value }))}
+              placeholder="Enter your email"
             />
           </div>
 

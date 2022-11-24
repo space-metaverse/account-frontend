@@ -1,17 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface GetMeRequest {
-
-}
-
 interface GetMeResponse {
-  username: string
-  tryspaceEmail?: string
-  userEmail?: string
-  phoneNumber?: string
-  firstName?: string
-  lastName?: string
   message: string
+  username: string
+  lastName?: string
+  userEmail?: string
+  firstName?: string
+  phoneNumber?: string
+  tryspaceEmail?: string
 }
 
 interface PostMeRequest {
@@ -42,7 +38,7 @@ export const accountApi = createApi({
   reducerPath: 'accountApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURl() }),
   endpoints: (builder) => ({
-    getMe: builder.query<GetMeResponse, GetMeRequest>({
+    getMe: builder.query<GetMeResponse, unknown>({
       query: () => ({
         url: '/me',
         method: 'GET',
@@ -70,4 +66,5 @@ export const accountApi = createApi({
 
 export const {
   useGetMeQuery,
+  usePostMeMutation,
 } = accountApi
