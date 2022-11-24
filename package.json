@@ -20,23 +20,23 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
-    "@space-metaverse-ag/space-ui": "^0.5.2",
+    "@space-metaverse-ag/space-ui": "^0.5.3",
     "ethers": "^5.7.2",
-    "next": "^13.0.3",
+    "next": "^13.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
     "styled-components": "^5.3.6",
-    "wagmi": "^0.8.3",
+    "wagmi": "^0.8.6",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
+    "@types/react-dom": "18.0.9",
     "@types/styled-components": "^5.1.26",
-    "eslint": "^8.27.0",
-    "eslint-config-next": "^13.0.3",
+    "eslint": "^8.28.0",
+    "eslint-config-next": "^13.0.4",
     "eslint-config-standard-with-typescript": "^23.0.0",
     "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-plugin-import": "^2.26.0",
@@ -44,8 +44,8 @@
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-n": "^15.5.1",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react": "^7.31.11",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "typescript": "4.8.4"
+    "typescript": "4.9.3"
   }
 }

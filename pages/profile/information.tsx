@@ -184,10 +184,8 @@ const Information: NextPageWithLayout = () => {
               label='Display Name'
               value={fields.displayName}
               isError={errors.displayName}
-              onChange={({ target }) =>
-                setFields((prev) => ({ ...prev, displayName: target.value }))
-              }
-              placeholder='Public name displayed across the platform'
+              onChange={({ target }) => setFields((prev) => ({ ...prev, displayName: target.value }))}
+              placeholder="Public name displayed across the platform"
             />
           </div>
           <div className='is-grid'>

@@ -24,7 +24,7 @@ interface PostMeResponse {
   message: string
 }
 
-function getBaseURl() {
+const getBaseURl = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
       return 'http://localhost:3001/account'
