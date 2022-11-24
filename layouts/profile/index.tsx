@@ -1,6 +1,6 @@
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-import { SideNav, type SideNavProps } from '@space-metaverse-ag/space-ui'
+import { SideNav, type SideNavProps } from "@space-metaverse-ag/space-ui";
 import {
   NFT,
   User,
@@ -18,17 +18,18 @@ import {
   FriendsRequests,
   ConnectedWallets,
   ConnectNewWallet,
+  Phygital,
 } from "@space-metaverse-ag/space-ui/icons";
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
 
-import { MainStyles, SharedStyles } from './styles'
+import { MainStyles, SharedStyles } from "./styles";
 
 interface ProfileLayoutProps extends PropsWithChildren {
-  title: string
+  title: string;
 }
 
-const options: SideNavProps['routes'] = [
+const options: SideNavProps["routes"] = [
   {
     Icon: User,
     label: "Profile",
@@ -125,25 +126,23 @@ const options: SideNavProps['routes'] = [
     Icon: Collection,
     label: "Space Inventory",
     route: "/space-inventory",
-    disabled: true,
+    disabled: false,
+    children: [
+      {
+        Icon: Phygital,
+        label: "Phygital",
+        route: "/space-inventory/phygital",
+      },
+    ],
   },
 ];
 
-const Layout: NextPage<ProfileLayoutProps> = ({
-  title,
-  children
-}) => {
-  const {
-    back
-  } = useRouter()
+const Layout: NextPage<ProfileLayoutProps> = ({ title, children }) => {
+  const { back } = useRouter();
 
   return (
     <MainStyles.Wrapper>
-      <SideNav
-        title="Account Settings"
-        goBack={back}
-        routes={options}
-      />
+      <SideNav title="Account Settings" goBack={back} routes={options} />
 
       <MainStyles.Content>
         <MainStyles.Title>{title}</MainStyles.Title>
@@ -151,10 +150,10 @@ const Layout: NextPage<ProfileLayoutProps> = ({
         {children}
       </MainStyles.Content>
     </MainStyles.Wrapper>
-  )
-}
+  );
+};
 
 export default {
   Layout,
-  SharedStyles
-}
+  SharedStyles,
+};
