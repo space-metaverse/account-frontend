@@ -19,6 +19,7 @@ import {
   Orders,
   OrdersList,
   ReturnAndRefund,
+  Phygital,
 } from "@space-metaverse-ag/space-ui/icons";
 import { useRouter } from "next/router";
 
@@ -126,7 +127,14 @@ const options: OptionProps[] = [
     Icon: Collection,
     label: "Space Inventory",
     route: "/space-inventory",
-    disabled: true,
+    disabled: false,
+    children: [
+      {
+        Icon: Phygital,
+        route: "/space-inventory/phygital",
+        label: "Phygital",
+      },
+    ],
   },
 ];
 
