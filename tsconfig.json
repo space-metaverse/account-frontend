@@ -7,6 +7,9 @@
       "esnext"
     ],
     "paths": {
+      "api/*": [
+        "./api/*"
+      ],
       "data/*": [
         "./data/*"
       ],

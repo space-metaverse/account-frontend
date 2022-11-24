@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface AccountState {
-  username?: string,
+  username?: string
   phone?: string
 }
 
@@ -17,7 +17,7 @@ export const accountSlice = createSlice({
     setAccountUsername: (state: AccountState, action: PayloadAction<{ username: string }>) => {
       state.username = action.payload.username
     },
-    setAccountPhone: (state: AccountState, action: PayloadAction<{ phone: string}>) => {
+    setAccountPhone: (state: AccountState, action: PayloadAction<{ phone: string }>) => {
       state.phone = action.payload.phone
     }
   }
