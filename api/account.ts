@@ -23,9 +23,11 @@ interface PostMeResponse {
 const getBaseURl = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
-      return 'http://localhost:3001/account'
+      return 'http://localhost:3003/account'
     case 'dev':
       return 'https://api.dev.tryspace.com/account'
+    case 'dev':
+      return 'https://api.qa.tryspace.com/account'
     case 'prod':
       return 'https://api.tryspace.com/account'
     default:

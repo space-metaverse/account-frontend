@@ -39,9 +39,11 @@ interface VerifySMSCodeResponse {
 const getBaseURL = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
-      return 'https://api.dev.tryspace.com/auth'
+      return 'http://localhost:3002/auth'
     case 'dev':
       return 'https://api.dev.tryspace.com/auth'
+    case 'qa':
+      return 'https://api.qa.tryspace.com/auth'
     case 'prod':
       return 'https://api.tryspace.com/auth'
     default:
