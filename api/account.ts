@@ -26,7 +26,7 @@ const getBaseURl = (): string => {
       return 'http://localhost:3003/account'
     case 'dev':
       return 'https://api.dev.tryspace.com/account'
-    case 'dev':
+    case 'qa':
       return 'https://api.qa.tryspace.com/account'
     case 'prod':
       return 'https://api.tryspace.com/account'
