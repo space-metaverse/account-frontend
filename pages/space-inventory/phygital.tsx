@@ -38,14 +38,14 @@ const Phygital: NextPageWithLayout = () => {
   return (
     <PhygitalStyles.Row>
       {nfts.map((nft) => (
-        <PhygitalStyles.CardContainer>
+        <PhygitalStyles.CardContainer key={nft.id}>
           <Popover
             options={[
               {
                 icon: DragPoint,
                 label: "Details",
-                callback: () =>
-                  router.push(`/space-inventory/details/${nft.id}`),
+                callback: async () =>
+                  await router.push(`/space-inventory/details/${nft.id}`),
               },
             ]}
             className="is-popover"
