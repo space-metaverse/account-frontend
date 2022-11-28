@@ -1,174 +1,86 @@
-import { type ReactElement } from "react";
+import type { ReactElement } from "react";
 
+import { Table, Chip } from "@space-metaverse-ag/space-ui";
+import { DropRight } from "@space-metaverse-ag/space-ui/icons";
 import Profile from "layouts/profile";
 import Head from "next/head";
-
-import { Table, Chip, Popover } from "@space-metaverse-ag/space-ui";
-import type { NextPageWithLayout } from "../../types";
 import styled from "styled-components";
 
-import { Dots, Edit, Delete } from "@space-metaverse-ag/space-ui/icons";
+import type { NextPageWithLayout } from "../../types";
 
-const columns = ["Order Number", "Order Date", "Items", "Total", "Status", ""];
+const columns = ["Order Number", "Name", "Order Date", "Items", "Total", "Status", "Info"];
 
-const OrderLabel = styled.div`
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-  color: #3332fe;
-  cursor: pointer;
-`;
+const CustomizedTable = styled(Table)`
+  tbody {
+    td {
+      path {
+        stroke: ${({ theme }) => theme.colors.dark[600]};
+      }
 
-const ButtonDots = styled.div`
-  cursor: pointer;
-`;
+      .order-number {
+        color: ${({ theme }) => theme.colors.blue[400]};
+        font-weight: ${({ theme }) => theme.fonts.weight.semibold};
+      }
+    }
+  }
+`
 
 const OrdersList: NextPageWithLayout = () => {
   const rows = [
     {
-      orderNumber: <OrderLabel>1000100-001</OrderLabel>,
+      name: 'Jeremiah Patel',
       orderDate: "1 Jan 2022",
       items: "4 items",
       total: "$1257.98",
       status: <Chip label="Pending" color="grey" />,
-      actions: (
-        <Popover
-          options={[
-            {
-              icon: () => <Edit />,
-              label: "Edit",
-              callback: () => console.log("edit"),
-            },
-            {
-              icon: () => <Delete />,
-              label: "Delete",
-              callback: () => console.log("delete"),
-            },
-          ]}
-          position="bottom"
-        >
-          <ButtonDots>
-            <Dots style={{ height: "2rem" }} />
-          </ButtonDots>
-        </Popover>
-      ),
+      more: <DropRight style={{ width: 'fit-content' }} />,
     },
     {
-      orderNumber: <OrderLabel>1000100-002</OrderLabel>,
+      name: 'Jeremiah Patel',
       orderDate: "1 Jan 2022",
       items: "4 items",
       total: "$1257.98",
       status: <Chip label="Complete" color="green" />,
-      actions: (
-        <Popover
-          options={[
-            {
-              icon: () => <Edit />,
-              label: "Edit",
-              callback: () => console.log("edit"),
-            },
-            {
-              icon: () => <Delete />,
-              label: "Delete",
-              callback: () => console.log("delete"),
-            },
-          ]}
-          position="bottom"
-        >
-          <ButtonDots>
-            <Dots style={{ height: "2rem" }} />
-          </ButtonDots>
-        </Popover>
-      ),
+      more: <DropRight style={{ width: 'fit-content' }} />,
     },
     {
-      orderNumber: <OrderLabel>1000100-003</OrderLabel>,
+      name: 'Jeremiah Patel',
       orderDate: "1 Jan 2022",
       items: "4 items",
       total: "$1257.98",
       status: <Chip label="In Process" color="orange" />,
-      actions: (
-        <Popover
-          options={[
-            {
-              icon: () => <Edit />,
-              label: "Edit",
-              callback: () => console.log("edit"),
-            },
-            {
-              icon: () => <Delete />,
-              label: "Delete",
-              callback: () => console.log("delete"),
-            },
-          ]}
-          position="bottom"
-        >
-          <ButtonDots>
-            <Dots style={{ height: "2rem" }} />
-          </ButtonDots>
-        </Popover>
-      ),
+      more: <DropRight style={{ width: 'fit-content' }} />,
     },
     {
-      orderNumber: <OrderLabel>1000100-004</OrderLabel>,
+      name: 'Jeremiah Patel',
       orderDate: "1 Jan 2022",
       items: "4 items",
       total: "$1257.98",
       status: <Chip label="Shipped" color="blue" />,
-      actions: (
-        <Popover
-          options={[
-            {
-              icon: () => <Edit />,
-              label: "Edit",
-              callback: () => console.log("edit"),
-            },
-            {
-              icon: () => <Delete />,
-              label: "Delete",
-              callback: () => console.log("delete"),
-            },
-          ]}
-          position="bottom"
-        >
-          <ButtonDots>
-            <Dots style={{ height: "2rem" }} />
-          </ButtonDots>
-        </Popover>
-      ),
+      more: <DropRight style={{ width: 'fit-content' }} />,
     },
     {
-      orderNumber: <OrderLabel>1000100-005</OrderLabel>,
+      name: 'Jeremiah Patel',
       orderDate: "1 Jan 2022",
       items: "4 items",
       total: "$1257.98",
       status: <Chip label="Cancelled" color="red" />,
-      actions: (
-        <Popover
-          options={[
-            {
-              icon: () => <Edit />,
-              label: "Edit",
-              callback: () => console.log("edit"),
-            },
-            {
-              icon: () => <Delete />,
-              label: "Delete",
-              callback: () => console.log("delete"),
-            },
-          ]}
-          position="bottom"
-        >
-          <ButtonDots>
-            <Dots style={{ height: "2rem" }} />
-          </ButtonDots>
-        </Popover>
-      ),
+      more: <DropRight style={{ width: 'fit-content' }} />,
     },
   ];
 
-  return <Table columns={columns} rows={rows} withBorder={false} />;
+  const data = rows.map((row, index) => ({
+    orderNumber: <p className="order-number">{`1000100-00${index + 1}`}</p>,
+    ...row,
+  }))
+
+  return (
+    <CustomizedTable
+      rows={data}
+      columns={columns}
+      withBorder={false}
+    />
+  );
 };
 
 OrdersList.getLayout = (page: ReactElement) => (
