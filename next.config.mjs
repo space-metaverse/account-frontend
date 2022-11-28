@@ -2,25 +2,26 @@
  * @type {import('next').NextConfig}
  */
 export default {
+  images: {
+    domains: ["picsum.photos"],
+  },
   compiler: {
-    styledComponents: true
+    styledComponents: true,
   },
 
-  async redirects () {
+  async redirects() {
     return [
       {
-        source: '/',
+        source: "/",
         permanent: true,
-        destination: '/profile/information'
-      }
-    ]
+        destination: "/profile/information",
+      },
+    ];
   },
 
   experimental: {
-    transpilePackages: [
-      '@space-metaverse-ag/space-ui'
-    ]
+    transpilePackages: ["@space-metaverse-ag/space-ui"],
   },
 
-  reactStrictMode: true
-}
+  reactStrictMode: true,
+};
