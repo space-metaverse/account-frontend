@@ -35,9 +35,10 @@ const Auth: React.FC = () => {
     })
 
   const {
-    isSuccess: isGetVerifyTokenSuccess,
+    data: getVerifyTokenData,
     isError: isGetVerifyTokenError,
-    data: getVerifyTokenData
+    isSuccess: isGetVerifyTokenSuccess,
+    isLoading: isGetVerifyTokenLoading,
   } = useGetVerifyTokenQuery({ immerToken },
     {
       skip: !immerToken
@@ -72,10 +73,10 @@ const Auth: React.FC = () => {
   }, [isGetVerifyTokenSuccess, getVerifyTokenData, dispatch])
 
   useEffect(() => {
-    if (isGetVerifyTokenError) {
+    if (isGetVerifyTokenError && !isGetVerifyTokenLoading) {
       window.localStorage.removeItem('immerToken')
     }
-  }, [isGetVerifyTokenError])
+  }, [isGetVerifyTokenError, isGetVerifyTokenLoading])
 
   return <></>
 }
