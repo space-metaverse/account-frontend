@@ -1,5 +1,34 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+interface GetOrderResponse {
+  id: string
+  date: Date
+  store: string
+  items: Array<{
+    name: string
+    price: number
+    quantity: string
+    model_url: string
+    description: string
+    order_item_id: string
+    thumbnail_url: string
+  }>
+  status: string
+  amount: number
+  currency: string
+  customer: {
+    name: string
+    country: string
+    zipcode: string
+    address: string
+    account_id: string
+  }
+  order_sid: string
+  crypto_amount: number
+  shipping_cost: string
+  shipping_status: string
+}
+
 interface GetMeResponse {
   message: string
   username: string
@@ -62,11 +91,21 @@ export const accountApi = createApi({
           email
         }
       })
-    })
+    }),
+    getOrders: builder.query<GetOrderResponse[], unknown>({
+      query: () => ({
+        url: '/orders',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
   })
 })
 
 export const {
   useGetMeQuery,
+  useGetOrdersQuery,
   usePostMeMutation,
 } = accountApi
