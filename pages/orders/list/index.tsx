@@ -5,7 +5,8 @@ import {
   Table,
   Spinner,
   type ChipProps,
-} from '@space-metaverse-ag/space-ui'; import { DropRight, Products as IconProducts } from "@space-metaverse-ag/space-ui/icons";
+} from '@space-metaverse-ag/space-ui';
+import { DropRight, Products as IconProducts } from "@space-metaverse-ag/space-ui/icons";
 import { useGetOrdersQuery } from 'api/account'
 import { format } from 'date-fns'
 import Profile from "layouts/profile";

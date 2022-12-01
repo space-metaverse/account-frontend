@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+interface GetOrderRequest {
+  id: string
+}
+
 interface GetOrderResponse {
   id: string
   date: Date
@@ -92,6 +96,15 @@ export const accountApi = createApi({
         }
       })
     }),
+    getOrder: builder.query<GetOrderResponse, GetOrderRequest>({
+      query: ({ id }) => ({
+        url: `/orders/${id}`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
     getOrders: builder.query<GetOrderResponse[], unknown>({
       query: () => ({
         url: '/orders',
@@ -106,6 +119,7 @@ export const accountApi = createApi({
 
 export const {
   useGetMeQuery,
+  useGetOrderQuery,
   useGetOrdersQuery,
   usePostMeMutation,
 } = accountApi
