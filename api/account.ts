@@ -21,11 +21,16 @@ interface GetOrderResponse {
   amount: number
   currency: string
   customer: {
+    city: string
     name: string
+    state: string
+    email: string
+    phone: string
     country: string
     zipcode: string
     address: string
     account_id: string
+    address_two: string
   }
   order_sid: string
   crypto_amount: number

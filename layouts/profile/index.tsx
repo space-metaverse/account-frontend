@@ -10,6 +10,8 @@ import {
   Friends,
   Profile,
   Security,
+  Phygital,
+  ArrowLeft,
   OrdersList,
   Collection,
   FriendsAdd,
@@ -18,7 +20,6 @@ import {
   FriendsRequests,
   ConnectedWallets,
   ConnectNewWallet,
-  Phygital,
 } from "@space-metaverse-ag/space-ui/icons";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -26,7 +27,8 @@ import { useRouter } from "next/router";
 import { MainStyles, SharedStyles } from "./styles";
 
 interface ProfileLayoutProps extends PropsWithChildren {
-  title: string;
+  title: string
+  isBack?: boolean
 }
 
 const options: SideNavProps["routes"] = [
@@ -137,7 +139,11 @@ const options: SideNavProps["routes"] = [
   },
 ];
 
-const Layout: NextPage<ProfileLayoutProps> = ({ title, children }) => {
+const Layout: NextPage<ProfileLayoutProps> = ({
+  title,
+  isBack,
+  children,
+}) => {
   const { back } = useRouter();
 
   return (
@@ -145,7 +151,11 @@ const Layout: NextPage<ProfileLayoutProps> = ({ title, children }) => {
       <SideNav title="Account Settings" goBack={back} routes={options} />
 
       <MainStyles.Content>
-        <MainStyles.Title>{title}</MainStyles.Title>
+        <MainStyles.Title>
+          {isBack && <ArrowLeft onClick={back} />}
+
+          {title}
+        </MainStyles.Title>
 
         {children}
       </MainStyles.Content>
