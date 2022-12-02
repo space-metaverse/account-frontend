@@ -4,14 +4,14 @@ interface GetOrderRequest {
   id: string
 }
 
-interface GetOrderResponse {
+interface GetOrdersResponse {
   id: string
   date: Date
   store: string
   items: Array<{
     name: string
     price: number
-    quantity: string
+    quantity: number
     model_url: string
     description: string
     order_item_id: string
@@ -20,6 +20,32 @@ interface GetOrderResponse {
   status: string
   amount: number
   currency: string
+  customer: {
+    name: string
+    country: string
+    zipcode: string
+    address: string
+    account_id: string
+  }
+  order_sid: string
+  crypto_amount: number
+  shipping_cost: string
+  payment_method: 'Stripe' | 'Crypto'
+  shipping_status: string
+}
+
+interface GetOrderResponse extends Omit<GetOrdersResponse, 'store' | 'customer'> {
+  store: {
+    city: string
+    name: string
+    state: string
+    email: string
+    phone: string
+    country: string
+    zipcode: string
+    address: string
+    address_two: string
+  }
   customer: {
     city: string
     name: string
@@ -32,10 +58,6 @@ interface GetOrderResponse {
     account_id: string
     address_two: string
   }
-  order_sid: string
-  crypto_amount: number
-  shipping_cost: string
-  shipping_status: string
 }
 
 interface GetMeResponse {
@@ -63,7 +85,7 @@ const getBaseURl = (): string => {
     case 'local':
       return 'http://localhost:3003/account'
     case 'dev':
-      return 'https://api.dev.tryspace.com/account'
+      return 'http://localhost:3003/account'
     case 'qa':
       return 'https://api.qa.tryspace.com/account'
     case 'prod':
@@ -110,7 +132,7 @@ export const accountApi = createApi({
         }
       })
     }),
-    getOrders: builder.query<GetOrderResponse[], unknown>({
+    getOrders: builder.query<GetOrdersResponse[], unknown>({
       query: () => ({
         url: '/orders',
         method: 'GET',

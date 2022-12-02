@@ -9,6 +9,7 @@ import {
 import { DropRight, Products as IconProducts } from "@space-metaverse-ag/space-ui/icons";
 import { useGetOrdersQuery } from 'api/account'
 import { format } from 'date-fns'
+import formatPrice from 'helpers/price'
 import Profile from "layouts/profile";
 import Head from "next/head";
 import { useRouter } from 'next/router'
@@ -122,10 +123,7 @@ const OrdersList: NextPageWithLayout = () => {
           items: `${items.length} Item${items.length > 1 ? 's' : ''}`,
           total: amount <= 0
             ? 'Crypto'
-            : new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD'
-            }).format(amount),
+            : formatPrice(amount),
           status: <Chip color={currentStatus ? currentStatus.appearance as ChipProps['color'] : 'grey'} label={currentStatus ? currentStatus.label : 'Uninformed'} />,
           more: <DropRight style={{ width: 'fit-content', cursor: 'pointer' }} onClick={async () => await push(`list/${id}`)} />,
         })

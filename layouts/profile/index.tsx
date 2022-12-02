@@ -144,11 +144,19 @@ const Layout: NextPage<ProfileLayoutProps> = ({
   isBack,
   children,
 }) => {
-  const { back } = useRouter();
+  const {
+    back,
+    push
+  } = useRouter();
 
   return (
     <MainStyles.Wrapper>
-      <SideNav title="Account Settings" goBack={back} routes={options} />
+      <SideNav
+        title="Account Settings"
+        goBack={back}
+        routes={options}
+        onNavigate={push}
+      />
 
       <MainStyles.Content>
         <MainStyles.Title>

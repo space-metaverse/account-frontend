@@ -1,12 +1,12 @@
-import { type ReactElement } from "react";
+import { useMemo, type ReactElement } from "react";
 
 import { Table, Spinner } from '@space-metaverse-ag/space-ui';
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
+import formatPrice from 'helpers/price'
 import Profile from "layouts/profile";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
-import { useRouter } from 'next/router'
 import styled from "styled-components";
 
 import type { NextPageWithLayout } from "../../../types";
@@ -81,6 +81,17 @@ const Loading = styled.div`
   justify-content: center;
 `
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const CustomizedTable = styled(Table)`
+  padding: 2rem 0;
+  border-top: ${({ theme }) => theme.colors.dark[200]};
+  border-bottom: ${({ theme }) => theme.colors.dark[200]};
+`
+
 interface OrderProps {
   id: string
 }
@@ -94,6 +105,24 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
   console.log({ data })
 
+  const rows = useMemo(() => {
+    if (data && data.items.length > 0) {
+      return data.items.map(({
+        price,
+        quantity,
+      }) => ({
+        product: '-',
+        quantity: quantity || '0',
+        price: price <= 0
+          ? 'Crypto'
+          : formatPrice(price),
+        subTotal: formatPrice(quantity * price),
+      }))
+    }
+
+    return []
+  }, [data])
+
   return (
     <div>
       {isFetching && (
@@ -103,72 +132,84 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
       )}
 
       {data && !isLoading && (
-        <Wrapper>
-          <Content className="is-large">
-            <h6>Order Info</h6>
+        <Container>
+          <Wrapper>
+            <Content className="is-large">
+              <h6>Order Info</h6>
 
-            <div className="cols-2">
-              <div className="is-group">
-                <p>Order Date:</p>
-                <span>{format(new Date(data.date), 'dd MMM yyyy')}</span>
+              <div className="cols-2">
+                <div className="is-group">
+                  <p>Order Date:</p>
+                  <span>{format(new Date(data.date), 'dd MMM yyyy')}</span>
+                </div>
+
+                <div className="is-group">
+                  <p>Order Number:</p>
+                  <span>{data.id}</span>
+                </div>
+
+                <div className="is-group">
+                  <p>Shipping Details:</p>
+                  <span>
+                    {data.customer.name}<br />
+                    {data.customer.address}<br />
+                    {data.customer.city}, {data.customer.state}, {data.customer.country} {data.customer.zipcode}
+                    <br />
+                    <br />
+
+                    {data.customer.email}
+                    <br />
+                    <br />
+
+                    {data.customer.phone ? `+${data.customer.phone}` : ''}
+                  </span>
+                </div>
+
+                <div className="is-group">
+                  <p>Billed To:</p>
+                  <span>
+                    Jeremiah Patel
+                    VISA Ending: 1234
+                  </span>
+                </div>
               </div>
+            </Content>
 
-              <div className="is-group">
-                <p>Order Number:</p>
-                <span>{data.id}</span>
+            <Content>
+              <h6>Seller Info</h6>
+
+              <div className="cols-1">
+                <div className="is-group">
+                  <p>Seller:</p>
+                  <span>{data.store.name}</span>
+                </div>
+
+                <div className="is-group">
+                  <p>Address:</p>
+                  <span>
+                    {data.store.name}<br />
+                    {data.store.address}<br />
+                    {data.store.city}, {data.store.state}, {data.store.country} {data.store.zipcode}
+                    <br />
+                    <br />
+
+                    {data.store.email}
+                    <br />
+                    <br />
+
+                    {data.store.phone ? `+${data.store.phone}` : ''}
+                  </span>
+                </div>
               </div>
+            </Content>
+          </Wrapper>
 
-              <div className="is-group">
-                <p>Shipping Details:</p>
-                <span>
-                  {data.customer.name}<br />
-                  {data.customer.address}<br />
-                  {data.customer.city}, {data.customer.state}, {data.customer.country} {data.customer.zipcode}
-                  <br />
-                  <br />
-
-                  {data.customer.email}
-                  <br />
-                  <br />
-
-                  {data.customer.phone ? `+${data.customer.phone}` : ''}
-                </span>
-              </div>
-
-              <div className="is-group">
-                <p>Billed To:</p>
-                <span>
-                  Jeremiah Patel
-                  VISA Ending: 1234
-                </span>
-              </div>
-            </div>
-          </Content>
-
-          <Content>
-            <h6>Seller Info</h6>
-
-            <div className="cols-1">
-              <div className="is-group">
-                <p>Seller:</p>
-                <span>{data.store}</span>
-              </div>
-
-              <div className="is-group">
-                <p>Address:</p>
-                <span>
-                  Strg Store
-                  123 East Main Street
-                  San Diego, CA US 94512
-
-                  customerservice@theshop.com
-
-                  +1 800-456-7890
-                </span>
-              </div>
-            </div>
-          </Content>
-        </Wrapper>
+          <CustomizedTable
+            rows={rows}
+            columns={["Product", "Quantity", "Price", "SubTotal"]}
+            withBorder={false}
+          />
+        </Container>
       )}
     </div>
   )
