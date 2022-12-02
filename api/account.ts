@@ -1,13 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface GetOrderResponse {
+interface GetOrderRequest {
+  id: string
+}
+
+interface GetOrdersResponse {
   id: string
   date: Date
   store: string
   items: Array<{
     name: string
+    type: string
     price: number
-    quantity: string
+    color: string | null
+    quantity: number
     model_url: string
     description: string
     order_item_id: string
@@ -25,8 +31,35 @@ interface GetOrderResponse {
   }
   order_sid: string
   crypto_amount: number
-  shipping_cost: string
+  shipping_cost: number
+  payment_method: 'Stripe' | 'Crypto'
   shipping_status: string
+}
+
+interface GetOrderResponse extends Omit<GetOrdersResponse, 'store' | 'customer'> {
+  store: {
+    city: string
+    name: string
+    state: string
+    email: string
+    phone: string
+    country: string
+    zipcode: string
+    address: string
+    address_two: string
+  }
+  customer: {
+    city: string
+    name: string
+    state: string
+    email: string
+    phone: string
+    country: string
+    zipcode: string
+    address: string
+    account_id: string
+    address_two: string
+  }
 }
 
 interface GetMeResponse {
@@ -106,7 +139,16 @@ export const accountApi = createApi({
         }
       })
     }),
-    getOrders: builder.query<GetOrderResponse[], unknown>({
+    getOrder: builder.query<GetOrderResponse, GetOrderRequest>({
+      query: ({ id }) => ({
+        url: `/orders/${id}`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
+    getOrders: builder.query<GetOrdersResponse[], unknown>({
       query: () => ({
         url: '/orders',
         method: 'GET',
@@ -141,6 +183,7 @@ export const accountApi = createApi({
 
 export const {
   useGetMeQuery,
+  useGetOrderQuery,
   useGetOrdersQuery,
   usePostMeMutation,
   useGetNonceQuery,

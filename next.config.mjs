@@ -3,25 +3,28 @@
  */
 export default {
   images: {
-    domains: ["picsum.photos"],
+    domains: [
+      'picsum.photos',
+      'space-staging-assets.metaverse-demo.com'
+    ]
   },
   compiler: {
-    styledComponents: true,
+    styledComponents: true
   },
 
-  async redirects() {
+  async redirects () {
     return [
       {
-        source: "/",
+        source: '/',
         permanent: true,
-        destination: "/profile/information",
-      },
-    ];
+        destination: '/profile/information'
+      }
+    ]
   },
 
   experimental: {
-    transpilePackages: ["@space-metaverse-ag/space-ui"],
+    transpilePackages: ['@space-metaverse-ag/space-ui']
   },
 
-  reactStrictMode: true,
-};
+  reactStrictMode: true
+}
