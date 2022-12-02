@@ -4,7 +4,7 @@ Account page for SPACE users to manage their data and settings."
 
 ## Dev Setup
 
-Configure your `.env.local` from `.env.local.example`. Ask someone for secrets. 
+Configure your `.env.local` from `.env.local.example`.
 
 ```bash
 npm i
