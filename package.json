@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
-    "@space-metaverse-ag/space-ui": "^1.0.0",
+    "@space-metaverse-ag/space-ui": "^1.1.0",
     "date-fns": "^2.29.3",
     "ethers": "^5.7.2",
     "next": "^13.0.5",

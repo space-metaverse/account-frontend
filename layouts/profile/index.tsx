@@ -138,11 +138,16 @@ const options: SideNavProps["routes"] = [
 ];
 
 const Layout: NextPage<ProfileLayoutProps> = ({ title, children }) => {
-  const { back } = useRouter();
+  const { back, push } = useRouter();
 
   return (
     <MainStyles.Wrapper>
-      <SideNav title="Account Settings" goBack={back} routes={options} />
+      <SideNav
+        title="Account Settings"
+        goBack={back}
+        routes={options}
+        onNavigate={(route) => push(route)}
+      />
 
       <MainStyles.Content>
         <MainStyles.Title>{title}</MainStyles.Title>
