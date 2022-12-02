@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react'
+import { useEffect, type ReactElement } from 'react'
 
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { Check } from '@space-metaverse-ag/space-ui/icons'
@@ -7,9 +7,10 @@ import Profile from 'layouts/profile'
 import Head from 'next/head'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount, useConnect, useSignMessage } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
+import { useGetNonceQuery, usePostSignatureMutation } from 'api/account'
 
 const Card = styled.div<{ disabled: boolean }>`
   border: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
@@ -95,12 +96,43 @@ const Wallet: NextPageWithLayout = () => {
     connect,
     isLoading,
     connectors,
-    pendingConnector
+    pendingConnector,
+    isSuccess: isConnectSuccess
   } = useConnect()
 
   const {
     connector: activeConnector
   } = useAccount()
+
+  const {
+    data: getNonceData,
+  } = useGetNonceQuery({
+    skip: !pendingConnector
+  })
+
+  const [
+    postSignature,
+  ] = usePostSignatureMutation()
+
+  const {
+    data: signMessageData,
+    isSuccess: isSignMessageSuccess,
+    signMessage
+  } = useSignMessage({
+    message: getNonceData?.nonce
+  })
+
+  useEffect(() => {
+    if (isConnectSuccess) {
+      signMessage()
+    }
+  }, [isConnectSuccess])
+
+  useEffect(() => {
+    if (isSignMessageSuccess && signMessageData) {
+      postSignature({ signature: signMessageData })
+    }
+  }, [isSignMessageSuccess, signMessageData])
 
   return (
     <Profile.SharedStyles.Container style={{ gap: '.75rem' }}>
@@ -112,16 +144,17 @@ const Wallet: NextPageWithLayout = () => {
 
         const connected = activeConnector?.id === id
 
+        const handleConnect = (): void => {
+          if (!connected) {
+            reset()
+            connect({ connector })
+          }
+        }
+
         return (
           <Card
             key={id}
-            onClick={() => {
-              if (!connected) {
-                reset()
-
-                connect({ connector })
-              }
-            }}
+            onClick={handleConnect}
             disabled={false}
           >
             <div>
@@ -136,7 +169,7 @@ const Wallet: NextPageWithLayout = () => {
             </div>
 
             {isLoading && pendingConnector?.id === connector.id &&
-            <Loading> (connecting)</Loading>}
+              <Loading> (connecting)</Loading>}
 
             {connected && <IconCheck />}
           </Card>

@@ -49,6 +49,20 @@ interface PostMeResponse {
   message: string
 }
 
+interface GetNonceResponse {
+  message: string
+  nonce: string
+}
+
+interface PostSignatureResponse {
+  message: string
+  address: string
+}
+
+interface PostSignatureRequest {
+  signature: string
+}
+
 const getBaseURl = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
@@ -101,6 +115,27 @@ export const accountApi = createApi({
         }
       })
     }),
+    getNonce: builder.query<GetNonceResponse, unknown>({
+      query: () => ({
+        url: '/wallet/nonce',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
+    postSignature: builder.mutation<PostSignatureResponse, PostSignatureRequest>({
+      query: ({ signature }) => ({
+        url: '/wallet/signature',
+        method: 'POST',
+        body: {
+          signature
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
   })
 })
 
@@ -108,4 +143,6 @@ export const {
   useGetMeQuery,
   useGetOrdersQuery,
   usePostMeMutation,
+  useGetNonceQuery,
+  usePostSignatureMutation
 } = accountApi
