@@ -1,6 +1,6 @@
 import { useMemo, type ReactElement } from "react";
 
-import { Table, Spinner } from '@space-metaverse-ag/space-ui';
+import { Table, Button, Spinner } from '@space-metaverse-ag/space-ui';
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
@@ -117,6 +117,7 @@ const Content = styled.div`
 `
 
 const Wrapper = styled.div`
+  gap: 2rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 
@@ -132,9 +133,13 @@ const Loading = styled.div`
   justify-content: center;
 `
 
-const Container = styled.div`
+const Actions = styled.div`
+  gap: 1rem;
+  margin: 2rem 0 6rem;
   display: flex;
-  flex-direction: column;
+  border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+  padding-top: 2rem;
+  align-items: center;
 `
 
 const ListProducts = styled.div`
@@ -174,6 +179,10 @@ const CustomizedTable = styled(Table)`
       font-family: ${({ theme }) => theme.fonts.family.body};
       flex-direction: column;
 
+      * {
+        text-align: left !important;
+      }
+
       h6 {
         ${({ theme }) => theme.fonts.size.md};
         color: ${({ theme }) => theme.colors.dark[800]};
@@ -202,6 +211,47 @@ const CustomizedTable = styled(Table)`
   }
 `
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: 1279px) {
+    ${Content} {
+      .cols-2 {
+        gap: 2rem 1rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    ${Wrapper} {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    ${Actions} {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    ${CustomizedTable} {
+      .product-container-infos {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+
+  @media screen and (max-width: 448px) {
+    ${Content} {
+      .cols-2 {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+`
+
 interface OrderProps {
   id: string
 }
@@ -212,8 +262,6 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     isLoading,
     isFetching,
   } = useGetOrderQuery({ id })
-
-  console.log({ data })
 
   const rows = useMemo(() => {
     if (data && data.items.length > 0) {
@@ -297,7 +345,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                   <span>
                     {data.customer.name}<br />
                     {data.customer.address}<br />
-                    {data.customer.city}, {data.customer.state}, {data.customer.country} {data.customer.zipcode}
+                    {data.customer.city ? `${data.customer.city},` : ''} {data.customer.state ? `${data.customer.state},` : ''} {data.customer.zipcode}
                     <br />
                     <br />
 
@@ -312,8 +360,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                 <div className="is-group">
                   <p>Billed To:</p>
                   <span>
-                    Jeremiah Patel
-                    VISA Ending: 1234
+                    {data.customer.name}
                   </span>
                 </div>
               </div>
@@ -325,7 +372,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
               <div className="cols-1">
                 <div className="is-group">
                   <p>Seller:</p>
-                  <span>{data.store.name}</span>
+                  <span>{data.store.name || '-'}</span>
                 </div>
 
                 <div className="is-group">
@@ -333,7 +380,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                   <span>
                     {data.store.name}<br />
                     {data.store.address}<br />
-                    {data.store.city}, {data.store.state}, {data.store.country} {data.store.zipcode}
+                    {data.store.city ? `${data.store.city},` : ''} {data.store.state ? `${data.store.state},` : ''} {data.store.zipcode}
                     <br />
                     <br />
 
@@ -377,6 +424,21 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
               <p>{formatPrice((data.amount || data.crypto_amount) + (data.shipping_cost || 0))}</p>
             </div>
           </Infos>
+
+          <Actions>
+            <Button
+              size="large"
+              label="Download Receipt"
+              color="blue"
+            />
+
+            <Button
+              size="large"
+              label="Return All Items"
+              color="red"
+              outline
+            />
+          </Actions>
         </Container>
       )}
     </div>
