@@ -10,6 +10,7 @@ interface GetOrdersResponse {
   store: string
   items: Array<{
     name: string
+    type: string
     price: number
     quantity: number
     model_url: string

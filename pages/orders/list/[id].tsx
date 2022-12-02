@@ -7,6 +7,7 @@ import formatPrice from 'helpers/price'
 import Profile from "layouts/profile";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
+import Image from 'next/image'
 import styled from "styled-components";
 
 import type { NextPageWithLayout } from "../../../types";
@@ -86,10 +87,68 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const CustomizedTable = styled(Table)`
+const ListProducts = styled.div`
+  margin: 2rem 0;
   padding: 2rem 0;
-  border-top: ${({ theme }) => theme.colors.dark[200]};
-  border-bottom: ${({ theme }) => theme.colors.dark[200]};
+  border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+`
+
+const CustomizedTable = styled(Table)`
+  thead {
+    background-color: transparent;
+  }
+
+  .product {
+    display: flex;
+    align-items: center;
+
+    &-thumb {
+      width: 5rem;
+      height: 5rem;
+      position: relative;
+      min-width: 5rem;
+      border-radius: ${({ theme }) => theme.radius['2xl']};
+      background-color: ${({ theme }) => theme.colors.dark[200]};
+
+      img {
+        object-fit: cover;
+        border-radius: ${({ theme }) => theme.radius['2xl']};
+      }
+    }
+
+    &-container {
+      gap: .5rem;
+      display: flex;
+      margin-left: 1.5rem;
+      font-family: ${({ theme }) => theme.fonts.family.body};
+      flex-direction: column;
+
+      h6 {
+        ${({ theme }) => theme.fonts.size.md};
+        color: ${({ theme }) => theme.colors.dark[800]};
+        font-weight: ${({ theme }) => theme.fonts.weight.semibold};
+      }
+
+      &-infos {
+        gap: 4rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        span {
+          ${({ theme }) => theme.fonts.size.md};
+          color: ${({ theme }) => theme.colors.dark[800]};
+          display: flex;
+          flex-direction: column;
+
+          b {
+            ${({ theme }) => theme.fonts.size.sm};
+            color: ${({ theme }) => theme.colors.dark[600]};
+          }
+        }
+      }
+    }
+  }
 `
 
 interface OrderProps {
@@ -108,10 +167,36 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
   const rows = useMemo(() => {
     if (data && data.items.length > 0) {
       return data.items.map(({
+        type,
+        name,
         price,
         quantity,
+        thumbnail_url: thumbnailUrl
       }) => ({
-        product: '-',
+        product: (
+          <div className="product">
+            <div className="product-thumb">
+              {thumbnailUrl && (
+                <Image
+                  alt=""
+                  src={thumbnailUrl}
+                  fill
+                />
+              )}
+            </div>
+
+            <div className="product-container">
+              <h6>{name}</h6>
+
+              <div className="product-container-infos">
+                <span>
+                  <b>Type:</b>
+                  {type}
+                </span>
+              </div>
+            </div>
+          </div>
+        ),
         quantity: quantity || '0',
         price: price <= 0
           ? 'Crypto'
@@ -204,11 +289,13 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
             </Content>
           </Wrapper>
 
-          <CustomizedTable
-            rows={rows}
-            columns={["Product", "Quantity", "Price", "SubTotal"]}
-            withBorder={false}
-          />
+          <ListProducts>
+            <CustomizedTable
+              rows={rows}
+              columns={["Product", "Quantity", "Price", "SubTotal"]}
+              withBorder={false}
+            />
+          </ListProducts>
         </Container>
       )}
     </div>
