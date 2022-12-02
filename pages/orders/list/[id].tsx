@@ -12,6 +12,56 @@ import styled from "styled-components";
 
 import type { NextPageWithLayout } from "../../../types";
 
+const Infos = styled.div`
+  width: 100%;
+  display: flex;
+  max-width: 18.5rem;
+  margin-left: auto;
+  flex-direction: column;
+
+  > div {
+    display: flex;
+    font-family: ${({ theme }) => theme.fonts.family.body};
+    align-items: center;
+    justify-content: space-between;
+
+    p {
+      color: ${({ theme }) => theme.colors.dark[800]};
+    }
+
+    span {
+      color: ${({ theme }) => theme.colors.dark[600]};
+    }
+
+    &.is-item {
+      p {
+        ${({ theme }) => theme.fonts.size.md};
+      }
+
+      span {
+        ${({ theme }) => theme.fonts.size.sm};
+        font-weight: ${({ theme }) => theme.fonts.weight.semibold};
+      }
+
+      &:not(:first-of-type) {
+        margin-top: 1.5rem;
+      }
+    }
+
+    &.is-total {
+      margin-top: 1.5rem;
+      border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
+      padding-top: 1.5rem;
+
+      p,
+      span {
+        ${({ theme }) => theme.fonts.size.xl};
+        font-weight: ${({ theme }) => theme.fonts.weight.medium};
+      }
+    }
+  }
+`
+
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -139,6 +189,7 @@ const CustomizedTable = styled(Table)`
           ${({ theme }) => theme.fonts.size.md};
           color: ${({ theme }) => theme.colors.dark[800]};
           display: flex;
+          text-transform: capitalize;
           flex-direction: column;
 
           b {
@@ -169,6 +220,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
       return data.items.map(({
         type,
         name,
+        color,
         price,
         quantity,
         thumbnail_url: thumbnailUrl
@@ -193,6 +245,13 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                   <b>Type:</b>
                   {type}
                 </span>
+
+                {color && (
+                  <span>
+                    <b>Color:</b>
+                    {color}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -296,6 +355,28 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
               withBorder={false}
             />
           </ListProducts>
+
+          <Infos>
+            <div className="is-item">
+              <span>Sub Total:</span>
+              <p>{formatPrice(data.amount || data.crypto_amount)}</p>
+            </div>
+
+            <div className="is-item">
+              <span>Shipping:</span>
+              <p>{data.shipping_status || '-'}</p>
+            </div>
+
+            <div className="is-item">
+              <span>Taxes:</span>
+              <p>{data.shipping_cost ? formatPrice(data.shipping_cost) : '-'}</p>
+            </div>
+
+            <div className="is-total">
+              <span>Total:</span>
+              <p>{formatPrice((data.amount || data.crypto_amount) + (data.shipping_cost || 0))}</p>
+            </div>
+          </Infos>
         </Container>
       )}
     </div>

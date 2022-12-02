@@ -12,6 +12,7 @@ interface GetOrdersResponse {
     name: string
     type: string
     price: number
+    color: string | null
     quantity: number
     model_url: string
     description: string
@@ -30,7 +31,7 @@ interface GetOrdersResponse {
   }
   order_sid: string
   crypto_amount: number
-  shipping_cost: string
+  shipping_cost: number
   payment_method: 'Stripe' | 'Crypto'
   shipping_status: string
 }
