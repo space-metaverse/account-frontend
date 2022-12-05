@@ -10,7 +10,7 @@ import { DropRight, Products as IconProducts } from "@space-metaverse-ag/space-u
 import { useGetOrdersQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import Head from "next/head";
 import { useRouter } from 'next/router'
 import styled from "styled-components";
@@ -163,14 +163,14 @@ const OrdersList: NextPageWithLayout = () => {
 };
 
 OrdersList.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="Orders List">
+  <Layout.Layout title="Orders List">
     <Head>
       <title>Orders List | SPACE</title>
       <meta name="description" content="SPACE Orders" />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default OrdersList;

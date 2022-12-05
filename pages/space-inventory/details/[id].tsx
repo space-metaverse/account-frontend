@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import Head from "next/head";
 
 import type { NextPageWithLayout } from "../../../types";
@@ -52,14 +52,14 @@ const PhygitalDetails: NextPageWithLayout = () => {
 };
 
 PhygitalDetails.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="NFT Details">
+  <Layout.Layout title="NFT Details">
     <Head>
       <title>NFT Details | SPACE</title>
       <meta name="description" content="SPACE NFT Details" />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default PhygitalDetails;

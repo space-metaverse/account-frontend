@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import PhygitalStyles from "layouts/phygital/styles";
 import Head from "next/head";
 
@@ -76,14 +76,14 @@ const Phygital: NextPageWithLayout = () => {
 };
 
 Phygital.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="My NFT Collection">
+  <Layout.Layout title="My NFT Collection">
     <Head>
       <title>My NFT Collection | SPACE</title>
       <meta name="description" content="SPACE Inventory" />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default Phygital;

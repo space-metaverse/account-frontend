@@ -11,7 +11,7 @@ import {
 import { useGetMeQuery, usePostMeMutation } from 'api/account'
 import { useSendSMSCodeMutation, useVerifySMSCodeMutation } from 'api/auth'
 import validate from 'helpers/validate'
-import Profile from 'layouts/profile'
+import Layout from 'layouts/layout'
 import Head from 'next/head'
 import { useAppDispatch } from 'redux/hooks'
 import { setAccountPhone } from 'redux/slices/account'
@@ -169,7 +169,7 @@ const Information: NextPageWithLayout = () => {
 
   return (
     <>
-      <Profile.SharedStyles.Container>
+      <Layout.SharedStyles.Container>
         <ImageInput
           file={file}
           header='Toni Papperoni'
@@ -184,7 +184,7 @@ const Information: NextPageWithLayout = () => {
           changeLabelWhenFileSelected
         />
 
-        <Profile.SharedStyles.Form>
+        <Layout.SharedStyles.Form>
           <div className='is-grid'>
             <TextInput
               label='Username'
@@ -256,16 +256,16 @@ const Information: NextPageWithLayout = () => {
                     />
               }
               {
-                phoneVerifyStatus.isAlertShow && <Profile.SharedStyles.Alert>
+                phoneVerifyStatus.isAlertShow && <Layout.SharedStyles.Alert>
                   <Alert
                     text={phoneVerifyStatus?.alertMessage || ''}
                     type={phoneVerifyStatus?.alertStatus}
                     withIcon
                   />
-                </Profile.SharedStyles.Alert>
+                </Layout.SharedStyles.Alert>
               }
             </div>
-            <Profile.SharedStyles.PhoneAction>
+            <Layout.SharedStyles.PhoneAction>
               {
                 phoneVerifyStatus.isVerifyCode
                   ? <Button
@@ -283,12 +283,12 @@ const Information: NextPageWithLayout = () => {
                       onClick={sendCode}
                     />
               }
-            </Profile.SharedStyles.PhoneAction>
+            </Layout.SharedStyles.PhoneAction>
           </div>
-        </Profile.SharedStyles.Form>
-      </Profile.SharedStyles.Container>
+        </Layout.SharedStyles.Form>
+      </Layout.SharedStyles.Container>
 
-      <Profile.SharedStyles.Actions>
+      <Layout.SharedStyles.Actions>
         <Button
           size='medium'
           color='blue'
@@ -302,20 +302,20 @@ const Information: NextPageWithLayout = () => {
           label='Discard'
           onClick={discard}
         />
-      </Profile.SharedStyles.Actions>
+      </Layout.SharedStyles.Actions>
     </>
   )
 }
 
 Information.getLayout = (page: ReactElement) => (
-  <Profile.Layout title='Profile Information'>
+  <Layout.Layout title='Profile Information'>
     <Head>
       <title>Profile Information | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 )
 
 export default Information
