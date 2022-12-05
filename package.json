@@ -23,6 +23,7 @@
     "@space-metaverse-ag/space-ui": "^1.2.0",
     "date-fns": "^2.29.3",
     "ethers": "^5.7.2",
+    "framer-motion": "^7.6.19",
     "next": "^13.0.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
 import "@space-metaverse-ag/space-ui/index.css"
 import Auth from 'components/Auth'
+import { LazyMotion, domAnimation } from "framer-motion"
 import TopNav from 'layouts/topnav'
 import type { AppProps } from 'next/app'
 import { store } from 'redux/store'
@@ -63,7 +64,9 @@ const Root = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
 
           <TopNav />
 
-          {layout(<Component {...pageProps} />)}
+          <LazyMotion features={domAnimation}>
+            {layout(<Component {...pageProps} />)}
+          </LazyMotion>
         </ThemeProvider>
       </Provider>
     </WagmiConfig>

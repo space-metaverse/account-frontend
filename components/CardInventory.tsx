@@ -109,7 +109,7 @@ const CardInventory: React.FC<CardInventoryProps> = ({
           <h2>{name}</h2>
 
           <p>
-            Created By:{" "}
+            Created by:{" "}
 
             <a
               rel="noopener noreferrer"
