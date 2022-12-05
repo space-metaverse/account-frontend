@@ -1,44 +1,41 @@
+import { Card as CustomCard } from "@space-metaverse-ag/space-ui";
+import { rgba } from "@space-metaverse-ag/space-ui/helpers";
 import styled from "styled-components";
-
-const Row = styled.div`
-  gap: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-  }
-`;
 
 const AuthorLink = styled.a`
   color: ${({ theme }) => theme.colors.blue};
-  text-decoration: none;
-  font-weight: ${({ theme }) => theme.fonts.weight.bold};
   cursor: pointer;
+  font-weight: ${({ theme }) => theme.fonts.weight.bold};
+  text-decoration: none;
 `;
 
 const CardButton = styled.div`
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  display: flex;
+  top: .5rem;
+  right: .5rem;
+  width: 2rem;
+  height: 2rem;
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  position: absolute;
+  transition: ${({ theme }) => theme.transitions.ease};
+  align-items: center;
+  border-radius: ${({ theme }) => theme.radius.full};
+  justify-content: center;
+  background-color: ${({ theme }) => rgba(theme.colors.dark[600], '.24')};
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: ${({ theme }) => rgba(theme.colors.dark[600], '.48')};
   }
 `;
 
-const CardContainer = styled.div`
+const CardWrapper = styled.div`
+  width: 100%;
   position: relative;
+
+  .is-popover + div {
+    top: 2rem;
+    right: .5rem;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -68,19 +65,34 @@ const TextContainer = styled.div`
   }
 `;
 
-const RowNotCentered = styled(Row)`
-  align-items: flex-start;
-  @media (max-width: 800px) {
-    flex-direction: column;
+const Card = styled(CustomCard)`
+  width: 100%;
+`
+
+const Wrapper = styled.div`
+  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 1324px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 456px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
 export default {
-  Row,
+  Card,
+  Wrapper,
   AuthorLink,
   CardButton,
-  CardContainer,
+  CardWrapper,
   ImageContainer,
   TextContainer,
-  RowNotCentered,
 };

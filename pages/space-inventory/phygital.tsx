@@ -1,30 +1,44 @@
 import { type ReactElement } from "react";
 
+import CardInventory from 'components/CardInventory'
 import Profile from "layouts/profile";
-import PhygitalStyles from "layouts/phygital/styles";
 import Head from "next/head";
+import styled from "styled-components";
 
 import type { NextPageWithLayout } from "../../types";
-import { Card, Popover } from "@space-metaverse-ag/space-ui";
-import { Dots, DragPoint } from "@space-metaverse-ag/space-ui/icons";
-import { useRouter } from "next/router";
+
+const Wrapper = styled.div`
+  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 1324px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 456px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
 
 const nfts = [
   {
-    id: 1,
+    id: '1',
     name: "NFT 1",
-    image: "https://picsum.photos/200",
-    description: "This is a description",
+    cover: "https://picsum.photos/200",
     author: {
       name: "Author 1",
       url: "https://google.com",
     },
   },
   {
-    id: 2,
+    id: '2',
     name: "NFT 2",
-    image: "https://picsum.photos/200?random=1",
-    description: "This is a description",
+    cover: "https://picsum.photos/200?random=1",
     author: {
       name: "Author 2",
       url: "https://google.ca",
@@ -32,48 +46,11 @@ const nfts = [
   },
 ];
 
-const Phygital: NextPageWithLayout = () => {
-  const router = useRouter();
-
-  return (
-    <PhygitalStyles.Row>
-      {nfts.map((nft) => (
-        <PhygitalStyles.CardContainer key={nft.id}>
-          <Popover
-            options={[
-              {
-                icon: DragPoint,
-                label: "Details",
-                callback: async () =>
-                  await router.push(`/space-inventory/details/${nft.id}`),
-              },
-            ]}
-            className="is-popover"
-          >
-            <PhygitalStyles.CardButton>
-              <Dots stroke="#fff" />
-            </PhygitalStyles.CardButton>
-          </Popover>
-
-          <Card image={nft.image}>
-            <div>
-              <h2>{nft.name}</h2>
-              <small>
-                Created By:{" "}
-                <PhygitalStyles.AuthorLink
-                  href={nft.author.url}
-                  target="_blank"
-                >
-                  {nft.author.name}
-                </PhygitalStyles.AuthorLink>
-              </small>
-            </div>
-          </Card>
-        </PhygitalStyles.CardContainer>
-      ))}
-    </PhygitalStyles.Row>
-  );
-};
+const Phygital: NextPageWithLayout = () => (
+  <Wrapper>
+    {nfts.map((props) => <CardInventory key={props.id} {...props} />)}
+  </Wrapper>
+);
 
 Phygital.getLayout = (page: ReactElement) => (
   <Profile.Layout title="My NFT Collection">

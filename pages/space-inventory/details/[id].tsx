@@ -1,19 +1,19 @@
 import { type ReactElement } from "react";
 
+import { Button, TextInput } from "@space-metaverse-ag/space-ui";
+import PhygitalStyles from "layouts/phygital/styles";
 import Profile from "layouts/profile";
 import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 import type { NextPageWithLayout } from "../../../types";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import PhygitalStyles from "layouts/phygital/styles";
-import { Button, TextInput } from "@space-metaverse-ag/space-ui";
 
 const PhygitalDetails: NextPageWithLayout = () => {
   const router = useRouter();
 
   return (
-    <PhygitalStyles.RowNotCentered>
+    <PhygitalStyles.Wrapper>
       <PhygitalStyles.ImageContainer>
         <Image
           src="https://picsum.photos/400"
@@ -47,7 +47,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
         <TextInput label="Value (ETH)" value="0" />
         <Button label="Mint NFT" color="blue" size="medium" />
       </PhygitalStyles.TextContainer>
-    </PhygitalStyles.RowNotCentered>
+    </PhygitalStyles.Wrapper>
   );
 };
 
