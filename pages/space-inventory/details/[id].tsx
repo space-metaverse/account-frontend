@@ -2,7 +2,6 @@ import { type ReactElement } from "react";
 
 import { Button } from "@space-metaverse-ag/space-ui";
 import { Share as IconShare, Refresh as IconRefresh, ExternalLink as IconExternalLink } from '@space-metaverse-ag/space-ui/icons'
-import { m } from 'framer-motion'
 import Profile from "layouts/profile";
 import Head from "next/head";
 import Image from "next/image";
@@ -37,7 +36,7 @@ const Actions = styled.div`
   margin-top: 3rem;
   align-items: center;
 
-  > button {
+  button {
     min-width: 14.25rem;
     min-height: 3.5rem;
   }
@@ -153,7 +152,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
         <ImageContainer>
           <Image
             src="https://picsum.photos/400"
-            alt="Avatar of Toni Papperoni"
+            alt=""
             fill
             sizes="100vw"
             priority
@@ -195,16 +194,11 @@ const PhygitalDetails: NextPageWithLayout = () => {
           </p>
 
           <Actions>
-            <m.div
-              transition={{ type: 'spring' }}
-              whileHover={{ scale: 1.2 }}
-            >
-              <Button
-                size="medium"
-                label="Mint NFT"
-                color="blue"
-              />
-            </m.div>
+            <Button
+              size="medium"
+              label="Mint NFT"
+              color="blue"
+            />
 
             <TextInput>
               <p>Value:</p>
