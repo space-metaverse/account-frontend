@@ -4,7 +4,6 @@ import {
   Alert,
   Button,
   TextInput,
-  ImageInput,
   PhoneInput,
   type AlertProps
 } from '@space-metaverse-ag/space-ui'
@@ -49,7 +48,6 @@ interface PhoneVerifyStatusProps {
 const Information: NextPageWithLayout = () => {
   const dispatch = useAppDispatch()
 
-  const [file, setFile] = useState<File | null>(null)
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
   const [phoneVerifyStatus, setPhoneVerifyStatus] = useState<PhoneVerifyStatusProps>({
@@ -170,20 +168,6 @@ const Information: NextPageWithLayout = () => {
   return (
     <>
       <Layout.SharedStyles.Container>
-        <ImageInput
-          file={file}
-          header='Toni Papperoni'
-          onFile={setFile}
-          button={{
-            size: 'small',
-            label: 'Change Avatar',
-            color: 'blue',
-            outline: true
-          }}
-          showDummyAvatar
-          changeLabelWhenFileSelected
-        />
-
         <Layout.SharedStyles.Form>
           <div className='is-grid'>
             <TextInput

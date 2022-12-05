@@ -55,7 +55,6 @@ const Wrapper = styled.div`
 const Form = styled.div`
   gap: 1rem;
   display: flex;
-  margin-top: 2rem;
   margin-bottom: 4rem;
   flex-direction: column;
 
