@@ -55,6 +55,7 @@ const Content = styled.div`
   p {
     color: ${({ theme }) => theme.colors.dark[600]};
     margin-top: .75rem;
+    font-family: ${({ theme }) => theme.fonts.family.body};
 
     a {
       color: ${({ theme }) => theme.colors.blue};
@@ -72,7 +73,6 @@ const Content = styled.div`
   p,
   h2 {
     ${({ theme }) => theme.fonts.size.md};
-    font-family: ${({ theme }) => theme.fonts.family.body};
   }
 `
 
