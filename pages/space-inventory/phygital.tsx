@@ -46,13 +46,13 @@ const nfts = [
   },
 ];
 
-const MyCollection: NextPageWithLayout = () => (
+const Phygital: NextPageWithLayout = () => (
   <Wrapper>
     {nfts.map((props) => <CardInventory key={props.id} {...props} />)}
   </Wrapper>
 );
 
-MyCollection.getLayout = (page: ReactElement) => (
+Phygital.getLayout = (page: ReactElement) => (
   <Layout.Layout title="My NFT Collection">
     <Head>
       <title>My NFT Collection | SPACE</title>
@@ -63,4 +63,4 @@ MyCollection.getLayout = (page: ReactElement) => (
   </Layout.Layout>
 );
 
-export default MyCollection;
+export default Phygital;
