@@ -109,6 +109,10 @@ const Content = styled.div`
         gap: 1rem;
         display: flex;
         margin-left: auto;
+
+        > div {
+          cursor: pointer;
+        }
       }
     }
   }
@@ -313,7 +317,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
 
                 <IconExternalLink />
 
-                <IconShare />
+                <IconShare onClick={async () => await navigator.clipboard.writeText('https://app.tryspace.com')} />
               </div>
             </div>
 
