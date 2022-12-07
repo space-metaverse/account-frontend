@@ -1,19 +1,26 @@
-import { useState, type ReactElement } from "react";
+import 'swiper/css'
+
+import { useRef, useState, type ReactElement } from "react";
 
 import { Button } from "@space-metaverse-ag/space-ui";
 import { rgba } from "@space-metaverse-ag/space-ui/helpers";
+import { useOutsideClick } from "@space-metaverse-ag/space-ui/hooks"
 import {
+  Close as IconClose,
   Share as IconShare,
   Refresh as IconRefresh,
   Fullscreen as IconFullscreen,
   ExternalLink as IconExternalLink
 } from '@space-metaverse-ag/space-ui/icons'
-import { motion, LayoutGroup } from 'framer-motion';
+import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
 import Profile from "layouts/profile";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { Navigation } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import type { NavigationOptions } from 'swiper/types'
 
 import type { NextPageWithLayout } from "../../../types";
 
@@ -140,9 +147,54 @@ const TextInput = styled.div`
   }
 `;
 
-const ContainerFullScreen = styled(motion.div)``
+const GalleryContent = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
 
-const ButtonFullScreen = styled(IconFullscreen)`
+  .gallery-swiper {
+    width: 100%;
+
+    &-slide {
+      width: 100%;
+      height: 22rem;
+      position: relative;
+      max-width: 22rem;
+
+      img {
+        border-radius: ${({ theme }) => theme.radius.xl};
+      } 
+    }
+  }
+`
+
+const ContainerFullScreen = styled(motion.div)`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  display: flex;
+  overflow: hidden;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => rgba(theme.colors.dark[800], '.48')};
+
+  .fullscreen-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    max-width: 30rem;
+    max-height: 30rem;
+
+    img {
+      border-radius: ${({ theme }) => theme.radius.xl};
+    } 
+  }
+`
+
+const IconButton = styled.svg`
   top: .5rem;
   right: .5rem;
   width: 2rem;
@@ -170,94 +222,158 @@ const ImageContainer = styled(motion.div)`
   }
 `
 
+const gallery = [
+  "https://picsum.photos/400",
+  "https://picsum.photos/400",
+  "https://picsum.photos/400",
+  "https://picsum.photos/400",
+  "https://picsum.photos/400",
+  "https://picsum.photos/400",
+]
+
 const PhygitalDetails: NextPageWithLayout = () => {
   const [fullscreen, setFullscreen] = useState(false)
 
+  const prevRef = useRef<HTMLElement>(null)
+  const nextRef = useRef<HTMLElement>(null)
+  const fullScreenRef = useRef<HTMLDivElement>(null)
+
   const router = useRouter();
 
+  useOutsideClick(fullScreenRef, () => setFullscreen(false))
+
   return (
-    <Container>
-      <Details>
-        <ImageContainer layoutId="image-expand">
-          <Image
-            src="https://picsum.photos/400"
-            alt=""
-            fill
-            sizes="100vw"
-            priority
-          />
-
-          <ButtonFullScreen onClick={() => setFullscreen((prev) => !prev)} />
-        </ImageContainer>
-
-        <Content>
-          <div className="content-head">
-            <h2>RTFKT x Nike Dunk Genesis CRYPTOKICKS</h2>
-
-            <div className="content-head-actions">
-              <IconRefresh />
-
-              <IconExternalLink />
-
-              <IconShare />
-            </div>
-          </div>
-
-          <span>
-            Created by:{" "}
-            <a
-              rel="noreferrer"
-              href={`https://google.com`}
-              target="_blank"
-            >
-              RTFKT
-            </a>
-          </span>
-
-          <small>Description:</small>
-
-          <p>
-            Introducing the first RTFKT x Nike Sneaker NFT, the RTFKT X Nike Dunk
-            Genesis CRYPTOKICKS Sneaker 🧪.
-            <br /> When equipped with a RTFKT Skin Vial NFT, the look of the RTFKT
-            x NIKE DUNK GENESIS CRYPTOKICKS changes according to the traits of the
-            vial.
-          </p>
-
-          <Actions>
-            <Button
-              size="medium"
-              label="Mint NFT"
-              color="blue"
+    <AnimatePresence mode="popLayout">
+      <Container>
+        <Details>
+          <ImageContainer layoutId="image-expand">
+            <Image
+              src="https://picsum.photos/400"
+              alt=""
+              fill
+              sizes="100vw"
+              priority
             />
 
-            <TextInput>
-              <p>Value:</p>
-              <p>1.2 ETH</p>
-            </TextInput>
-          </Actions>
-        </Content>
-      </Details>
+            <IconButton as={IconFullscreen} onClick={() => setFullscreen((prev) => !prev)} />
+          </ImageContainer>
 
-      <Gallery>
-        <h2>Gallery</h2>
-      </Gallery>
+          <Content>
+            <div className="content-head">
+              <h2>RTFKT x Nike Dunk Genesis CRYPTOKICKS</h2>
 
-      <ContainerFullScreen
-        initial={{ opacity: 0, pointerEvents: 'none' }}
-        animate={{ opacity: fullscreen ? 100 : 0, pointerEvents: fullscreen ? 'auto' : 'none' }}
-        transition={{ type: 'spring' }}
-        layoutId="image-expand"
-      >
-        <Image
-          src="https://picsum.photos/400"
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-        />
-      </ContainerFullScreen>
-    </Container>
+              <div className="content-head-actions">
+                <IconRefresh />
+
+                <IconExternalLink />
+
+                <IconShare />
+              </div>
+            </div>
+
+            <span>
+              Created by:{" "}
+              <a
+                rel="noreferrer"
+                href={`https://google.com`}
+                target="_blank"
+              >
+                RTFKT
+              </a>
+            </span>
+
+            <small>Description:</small>
+
+            <p>
+              Introducing the first RTFKT x Nike Sneaker NFT, the RTFKT X Nike Dunk
+              Genesis CRYPTOKICKS Sneaker 🧪.
+              <br /> When equipped with a RTFKT Skin Vial NFT, the look of the RTFKT
+              x NIKE DUNK GENESIS CRYPTOKICKS changes according to the traits of the
+              vial.
+            </p>
+
+            <Actions>
+              <Button
+                size="medium"
+                label="Mint NFT"
+                color="blue"
+              />
+
+              <TextInput>
+                <p>Value:</p>
+                <p>1.2 ETH</p>
+              </TextInput>
+            </Actions>
+          </Content>
+        </Details>
+
+        <Gallery>
+          <h2>Gallery</h2>
+
+          <GalleryContent>
+            <Swiper
+              modules={[Navigation]}
+              className="gallery-swiper"
+              navigation={{
+                prevEl: prevRef.current,
+                nextEl: nextRef.current
+              }}
+              spaceBetween={16}
+              onBeforeInit={(swiper) => {
+                const navigation = swiper.params.navigation as NavigationOptions
+
+                if (navigation) {
+                  navigation.prevEl = prevRef.current
+                  navigation.nextEl = nextRef.current
+                }
+
+                swiper.navigation.init()
+                swiper.navigation.update()
+              }}
+              slidesPerView="auto"
+            >
+              {gallery.map((picture, index) => (
+                <SwiperSlide
+                  key={`${picture}-${index}`}
+                  className="gallery-swiper-slide"
+                >
+                  <Image
+                    src={picture}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </GalleryContent>
+        </Gallery>
+
+        {fullscreen && (
+          <ContainerFullScreen
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <motion.div
+              ref={fullScreenRef}
+              layoutId="image-expand"
+              className="fullscreen-image"
+            >
+              <Image
+                src="https://picsum.photos/400"
+                alt=""
+                fill
+                sizes="100vw"
+                priority
+              />
+
+              <IconButton as={IconClose} onClick={() => setFullscreen((prev) => !prev)} />
+            </motion.div>
+          </ContainerFullScreen>
+        )}
+      </Container>
+    </AnimatePresence>
   );
 };
 

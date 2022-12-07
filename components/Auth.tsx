@@ -10,14 +10,14 @@ function getAuthURL(): string {
     case 'local':
       return 'http://localhost:3001'
     case 'dev':
-      return 'https://www.auth.dev.tryspace.com'
+      return 'https://auth.dev.tryspace.com'
     case 'qa':
-      return 'https://www.auth.qa.tryspace.com'
+      return 'https://auth.qa.tryspace.com'
     case 'prod':
-      return 'https://www.auth.tryspace.com'
+      return 'https://auth.tryspace.com'
     default:
       console.log('No ENV set')
-      return 'https://www.auth.dev.tryspace.com'
+      return 'https://auth.dev.tryspace.com'
   }
 }
 
