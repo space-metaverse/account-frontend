@@ -9,6 +9,8 @@ import {
   Close as IconClose,
   Share as IconShare,
   Refresh as IconRefresh,
+  ArrowLeft as IconArrowLeft,
+  ArrowRight as IconArrowRight,
   Fullscreen as IconFullscreen,
   ExternalLink as IconExternalLink
 } from '@space-metaverse-ag/space-ui/icons'
@@ -16,7 +18,6 @@ import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
 import Profile from "layouts/profile";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -26,6 +27,7 @@ import type { NextPageWithLayout } from "../../../types";
 
 const Gallery = styled.div`
   display: flex;
+  margin-bottom: 4rem;
   flex-direction: column;
 
   h2 {
@@ -147,6 +149,52 @@ const TextInput = styled.div`
   }
 `;
 
+const GalleryAction = styled.div`
+  height: 100%;
+  z-index: 9;
+  display: flex;
+  opacity: 1;
+  position: absolute;
+  transition: ${({ theme }) => theme.transitions.ease};
+  align-items: center;
+
+  button {
+    width: 3.5rem;
+    height: 3.5rem;
+    cursor: pointer;
+    border: none;
+    box-shadow: ${({ theme }) => `0px 12px 32px -12px ${theme.colors.blue[200]}`};
+    border-radius: ${({ theme }) => theme.radius.full};
+    background-color: ${({ theme }) => theme.colors.white};
+  
+    path {
+      stroke: ${({ theme }) => theme.colors.dark[500]};
+      transition: ${({ theme }) => theme.transitions.ease};
+    }
+
+    &:hover path {
+      stroke: ${({ theme }) => theme.colors.blue[400]};
+    }
+  }
+
+  &.is-left {
+    left: 0;
+    padding: 0 5rem 0 1.5rem;
+    background: ${({ theme }) => `linear-gradient(-270deg, ${theme.colors.white} 0%, ${rgba(theme.colors.dark[800], '0')} 100%)`};
+  }
+
+  &.is-right {
+    right: 0;
+    padding: 0 1.5rem 0 5rem;
+    background: ${({ theme }) => `linear-gradient(270deg, ${theme.colors.white} 0%, ${rgba(theme.colors.dark[800], '0')} 100%)`};
+  }
+
+  &:has(button.swiper-button-disabled) {
+    opacity: 0;
+    pointer-events: none;
+  }
+`;
+
 const GalleryContent = styled.div`
   display: flex;
   position: relative;
@@ -234,11 +282,9 @@ const gallery = [
 const PhygitalDetails: NextPageWithLayout = () => {
   const [fullscreen, setFullscreen] = useState(false)
 
-  const prevRef = useRef<HTMLElement>(null)
-  const nextRef = useRef<HTMLElement>(null)
+  const prevRef = useRef<HTMLButtonElement>(null)
+  const nextRef = useRef<HTMLButtonElement>(null)
   const fullScreenRef = useRef<HTMLDivElement>(null)
-
-  const router = useRouter();
 
   useOutsideClick(fullScreenRef, () => setFullscreen(false))
 
@@ -311,9 +357,16 @@ const PhygitalDetails: NextPageWithLayout = () => {
           <h2>Gallery</h2>
 
           <GalleryContent>
+            <GalleryAction className="is-left">
+              <button ref={prevRef}>
+                <IconArrowLeft />
+              </button>
+            </GalleryAction>
+
             <Swiper
               modules={[Navigation]}
               className="gallery-swiper"
+              grabCursor
               navigation={{
                 prevEl: prevRef.current,
                 nextEl: nextRef.current
@@ -346,6 +399,12 @@ const PhygitalDetails: NextPageWithLayout = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
+
+            <GalleryAction className="is-right">
+              <button ref={nextRef}>
+                <IconArrowRight />
+              </button>
+            </GalleryAction>
           </GalleryContent>
         </Gallery>
 
