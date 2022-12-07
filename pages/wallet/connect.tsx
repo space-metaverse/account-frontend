@@ -2,15 +2,15 @@ import { useEffect, type ReactElement } from 'react'
 
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { Check } from '@space-metaverse-ag/space-ui/icons'
+import { useGetNonceQuery, usePostSignatureMutation } from 'api/account'
 import wallets from 'data/wallets'
-import Profile from 'layouts/profile'
+import Layout from 'layouts/layout'
 import Head from 'next/head'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { useAccount, useConnect, useSignMessage } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
-import { useGetNonceQuery, usePostSignatureMutation } from 'api/account'
 
 const Card = styled.div<{ disabled: boolean }>`
   border: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
@@ -126,16 +126,16 @@ const Wallet: NextPageWithLayout = () => {
     if (isConnectSuccess) {
       signMessage()
     }
-  }, [isConnectSuccess])
+  }, [signMessage, isConnectSuccess])
 
   useEffect(() => {
     if (isSignMessageSuccess && signMessageData) {
       postSignature({ signature: signMessageData })
     }
-  }, [isSignMessageSuccess, signMessageData])
+  }, [isSignMessageSuccess, signMessageData, postSignature])
 
   return (
-    <Profile.SharedStyles.Container style={{ gap: '.75rem' }}>
+    <Layout.SharedStyles.Container style={{ gap: '.75rem' }}>
       {connectors.map((connector) => {
         const {
           id,
@@ -197,19 +197,19 @@ const Wallet: NextPageWithLayout = () => {
       ))}
 
       {isError && error && <Error>{error.message}</Error>}
-    </Profile.SharedStyles.Container>
+    </Layout.SharedStyles.Container>
   )
 }
 
 Wallet.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="Connect New Wallet">
+  <Layout.Layout title="Connect New Wallet">
     <Head>
       <title>Connect New Wallet | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 )
 
 export default Wallet

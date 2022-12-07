@@ -4,7 +4,7 @@ import { Table, Button, Spinner } from '@space-metaverse-ag/space-ui';
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from 'next/image'
@@ -454,7 +454,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 Order.getLayout = (page: ReactElement) => (
-  <Profile.Layout
+  <Layout.Layout
     title="Order Details"
     isBack
   >
@@ -464,7 +464,7 @@ Order.getLayout = (page: ReactElement) => (
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default Order;

@@ -5,7 +5,7 @@ import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { ExternalLink } from '@space-metaverse-ag/space-ui/icons'
 import wallets from 'data/wallets'
 import truncate from 'helpers/truncate'
-import Profile from 'layouts/profile'
+import Layout from 'layouts/layout'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -120,7 +120,7 @@ const Wallet: NextPageWithLayout = () => {
   } = useDisconnect()
 
   return (
-    <Profile.SharedStyles.Container>
+    <Layout.SharedStyles.Container>
       {address && connector && (
         <WalletConnected.Base>
           <div>
@@ -168,19 +168,19 @@ const Wallet: NextPageWithLayout = () => {
         Dont Have a wallet? <br />
         No Problem, Check our <b>step by step guides</b> how to create wallet
       </Message>
-    </Profile.SharedStyles.Container>
+    </Layout.SharedStyles.Container>
   )
 }
 
 Wallet.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="Active Wallets">
+  <Layout.Layout title="Active Wallets">
     <Head>
       <title>Active Wallets | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 )
 
 export default Wallet

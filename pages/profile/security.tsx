@@ -2,7 +2,7 @@ import { useState, type ReactElement } from 'react'
 
 import { Button, TextInput } from '@space-metaverse-ag/space-ui'
 import validate from 'helpers/validate'
-import Profile from 'layouts/profile'
+import Layout from 'layouts/layout'
 import Head from 'next/head'
 import styled from 'styled-components'
 import { ref, string } from 'yup'
@@ -12,7 +12,6 @@ import type { NextPageWithLayout } from '../../types'
 const Label = styled.label`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark['800']};
-  margin-top: 1rem;
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -61,10 +60,10 @@ const Security: NextPageWithLayout = () => {
 
   return (
     <>
-      <Profile.SharedStyles.Container>
+      <Layout.SharedStyles.Container>
         <Label>Change Password</Label>
 
-        <Profile.SharedStyles.Form>
+        <Layout.SharedStyles.Form>
           <div className='is-grid'>
             <TextInput
               type='password'
@@ -95,10 +94,10 @@ const Security: NextPageWithLayout = () => {
               placeholder='Re-enter new password'
             />
           </div>
-        </Profile.SharedStyles.Form>
-      </Profile.SharedStyles.Container>
+        </Layout.SharedStyles.Form>
+      </Layout.SharedStyles.Container>
 
-      <Profile.SharedStyles.Actions>
+      <Layout.SharedStyles.Actions>
         <Button
           size="medium"
           color="blue"
@@ -112,20 +111,20 @@ const Security: NextPageWithLayout = () => {
           label="Discard"
           onClick={discard}
         />
-      </Profile.SharedStyles.Actions>
+      </Layout.SharedStyles.Actions>
     </>
   )
 }
 
 Security.getLayout = (page: ReactElement) => (
-  <Profile.Layout title='Security Settings'>
+  <Layout.Layout title='Security Settings'>
     <Head>
       <title>Security Settings | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 )
 
 export default Security

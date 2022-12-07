@@ -15,7 +15,7 @@ import {
   ExternalLink as IconExternalLink
 } from '@space-metaverse-ag/space-ui/icons'
 import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
@@ -441,7 +441,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
 };
 
 PhygitalDetails.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="NFT Details">
+  <Layout.Layout title="NFT Details">
     <Head>
       <title>NFT Details | SPACE</title>
       <meta name="description" content="SPACE NFT Details" />
@@ -450,7 +450,7 @@ PhygitalDetails.getLayout = (page: ReactElement) => (
     <LayoutGroup>
       {page}
     </LayoutGroup>
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default PhygitalDetails;

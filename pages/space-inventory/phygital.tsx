@@ -1,7 +1,7 @@
 import { type ReactElement } from "react";
 
 import CardInventory from 'components/CardInventory'
-import Profile from "layouts/profile";
+import Layout from "layouts/layout";
 import Head from "next/head";
 import styled from "styled-components";
 
@@ -53,14 +53,14 @@ const MyCollection: NextPageWithLayout = () => (
 );
 
 MyCollection.getLayout = (page: ReactElement) => (
-  <Profile.Layout title="My NFT Collection">
+  <Layout.Layout title="My NFT Collection">
     <Head>
       <title>My NFT Collection | SPACE</title>
       <meta name="description" content="SPACE Inventory" />
     </Head>
 
     {page}
-  </Profile.Layout>
+  </Layout.Layout>
 );
 
 export default MyCollection;
