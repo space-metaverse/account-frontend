@@ -56,6 +56,15 @@ const Actions = styled.div`
     min-width: 14.25rem;
     min-height: 3.5rem;
   }
+
+  @media screen and (max-width: 1480px) {
+    align-items: flex-start;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
 `;
 
 const Content = styled.div`
@@ -125,6 +134,18 @@ const Details = styled.div`
 
   ${Content} {
     grid-column: span 2/span 2;
+  }
+
+  @media screen and (max-width: 1480px) {
+    grid-template-columns: repeat(2, 1fr);
+
+    ${Content} {
+      grid-column: span 1/span 1;
+    }
+  }
+
+  @media screen and (max-width: 1199px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
