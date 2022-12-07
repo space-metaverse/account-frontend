@@ -1,7 +1,14 @@
-import { type ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 
 import { Button } from "@space-metaverse-ag/space-ui";
-import { Share as IconShare, Refresh as IconRefresh, ExternalLink as IconExternalLink } from '@space-metaverse-ag/space-ui/icons'
+import { rgba } from "@space-metaverse-ag/space-ui/helpers";
+import {
+  Share as IconShare,
+  Refresh as IconRefresh,
+  Fullscreen as IconFullscreen,
+  ExternalLink as IconExternalLink
+} from '@space-metaverse-ag/space-ui/icons'
+import { motion, LayoutGroup } from 'framer-motion';
 import Profile from "layouts/profile";
 import Head from "next/head";
 import Image from "next/image";
@@ -133,7 +140,27 @@ const TextInput = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ContainerFullScreen = styled(motion.div)``
+
+const ButtonFullScreen = styled(IconFullscreen)`
+  top: .5rem;
+  right: .5rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  border-radius: ${({ theme }) => theme.radius.full};
+  justify-content: center;
+  background-color: ${({ theme }) => rgba(theme.colors.dark[800], '.24')};
+
+  path {
+    stroke: ${({ theme }) => theme.colors.white};
+  }
+`
+
+const ImageContainer = styled(motion.div)`
   width: 100%;
   position: relative;
   min-height: 20.5rem;
@@ -144,12 +171,14 @@ const ImageContainer = styled.div`
 `
 
 const PhygitalDetails: NextPageWithLayout = () => {
+  const [fullscreen, setFullscreen] = useState(false)
+
   const router = useRouter();
 
   return (
     <Container>
       <Details>
-        <ImageContainer>
+        <ImageContainer layoutId="image-expand">
           <Image
             src="https://picsum.photos/400"
             alt=""
@@ -157,6 +186,8 @@ const PhygitalDetails: NextPageWithLayout = () => {
             sizes="100vw"
             priority
           />
+
+          <ButtonFullScreen onClick={() => setFullscreen((prev) => !prev)} />
         </ImageContainer>
 
         <Content>
@@ -211,6 +242,21 @@ const PhygitalDetails: NextPageWithLayout = () => {
       <Gallery>
         <h2>Gallery</h2>
       </Gallery>
+
+      <ContainerFullScreen
+        initial={{ opacity: 0, pointerEvents: 'none' }}
+        animate={{ opacity: fullscreen ? 100 : 0, pointerEvents: fullscreen ? 'auto' : 'none' }}
+        transition={{ type: 'spring' }}
+        layoutId="image-expand"
+      >
+        <Image
+          src="https://picsum.photos/400"
+          alt=""
+          fill
+          sizes="100vw"
+          priority
+        />
+      </ContainerFullScreen>
     </Container>
   );
 };
@@ -222,7 +268,9 @@ PhygitalDetails.getLayout = (page: ReactElement) => (
       <meta name="description" content="SPACE NFT Details" />
     </Head>
 
-    {page}
+    <LayoutGroup>
+      {page}
+    </LayoutGroup>
   </Profile.Layout>
 );
 
