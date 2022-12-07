@@ -26,7 +26,7 @@ import { useRouter } from "next/router";
 
 import { MainStyles, SharedStyles } from "./styles";
 
-interface ProfileLayoutProps extends PropsWithChildren {
+interface LayoutProps extends PropsWithChildren {
   title: string
   isBack?: boolean
 }
@@ -152,7 +152,7 @@ const options: SideNavProps["routes"] = [
   },
 ];
 
-const Layout: NextPage<ProfileLayoutProps> = ({
+const Layout: NextPage<LayoutProps> = ({
   title,
   isBack,
   children,
