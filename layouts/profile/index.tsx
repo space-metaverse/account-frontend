@@ -123,12 +123,6 @@ const options: SideNavProps["routes"] = [
     label: "NFT Inventory",
     route: "/nft-inventory",
     disabled: true,
-  },
-  {
-    Icon: Collection,
-    label: "Space Inventory",
-    route: "/space-inventory",
-    disabled: false,
     children: [
       {
         Icon: Phygital,
@@ -140,6 +134,19 @@ const options: SideNavProps["routes"] = [
         label: "Received NFTs",
         route: "/space-inventory/received",
         disabled: true
+      },
+    ]
+  },
+  {
+    Icon: Collection,
+    label: "Space Inventory",
+    route: "/space-inventory",
+    disabled: false,
+    children: [
+      {
+        Icon: Phygital,
+        label: "Phygital",
+        route: "/space-inventory/phygital",
       },
     ],
   },
