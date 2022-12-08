@@ -83,21 +83,9 @@ const options: SideNavProps["routes"] = [
   },
   {
     Icon: Wallet,
-    route: null,
-    label: "Connected Wallets",
+    route: "/wallets",
+    label: "Wallets",
     disabled: false,
-    children: [
-      {
-        Icon: ConnectedWallets,
-        route: "/wallet",
-        label: "Active Wallets",
-      },
-      {
-        Icon: ConnectNewWallet,
-        route: "/wallet/connect",
-        label: "Connect New Wallet",
-      },
-    ],
   },
   {
     Icon: Orders,

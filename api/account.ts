@@ -94,6 +94,23 @@ interface PostSignatureResponse {
 
 interface PostSignatureRequest {
   signature: string
+  address: string
+}
+
+interface GetWalletsResponse {
+  message: string
+  wallets: string[]
+  primaryWallet: string
+  username: string
+}
+
+interface PostPrimaryWalletResponse {
+  message: string
+  primaryWallet: string
+}
+
+interface PostPrimaryWalletRequest {
+  primaryWallet: string
 }
 
 const getBaseURl = (): string => {
@@ -167,11 +184,45 @@ export const accountApi = createApi({
       })
     }),
     postSignature: builder.mutation<PostSignatureResponse, PostSignatureRequest>({
-      query: ({ signature }) => ({
+      query: ({ signature, address }) => ({
         url: '/wallet/signature',
         method: 'POST',
         body: {
-          signature
+          signature,
+          address
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
+    getWallets: builder.query<GetWalletsResponse, unknown>({
+      query: () => ({
+        url: '/wallet/wallets',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
+    postPrimaryWallet: builder.mutation<PostPrimaryWalletResponse, PostPrimaryWalletRequest>({
+      query: ({ primaryWallet }) => ({
+        url: '/wallet/primary',
+        method: 'POST',
+        body: {
+          primaryWallet
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        }
+      })
+    }),
+    deleteWallet: builder.mutation<{ message: string }, { address: string }>({
+      query: ({ address }) => ({
+        url: '/wallet',
+        method: 'DELETE',
+        body: {
+          address
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
@@ -187,5 +238,8 @@ export const {
   useGetOrdersQuery,
   usePostMeMutation,
   useGetNonceQuery,
-  usePostSignatureMutation
+  usePostSignatureMutation,
+  useGetWalletsQuery,
+  usePostPrimaryWalletMutation,
+  useDeleteWalletMutation
 } = accountApi
