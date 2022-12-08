@@ -91,7 +91,6 @@ const WalletConnected = {
     color: ${({ theme }) => theme.colors.dark['800']};
     padding: .25rem .75rem;
     font-weight: ${({ theme }) => theme.fonts.weight.medium};
-    font-family: ${({ theme }) => theme.fonts.family.body};
     border-radius: ${({ theme }) => theme.radius.full};
     background-color: ${({ theme }) => rgba(theme.colors.dark['600'], '.12')};
   `,
