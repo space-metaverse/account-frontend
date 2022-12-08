@@ -1,6 +1,8 @@
 import { TopNav } from '@space-metaverse-ag/space-ui'
 import { Logout as IconLogout } from '@space-metaverse-ag/space-ui/icons'
+import { useGetMeQuery } from 'api/account'
 import { useAppSelector } from 'redux/hooks'
+import analytics from 'services/segment'
 
 const routes = [
   {
@@ -42,9 +44,20 @@ const routes = [
 ]
 
 const Topnav: React.FC = () => {
+  const {
+    data,
+  } = useGetMeQuery({})
+
+  console.log(data)
+
   const { username } = useAppSelector(state => state.account)
 
   const logout = (): void => {
+    analytics.track({
+      id: data?.accountId,
+      event: 'SignOut'
+    })
+
     window.localStorage.removeItem('immerToken')
 
     location.reload()
