@@ -22,6 +22,9 @@
       "helpers/*": [
         "./helpers/*"
       ],
+      "services/*": [
+        "./services/*"
+      ],
       "layouts/*": [
         "./layouts/*"
       ],

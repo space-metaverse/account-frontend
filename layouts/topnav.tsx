@@ -48,13 +48,11 @@ const Topnav: React.FC = () => {
     data,
   } = useGetMeQuery({})
 
-  console.log(data)
-
   const { username } = useAppSelector(state => state.account)
 
   const logout = (): void => {
     analytics.track({
-      id: data?.accountId,
+      id: data?.accountId as string,
       event: 'SignOut'
     })
 
