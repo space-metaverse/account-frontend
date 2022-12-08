@@ -148,7 +148,7 @@ const Wallet: NextPageWithLayout = () => {
     }
   }, [postPrimaryWalletSuccess, deleteWalletSuccess])
 
-  const handleSetPrimaryWallet = (address: string) => {
+  const handleSetPrimaryWallet = (address: string): void => {
     postPrimaryWallet({ primaryWallet: address })
   }
 

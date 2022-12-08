@@ -24,12 +24,12 @@ const WalletsGrid = styled.div`
   }
 `
 
-interface ConnectWalletModal {
+interface ConnectWalletModalProps {
   modalRef: RefObject<ModalProps>
   refetchWallets: () => void
 }
 
-const ConnectWalletModal = ({ modalRef, refetchWallets }: ConnectWalletModal) => {
+const ConnectWalletModal = ({ modalRef, refetchWallets }: ConnectWalletModalProps) => {
   const {
     reset,
     connect,
