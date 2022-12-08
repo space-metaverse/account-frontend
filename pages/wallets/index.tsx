@@ -1,24 +1,21 @@
-import { type ReactElement } from 'react'
+import { useEffect, useRef, type ReactElement } from 'react'
 
-import { Button } from '@space-metaverse-ag/space-ui'
+import { Button, ModalProps, Spinner } from '@space-metaverse-ag/space-ui'
 import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { ExternalLink } from '@space-metaverse-ag/space-ui/icons'
-import wallets from 'data/wallets'
 import truncate from 'helpers/truncate'
 import Layout from 'layouts/layout'
 import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
 import styled from 'styled-components'
-import { useAccount, useDisconnect } from 'wagmi'
 
 import type { NextPageWithLayout } from '../../types'
+import ConnectWalletModal from './ConnectWalletModal'
+import { useDeleteWalletMutation, useGetWalletsQuery, usePostPrimaryWalletMutation } from 'api/account'
 
 const Message = styled.p`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark['800']};
   padding: 1.5rem 0;
-  margin-top: 2rem;
   border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   letter-spacing: 1px;
@@ -36,6 +33,7 @@ const ConnectWallet = styled.div`
   border-radius: ${({ theme }) => theme.radius.xl};
   justify-content: space-between;
   background-color: ${({ theme }) => theme.colors.dark['100']};
+  margin-bottom: 2rem;
 
   p {
     ${({ theme }) => theme.fonts.size.sm};
@@ -65,6 +63,11 @@ const WalletConnected = {
     > div {
       display: flex;
       align-items: center;
+      gap: 1rem;
+
+      p {
+        color: ${({ theme }) => theme.colors.green['500']};
+      }
     }
 
     @media screen and (max-width: 640px) {
@@ -84,8 +87,8 @@ const WalletConnected = {
   `,
 
   Badge: styled.span`
-    ${({ theme }) => theme.fonts.size.sm};
-    color: ${({ theme }) => theme.colors.dark['600']};
+    ${({ theme }) => theme.fonts.size.md};
+    color: ${({ theme }) => theme.colors.dark['800']};
     padding: .25rem .75rem;
     font-weight: ${({ theme }) => theme.fonts.weight.medium};
     font-family: ${({ theme }) => theme.fonts.family.body};
@@ -109,66 +112,100 @@ const WalletConnected = {
   `
 }
 
+const SpinnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem;
+`
+
 const Wallet: NextPageWithLayout = () => {
-  const {
-    address,
-    connector
-  } = useAccount()
+  const modalRef = useRef<ModalProps>(null);
 
   const {
-    disconnectAsync
-  } = useDisconnect()
+    data: getWalletsData,
+    isLoading: getWalletsLoading,
+    refetch: getWalletsRefetch,
+  } = useGetWalletsQuery({})
+
+  const [
+    postPrimaryWallet, {
+      isSuccess: postPrimaryWalletSuccess,
+      isLoading: postPrimaryWalletLoading,
+    }
+  ] = usePostPrimaryWalletMutation()
+
+  const [
+    deleteWallet, {
+      isSuccess: deleteWalletSuccess,
+      isLoading: isDeleteWalletLoading,
+    }
+  ] = useDeleteWalletMutation()
+
+  useEffect(() => {
+    if (postPrimaryWalletSuccess || deleteWalletSuccess) {
+      getWalletsRefetch()
+    }
+  }, [postPrimaryWalletSuccess, deleteWalletSuccess])
+
+  const handleSetPrimaryWallet = (address: string) => {
+    postPrimaryWallet({ primaryWallet: address })
+  }
 
   return (
-    <Layout.SharedStyles.Container>
-      {address && connector && (
-        <WalletConnected.Base>
-          <div>
-            <Image
-              src={wallets[connector.id as keyof typeof wallets]}
-              alt={connector.name}
-              width={32}
-              height={32}
-            />
-
-            <WalletConnected.Name>{connector.name}</WalletConnected.Name>
-
-            <WalletConnected.Badge title={address}>{truncate(address)}</WalletConnected.Badge>
-          </div>
-
-          <div>
-            <Button
-              size="small"
-              color="red"
-              label="Disconnect"
-              outline
-              onClick={async () => await disconnectAsync()}
-            />
-
-            <WalletConnected.Icon />
-          </div>
-        </WalletConnected.Base>
-      )}
-
-      <ConnectWallet>
-        <p>
-          You can connect more wallets to your account
-        </p>
-
-        <Link href="/wallet/connect">
+    <>
+      <Layout.SharedStyles.Container>
+        <ConnectWallet>
+          <p>
+            You can connect many wallets to your account
+          </p>
           <Button
             size="small"
             color="blue"
             label="CONNECT"
+            onClick={() => modalRef?.current?.opened()}
           />
-        </Link>
-      </ConnectWallet>
-
-      <Message>
-        Dont Have a wallet? <br />
-        No Problem, Check our <b>step by step guides</b> how to create wallet
-      </Message>
-    </Layout.SharedStyles.Container>
+        </ConnectWallet>
+        {
+          !getWalletsLoading ? getWalletsData?.wallets?.map((wallet, index) => (
+            <WalletConnected.Base key={wallet}>
+              <div>
+                <WalletConnected.Badge title={wallet}>{truncate(wallet)}</WalletConnected.Badge>
+              </div>
+              <div>
+                {
+                  getWalletsData?.primaryWallet === wallet ? (
+                    <p>Primary</p>
+                  ) : (
+                    <Button
+                      size="small"
+                      color="blue"
+                      label={postPrimaryWalletLoading ? <Spinner size='small' /> : "Make Primary"}
+                      outline
+                      onClick={() => handleSetPrimaryWallet(wallet)}
+                    />
+                  )
+                }
+                <Button
+                  size="small"
+                  color="red"
+                  label={postPrimaryWalletLoading ? <Spinner size='small' /> : "Remove"}
+                  outline
+                  onClick={() => deleteWallet({ address: wallet })}
+                />
+              </div>
+            </WalletConnected.Base>
+          )) : <SpinnerContainer>
+            <Spinner />
+          </SpinnerContainer>
+        }
+        <Message>
+          Dont Have a wallet? <br />
+          No Problem, Check our <b>step by step guides</b> how to create wallet
+        </Message>
+      </Layout.SharedStyles.Container>
+      <ConnectWalletModal modalRef={modalRef} refetchWallets={getWalletsRefetch} />
+    </>
   )
 }
 
@@ -178,7 +215,6 @@ Wallet.getLayout = (page: ReactElement) => (
       <title>Active Wallets | SPACE</title>
       <meta name='description' content='SPACE Accounts' />
     </Head>
-
     {page}
   </Layout.Layout>
 )

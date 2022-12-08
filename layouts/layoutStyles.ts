@@ -108,7 +108,7 @@ const Alert = styled.div`
 const Container = styled.div`
   width: 100%;
   display: flex;
-  max-width: 37.5rem;
+  max-width: 45rem;
   flex-direction: column;
 `
 

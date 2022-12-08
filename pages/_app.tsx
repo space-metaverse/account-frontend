@@ -46,7 +46,8 @@ const client = createClient({
       }
     })
   ],
-  autoConnect: true,
+  autoConnect: false,
+  storage: undefined,
   webSocketProvider
 })
 
