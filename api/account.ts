@@ -65,6 +65,7 @@ interface GetOrderResponse extends Omit<GetOrdersResponse, 'store' | 'customer'>
 interface GetMeResponse {
   message: string
   username: string
+  accountId: string
   lastName?: string
   userEmail?: string
   firstName?: string
