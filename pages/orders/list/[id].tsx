@@ -315,7 +315,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     return []
   }, [data])
 
-  const subTotal = data?.amount ? data.amount / 100 : (data?.crypto_amount ?? 0);
+  const subTotal = data ? data.amount ? data.amount / 100 : (data?.crypto_amount ?? 0) : 0;
 
   const shippingCost = data?.shipping_cost ? data.shipping_cost / 100 : 0
 
