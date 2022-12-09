@@ -24,7 +24,7 @@ import {
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import { MainStyles, SharedStyles } from "./layoutStyles";
+import { MainStyles, SharedStyles } from "./styles";
 
 interface LayoutProps extends PropsWithChildren {
   title: string
@@ -111,6 +111,19 @@ const options: SideNavProps["routes"] = [
     label: "NFT Inventory",
     route: "/nft-inventory",
     disabled: true,
+    children: [
+      {
+        Icon: Phygital,
+        label: "My NFT Collection",
+        route: "/space-inventory/my-collection",
+      },
+      {
+        Icon: OrdersList,
+        label: "Received NFTs",
+        route: "/space-inventory/received",
+        disabled: true
+      },
+    ]
   },
   {
     Icon: Collection,

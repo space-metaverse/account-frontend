@@ -12,7 +12,6 @@ import type { NextPageWithLayout } from '../../types'
 const Label = styled.label`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark['800']};
-  margin-top: 1rem;
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   letter-spacing: 1px;
   text-transform: uppercase;
