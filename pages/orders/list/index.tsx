@@ -113,11 +113,12 @@ const OrdersList: NextPageWithLayout = () => {
         store,
         status,
         amount,
+        order_sid: orderSid,
       }) => {
         const currentStatus = listStatus[status as keyof typeof listStatus]
 
         return ({
-          orderNumber: <p title={id} className="order-number">{id}</p>,
+          orderNumber: <p className="order-number">{orderSid}</p>,
           name: store,
           orderDate: format(new Date(date), 'dd MMM yyyy'),
           items: `${items.length} Item${items.length > 1 ? 's' : ''}`,
