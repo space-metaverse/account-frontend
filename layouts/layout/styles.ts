@@ -55,6 +55,7 @@ const Wrapper = styled.div`
 const Form = styled.div`
   gap: 1rem;
   display: flex;
+  margin-top: 2rem;
   margin-bottom: 4rem;
   flex-direction: column;
 
@@ -108,7 +109,7 @@ const Alert = styled.div`
 const Container = styled.div`
   width: 100%;
   display: flex;
-  max-width: 37.5rem;
+  max-width: 45rem;
   flex-direction: column;
 `
 
