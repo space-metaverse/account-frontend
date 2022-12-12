@@ -38,7 +38,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel='icon' href='/favicon.ico' />
         </Head>
-        <body style={{ margin: 0 }}>
+        <body style={{ margin: 0, fontFamily: "Aeroport, sans-serif" }}>
           <Main />
 
           <NextScript />

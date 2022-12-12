@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
 
-import { ThemeProvider, GlobalStyles } from '@space-metaverse-ag/space-ui'
+import { ThemeProvider } from '@space-metaverse-ag/space-ui'
 import "@space-metaverse-ag/space-ui/index.css"
 import Auth from 'components/Auth'
 import { LazyMotion, domAnimation } from "framer-motion"
@@ -19,6 +19,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 import type { NextPageWithLayout } from '../types'
+import "../styles/global.css";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
@@ -59,7 +60,6 @@ const Root = ({ Component, pageProps }: AppPropsWithLayout): JSX.Element => {
     <WagmiConfig client={client}>
       <Provider store={store}>
         <ThemeProvider>
-          <GlobalStyles />
 
           <Auth />
 
