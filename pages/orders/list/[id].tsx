@@ -315,6 +315,10 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     return []
   }, [data])
 
+  const subTotal = data ? data.amount ? data.amount / 100 : (data?.crypto_amount ?? 0) : 0;
+
+  const shippingCost = data?.shipping_cost ? data.shipping_cost / 100 : 0
+
   return (
     <div>
       {isFetching && (
@@ -337,7 +341,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
                 <div className="is-group">
                   <p>Order Number:</p>
-                  <span>{data.id}</span>
+                  <span>{data.order_sid}</span>
                 </div>
 
                 <div className="is-group">
@@ -406,7 +410,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
           <Infos>
             <div className="is-item">
               <span>Sub Total:</span>
-              <p>{formatPrice(data.amount || data.crypto_amount)}</p>
+              <p>{formatPrice(subTotal)}</p>
             </div>
 
             <div className="is-item">
@@ -416,12 +420,12 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
             <div className="is-item">
               <span>Taxes:</span>
-              <p>{data.shipping_cost ? formatPrice(data.shipping_cost) : '-'}</p>
+              <p>{shippingCost ? formatPrice(shippingCost) : '-'}</p>
             </div>
 
             <div className="is-total">
               <span>Total:</span>
-              <p>{formatPrice((data.amount || data.crypto_amount) + (data.shipping_cost || 0))}</p>
+              <p>{formatPrice(subTotal + shippingCost)}</p>
             </div>
           </Infos>
 
