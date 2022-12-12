@@ -21,7 +21,6 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { publicProvider } from 'wagmi/providers/public'
 
 import type { NextPageWithLayout } from '../types'
-import "../styles/global.css";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
