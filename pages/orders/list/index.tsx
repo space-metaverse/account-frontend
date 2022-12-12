@@ -113,17 +113,20 @@ const OrdersList: NextPageWithLayout = () => {
         store,
         status,
         amount,
+        order_sid: orderSid,
       }) => {
         const currentStatus = listStatus[status as keyof typeof listStatus]
 
+        const total = amount ? amount / 100 : 0;
+
         return ({
-          orderNumber: <p title={id} className="order-number">{id}</p>,
+          orderNumber: <p className="order-number">{orderSid}</p>,
           name: store,
           orderDate: format(new Date(date), 'dd MMM yyyy'),
           items: `${items.length} Item${items.length > 1 ? 's' : ''}`,
           total: amount <= 0
             ? 'Crypto'
-            : formatPrice(amount),
+            : formatPrice(total),
           status: <Chip color={currentStatus ? currentStatus.appearance as ChipProps['color'] : 'grey'} label={currentStatus ? currentStatus.label : 'Uninformed'} />,
           more: <DropRight style={{ width: 'fit-content', cursor: 'pointer' }} onClick={async () => await push(`list/${id}`)} />,
         })
