@@ -55,7 +55,6 @@ const Wrapper = styled.div`
 const Form = styled.div`
   gap: 1rem;
   display: flex;
-  margin-top: 2rem;
   margin-bottom: 4rem;
   flex-direction: column;
 
@@ -81,6 +80,11 @@ const Actions = styled.div`
   border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   align-items: center;
 
+  button > .spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
   @media screen and (max-width: 640px) {
     left: 0;
     width: 100%;
@@ -92,13 +96,19 @@ const Actions = styled.div`
 `
 
 const PhoneAction = styled.div`
-  align-items: center;
   display: flex;
-  padding-top: 1.5rem;
   height: 4.375rem;
+  align-items: center;
+  padding-top: 1.5rem;
+
+  button > .spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
   @media screen and (max-width: 640px) {
-    padding-top: 0;
     height: fit-content;
+    padding-top: 0;
   }
 `
 
@@ -109,6 +119,7 @@ const Alert = styled.div`
 const Container = styled.div`
   width: 100%;
   display: flex;
+  position: relative;
   max-width: 45rem;
   flex-direction: column;
 `
