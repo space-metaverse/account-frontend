@@ -50,7 +50,7 @@ const Topnav: React.FC = () => {
   const { username } = useAppSelector(state => state.account)
 
   const logout = async (): Promise<void> => {
-    await global.analytics.track('Signed Out', {
+    await global.analytics?.track?.('Signed Out', {
       userId: data?.accountId as string,
       username: username as string,
     })

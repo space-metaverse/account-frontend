@@ -315,7 +315,15 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     return []
   }, [data])
 
-  const subTotal = data ? data.amount ? data.amount / 100 : (data?.crypto_amount ?? 0) : 0;
+  const subTotal = useMemo(() => {
+    if (data) {
+      const calculate = data.items.map(({ quantity, price }) => price > 0 ? quantity * price : 0)
+
+      return calculate.reduce((acc, curr) => acc + curr, 0)
+    }
+
+    return 0
+  }, [data])
 
   const shippingCost = data?.shipping_cost ? data.shipping_cost / 100 : 0
 
@@ -415,21 +423,21 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
             <div className="is-item">
               <span>Shipping:</span>
-              <p>{data.shipping_status || '-'}</p>
+              <p>{shippingCost ? formatPrice(shippingCost) : '-'}</p>
             </div>
 
             <div className="is-item">
               <span>Taxes:</span>
-              <p>{shippingCost ? formatPrice(shippingCost) : '-'}</p>
+              <p>$0</p>
             </div>
 
             <div className="is-total">
               <span>Total:</span>
-              <p>{formatPrice(subTotal + shippingCost)}</p>
+              <p>{data.amount ? formatPrice(data.amount) : data.crypto_amount}</p>
             </div>
           </Infos>
 
-          <Actions>
+          <Actions title="Feature coming soon">
             <Button
               size="large"
               label="Download Receipt"
