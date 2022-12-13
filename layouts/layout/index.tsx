@@ -18,8 +18,6 @@ import {
   FriendsList,
   ReturnAndRefund,
   FriendsRequests,
-  ConnectedWallets,
-  ConnectNewWallet,
 } from "@space-metaverse-ag/space-ui/icons";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

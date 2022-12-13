@@ -1,12 +1,14 @@
-import { useState, useEffect, type ReactElement } from 'react'
+import { useState, useEffect, type ReactElement, useCallback } from 'react'
 
 import {
   Alert,
   Button,
+  Spinner,
   TextInput,
   PhoneInput,
   type AlertProps
 } from '@space-metaverse-ag/space-ui'
+import { rgba } from '@space-metaverse-ag/space-ui/helpers'
 import { useGetMeQuery, usePostMeMutation } from 'api/account'
 import { useSendSMSCodeMutation, useVerifySMSCodeMutation } from 'api/auth'
 import validate from 'helpers/validate'
@@ -14,6 +16,7 @@ import Layout from 'layouts/layout'
 import Head from 'next/head'
 import { useAppDispatch } from 'redux/hooks'
 import { setAccountPhone } from 'redux/slices/account'
+import styled from 'styled-components'
 import { string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
@@ -45,11 +48,27 @@ interface PhoneVerifyStatusProps {
   prevSendSMSLoading: boolean
 }
 
+const Loading = styled.div`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 99;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => rgba(theme.colors.white, '.64')};
+`
+
 const Information: NextPageWithLayout = () => {
   const dispatch = useAppDispatch()
 
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [loadingSMS, setLoadingSMS] = useState(false)
   const [phoneVerifyStatus, setPhoneVerifyStatus] = useState<PhoneVerifyStatusProps>({
     alertStatus: 'error',
     isAlertShow: false,
@@ -90,11 +109,19 @@ const Information: NextPageWithLayout = () => {
           firstName,
         } = fields;
 
+        setLoading(true)
+
         await postMe({
           email,
           lastName,
           firstName,
         })
+
+        setLoading(false)
+
+        setSuccess(true)
+
+        setTimeout(() => setSuccess(false), 3000)
       })
       .catch((err: Error) => {
         const messages = validate.error(err)
@@ -103,21 +130,24 @@ const Information: NextPageWithLayout = () => {
       })
   }
 
-  const discard = (): void => {
-    setErrors(initialFields)
-    setFields(initialFields)
+  const sendCode = async (): Promise<void> => {
+    setLoadingSMS(true)
+
+    await sendSMSCode({ phoneNumber: fields.phone ?? '' })
+
+    setLoadingSMS(false)
   }
 
-  const sendCode = (): void => {
-    sendSMSCode({ phoneNumber: fields.phone ?? '' })
+  const verifyCode = async (): Promise<void> => {
+    setLoadingSMS(true)
+
+    await verifySMSCode({ code: fields.code })
+
+    setLoadingSMS(false)
   }
 
-  const verifyCode = (): void => {
-    verifySMSCode({ code: fields.code })
-  }
-
-  useEffect(() => {
-    if (data && isSuccess) {
+  const populateFields = useCallback(() => {
+    if (data) {
       const {
         lastName,
         username,
@@ -133,13 +163,26 @@ const Information: NextPageWithLayout = () => {
         username,
         lastName: lastName ?? '',
         firstName: firstName ?? '',
+        displayName: '',
       }))
+    }
+  }, [data])
 
-      if (phoneNumber) {
-        dispatch(setAccountPhone({ phone: phoneNumber }))
+  const discard = (): void => {
+    populateFields()
+
+    setErrors(initialFields)
+  }
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      populateFields()
+
+      if (data.phoneNumber) {
+        dispatch(setAccountPhone({ phone: data.phoneNumber }))
       }
     }
-  }, [dispatch, data, isSuccess])
+  }, [data, dispatch, isSuccess, populateFields])
 
   useEffect(() => {
     let alertMessage = ''
@@ -168,15 +211,27 @@ const Information: NextPageWithLayout = () => {
   return (
     <>
       <Layout.SharedStyles.Container>
+        {!isSuccess && (
+          <Loading>
+            <Spinner />
+          </Loading>
+        )}
+
+        {success && (
+          <Alert
+            text="Your data has been successfully updated"
+            type="success"
+            withIcon
+          />
+        )}
+
         <Layout.SharedStyles.Form>
           <div className='is-grid'>
             <TextInput
               label='Username'
               value={fields.username}
               disabled
-              onChange={({ target }) =>
-                setFields((prev) => ({ ...prev, username: target.value }))
-              }
+              onChange={({ target }) => setFields((prev) => ({ ...prev, username: target.value }))}
               placeholder='Your unique Username'
             />
 
@@ -188,22 +243,19 @@ const Information: NextPageWithLayout = () => {
               placeholder="Public name displayed across the platform"
             />
           </div>
+
           <div className='is-grid'>
             <TextInput
               label='First name'
               value={fields.firstName}
-              onChange={({ target }) =>
-                setFields((prev) => ({ ...prev, firstName: target.value }))
-              }
+              onChange={({ target }) => setFields((prev) => ({ ...prev, firstName: target.value }))}
               placeholder='Enter your first name'
             />
 
             <TextInput
               label='Last name'
               value={fields.lastName}
-              onChange={({ target }) =>
-                setFields((prev) => ({ ...prev, lastName: target.value }))
-              }
+              onChange={({ target }) => setFields((prev) => ({ ...prev, lastName: target.value }))}
               placeholder='Enter your last name'
             />
           </div>
@@ -231,12 +283,10 @@ const Information: NextPageWithLayout = () => {
                   />
                   : <PhoneInput
                       label='Phone'
-                      mainCountry='ca'
-                      isError={phoneVerifyStatus.phoneInputInvalid}
-                      onChange={(value) => {
-                        setFields((prev) => ({ ...prev, phone: value }))
-                      }}
                       value={fields.phone}
+                      isError={phoneVerifyStatus.phoneInputInvalid}
+                      onChange={(value) => setFields((prev) => ({ ...prev, phone: value }))}
+                      mainCountry='ca'
                     />
               }
               {
@@ -249,19 +299,20 @@ const Information: NextPageWithLayout = () => {
                 </Layout.SharedStyles.Alert>
               }
             </div>
+
             <Layout.SharedStyles.PhoneAction>
               {
                 phoneVerifyStatus.isVerifyCode
                   ? <Button
                     color='blue'
-                    label='Verify Code'
+                    label={loadingSMS ? <Spinner size="small" /> : 'Verify Code'}
                     size='small'
                     outline
                     onClick={verifyCode}
                   />
                   : <Button
                       color='blue'
-                      label='Send Code'
+                      label={loadingSMS ? <Spinner size="small" /> : 'Send Code'}
                       size='small'
                       outline
                       onClick={sendCode}
@@ -276,8 +327,9 @@ const Information: NextPageWithLayout = () => {
         <Button
           size='medium'
           color='blue'
-          label='Save changes'
+          label={loading ? <Spinner size="small" /> : 'Save changes'}
           onClick={submit}
+          outline={loading}
         />
 
         <Button
