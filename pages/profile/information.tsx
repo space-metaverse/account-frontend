@@ -163,6 +163,7 @@ const Information: NextPageWithLayout = () => {
         username,
         lastName: lastName ?? '',
         firstName: firstName ?? '',
+        displayName: '',
       }))
     }
   }, [data])

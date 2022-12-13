@@ -74,6 +74,7 @@ const Topnav: React.FC = () => {
           callback: logout
         }
       ]}
+      logoRoute="https://app.tryspace.com"
     />
   )
 }
