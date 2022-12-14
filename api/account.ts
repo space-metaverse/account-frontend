@@ -71,6 +71,7 @@ interface GetMeResponse {
   firstName?: string
   phoneNumber?: string
   tryspaceEmail?: string
+  displayName?: string
 }
 
 interface PostMeRequest {

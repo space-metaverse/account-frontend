@@ -154,6 +154,7 @@ const Information: NextPageWithLayout = () => {
         userEmail,
         firstName,
         phoneNumber,
+        displayName
       } = data;
 
       setFields((prev) => ({
@@ -163,7 +164,7 @@ const Information: NextPageWithLayout = () => {
         username,
         lastName: lastName ?? '',
         firstName: firstName ?? '',
-        displayName: '',
+        displayName: displayName ?? '',
       }))
     }
   }, [data])
@@ -282,12 +283,12 @@ const Information: NextPageWithLayout = () => {
                     placeholder='XXXXXX'
                   />
                   : <PhoneInput
-                      label='Phone'
-                      value={fields.phone}
-                      isError={phoneVerifyStatus.phoneInputInvalid}
-                      onChange={(value) => setFields((prev) => ({ ...prev, phone: value }))}
-                      mainCountry='ca'
-                    />
+                    label='Phone'
+                    value={fields.phone}
+                    isError={phoneVerifyStatus.phoneInputInvalid}
+                    onChange={(value) => setFields((prev) => ({ ...prev, phone: value }))}
+                    mainCountry='ca'
+                  />
               }
               {
                 phoneVerifyStatus.isAlertShow && <Layout.SharedStyles.Alert>
@@ -311,12 +312,12 @@ const Information: NextPageWithLayout = () => {
                     onClick={verifyCode}
                   />
                   : <Button
-                      color='blue'
-                      label={loadingSMS ? <Spinner size="small" /> : 'Send Code'}
-                      size='small'
-                      outline
-                      onClick={sendCode}
-                    />
+                    color='blue'
+                    label={loadingSMS ? <Spinner size="small" /> : 'Send Code'}
+                    size='small'
+                    outline
+                    onClick={sendCode}
+                  />
               }
             </Layout.SharedStyles.PhoneAction>
           </div>
