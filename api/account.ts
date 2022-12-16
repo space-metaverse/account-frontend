@@ -120,7 +120,7 @@ const getBaseURl = (): string => {
     case 'local':
       return 'http://localhost:3003/account'
     case 'dev':
-      return 'https://api.dev.tryspace.com/account'
+      return 'http://localhost:3003/account'
     case 'qa':
       return 'https://api.qa.tryspace.com/account'
     case 'prod':
