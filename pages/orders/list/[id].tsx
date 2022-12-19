@@ -1,6 +1,11 @@
-import { useMemo, type ReactElement } from "react";
+import { useMemo, useState, type ReactElement } from "react";
 
-import { Table, Button, Spinner } from '@space-metaverse-ag/space-ui';
+import {
+  Alert,
+  Table,
+  Button,
+  Spinner
+} from '@space-metaverse-ag/space-ui';
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
@@ -137,6 +142,7 @@ const Actions = styled.div`
   gap: 1rem;
   margin: 2rem 0 6rem;
   display: flex;
+  position: relative;
   border-top: ${({ theme }) => `1px solid ${theme.colors.dark[200]}`};
   padding-top: 2rem;
   align-items: center;
@@ -152,6 +158,10 @@ const ListProducts = styled.div`
 const CustomizedTable = styled(Table)`
   thead {
     background-color: transparent;
+
+    th > div > div {
+      display: none;
+    }
   }
 
   .product {
@@ -211,6 +221,11 @@ const CustomizedTable = styled(Table)`
   }
 `
 
+const Message = styled(Alert)`
+  top: 7rem;
+  position: absolute;
+`
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -257,11 +272,19 @@ interface OrderProps {
 }
 
 const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
+  const [comingSoon, setComingSoon] = useState(false)
+
   const {
     data,
     isLoading,
     isFetching,
   } = useGetOrderQuery({ id })
+
+  const showComingSoon = () => {
+    setComingSoon(true)
+
+    setTimeout(() => setComingSoon(false), 4000);
+  }
 
   const rows = useMemo(() => {
     if (data && data.items.length > 0) {
@@ -325,8 +348,6 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     return 0
   }, [data])
 
-  const shippingCost = data?.shipping_cost ? data.shipping_cost / 100 : 0
-
   return (
     <div>
       {isFetching && (
@@ -361,11 +382,11 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                     <br />
                     <br />
 
-                    {data.customer.email}
+                    {data.customer.email || 'No email available'}
                     <br />
                     <br />
 
-                    {data.customer.phone ? `+${data.customer.phone}` : ''}
+                    {data.customer.phone || 'No phone available'}
                   </span>
                 </div>
 
@@ -396,11 +417,11 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                     <br />
                     <br />
 
-                    {data.store.email}
+                    {data.store.email || 'No email available'}
                     <br />
                     <br />
 
-                    {data.store.phone ? `+${data.store.phone}` : ''}
+                    {data.store.phone || 'No phone available'}
                   </span>
                 </div>
               </div>
@@ -423,7 +444,7 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
             <div className="is-item">
               <span>Shipping:</span>
-              <p>{shippingCost ? formatPrice(shippingCost) : '-'}</p>
+              <p>{data.shipping_cost ? formatPrice(data.shipping_cost) : '-'}</p>
             </div>
 
             <div className="is-item">
@@ -437,11 +458,12 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
             </div>
           </Infos>
 
-          <Actions title="Feature coming soon">
+          <Actions>
             <Button
               size="large"
               label="Download Receipt"
               color="blue"
+              onClick={showComingSoon}
             />
 
             <Button
@@ -449,7 +471,15 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
               label="Return All Items"
               color="red"
               outline
+              onClick={showComingSoon}
             />
+
+            {comingSoon && (
+              <Message
+                text="Feature coming soon"
+                type="info"
+              />
+            )}
           </Actions>
         </Container>
       )}
