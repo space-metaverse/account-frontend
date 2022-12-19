@@ -113,6 +113,7 @@ const OrdersList: NextPageWithLayout = () => {
         store,
         status,
         amount,
+        currency,
         order_sid: orderSid,
       }) => {
         const currentStatus = listStatus[status as keyof typeof listStatus]
@@ -122,7 +123,7 @@ const OrdersList: NextPageWithLayout = () => {
           name: store,
           orderDate: format(new Date(date), 'dd MMM yyyy'),
           items: `${items.length} Item${items.length > 1 ? 's' : ''}`,
-          total: amount <= 0
+          total: currency !== 'usd'
             ? 'Crypto'
             : formatPrice(amount),
           status: <Chip color={currentStatus ? currentStatus.appearance as ChipProps['color'] : 'grey'} label={currentStatus ? currentStatus.label : 'Uninformed'} />,

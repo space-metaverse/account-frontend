@@ -348,6 +348,28 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
     return 0
   }, [data])
 
+  const calculate = {
+    total: () => {
+      if (data?.amount) {
+        if (data.currency === 'usd') return formatPrice(data.amount)
+
+        if (data.currency !== 'usd') return `${data.currency.toUpperCase()} ${data.crypto_amount}`;
+      }
+
+      return '-'
+    },
+
+    shipping: () => {
+      if (data?.shipping_cost) {
+        if (data.currency === 'usd') return formatPrice(data.shipping_cost);
+
+        if (data.currency !== 'usd') return `${data.currency.toUpperCase()} ${data.shipping_cost}`
+      }
+
+      return '-'
+    }
+  }
+
   return (
     <div>
       {isFetching && (
@@ -444,17 +466,17 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
             <div className="is-item">
               <span>Shipping:</span>
-              <p>{data.shipping_cost ? formatPrice(data.shipping_cost) : '-'}</p>
+              <p>{calculate.shipping()}</p>
             </div>
 
             <div className="is-item">
               <span>Taxes:</span>
-              <p>$0</p>
+              <p>-</p>
             </div>
 
             <div className="is-total">
               <span>Total:</span>
-              <p>{data.amount ? formatPrice(data.amount) : data.crypto_amount}</p>
+              <p>{calculate.total()}</p>
             </div>
           </Infos>
 
