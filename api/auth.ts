@@ -36,6 +36,15 @@ interface VerifySMSCodeResponse {
   message: string
 }
 
+interface PostChangePasswordRequest {
+  oldPassword: string
+  newPassword: string
+}
+
+interface PostChangePasswordResponse {
+  message: string
+}
+
 const getBaseURL = (): string => {
   switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
@@ -96,6 +105,19 @@ export const authApi = createApi({
         body: {
           code
         }
+      }),
+    }),
+    postChangePassword: builder.mutation<PostChangePasswordResponse, PostChangePasswordRequest>({
+      query: ({ oldPassword, newPassword }) => ({
+        url: '/changePassword',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+        },
+        body: {
+          oldPassword,
+          newPassword
+        }
       })
     })
   })
@@ -105,5 +127,6 @@ export const {
   useGetVerifyCodeQuery,
   useGetVerifyTokenQuery,
   useSendSMSCodeMutation,
-  useVerifySMSCodeMutation
+  useVerifySMSCodeMutation,
+  usePostChangePasswordMutation
 } = authApi
