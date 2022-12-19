@@ -13,6 +13,7 @@ const Label = styled.label`
   ${({ theme }) => theme.fonts.size.sm};
   color: ${({ theme }) => theme.colors.dark['800']};
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
+  margin-bottom: 1.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
 `
