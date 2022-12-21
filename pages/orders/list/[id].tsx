@@ -6,6 +6,7 @@ import {
   Button,
   Spinner
 } from '@space-metaverse-ag/space-ui';
+import { Image as IconImage } from '@space-metaverse-ag/space-ui/icons'
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
@@ -171,14 +172,21 @@ const CustomizedTable = styled(Table)`
     &-thumb {
       width: 5rem;
       height: 5rem;
+      display: flex;
       position: relative;
       min-width: 5rem;
+      align-items: center;
       border-radius: ${({ theme }) => theme.radius['2xl']};
+      justify-content: center;
       background-color: ${({ theme }) => theme.colors.dark[200]};
 
       img {
         object-fit: cover;
         border-radius: ${({ theme }) => theme.radius['2xl']};
+      }
+
+      svg path {
+        stroke: ${({ theme }) => theme.colors.blue[400]}
       }
     }
 
@@ -306,6 +314,8 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                   fill
                 />
               )}
+
+              {!thumbnailUrl && <IconImage width={40} height={40} />}
             </div>
 
             <div className="product-container">
