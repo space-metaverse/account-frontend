@@ -6,6 +6,7 @@ import {
   Button,
   Spinner
 } from '@space-metaverse-ag/space-ui';
+import { Image as IconImage } from '@space-metaverse-ag/space-ui/icons'
 import { useGetOrderQuery } from 'api/account'
 import { format } from 'date-fns'
 import formatPrice from 'helpers/price'
@@ -171,14 +172,21 @@ const CustomizedTable = styled(Table)`
     &-thumb {
       width: 5rem;
       height: 5rem;
+      display: flex;
       position: relative;
       min-width: 5rem;
+      align-items: center;
       border-radius: ${({ theme }) => theme.radius['2xl']};
+      justify-content: center;
       background-color: ${({ theme }) => theme.colors.dark[200]};
 
       img {
         object-fit: cover;
         border-radius: ${({ theme }) => theme.radius['2xl']};
+      }
+
+      svg path {
+        stroke: ${({ theme }) => theme.colors.blue[400]}
       }
     }
 
@@ -306,6 +314,8 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
                   fill
                 />
               )}
+
+              {!thumbnailUrl && <IconImage width={40} height={40} />}
             </div>
 
             <div className="product-container">
@@ -347,6 +357,28 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
     return 0
   }, [data])
+
+  const calculate = {
+    total: () => {
+      if (data?.amount) {
+        if (data.currency === 'usd') return formatPrice(data.amount)
+
+        if (data.currency !== 'usd') return `${data.currency.toUpperCase()} ${data.crypto_amount}`;
+      }
+
+      return '-'
+    },
+
+    shipping: () => {
+      if (data?.shipping_cost) {
+        if (data.currency === 'usd') return formatPrice(data.shipping_cost);
+
+        if (data.currency !== 'usd') return `${data.currency.toUpperCase()} ${data.shipping_cost}`
+      }
+
+      return '-'
+    }
+  }
 
   return (
     <div>
@@ -444,17 +476,17 @@ const Order: NextPageWithLayout<OrderProps> = ({ id }) => {
 
             <div className="is-item">
               <span>Shipping:</span>
-              <p>{data.shipping_cost ? formatPrice(data.shipping_cost) : '-'}</p>
+              <p>{calculate.shipping()}</p>
             </div>
 
             <div className="is-item">
               <span>Taxes:</span>
-              <p>$0</p>
+              <p>-</p>
             </div>
 
             <div className="is-total">
               <span>Total:</span>
-              <p>{data.amount ? formatPrice(data.amount) : data.crypto_amount}</p>
+              <p>{calculate.total()}</p>
             </div>
           </Infos>
 
