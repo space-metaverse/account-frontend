@@ -1,5 +1,4 @@
 import { Provider } from 'react-redux'
-
 import { ThemeProvider } from '@space-metaverse-ag/space-ui'
 import "@space-metaverse-ag/space-ui/index.css"
 import Auth from 'components/Auth'
@@ -11,9 +10,9 @@ import { store } from 'redux/store'
 import {
   WagmiConfig,
   createClient,
-  defaultChains,
   configureChains
 } from 'wagmi'
+import { polygon, polygonMumbai } from 'wagmi/chains'
 import * as snippet from '@segment/snippet'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
@@ -30,7 +29,7 @@ const {
   chains,
   provider,
   webSocketProvider
-} = configureChains(defaultChains, [publicProvider()])
+} = configureChains([polygon, polygonMumbai], [publicProvider()])
 
 const client = createClient({
   provider,
