@@ -24,6 +24,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import type { NavigationOptions } from 'swiper/types'
 
 import type { NextPageWithLayout } from "../../../types";
+import { useGetPhygitalNftQuery } from 'api/moralis';
+import { usePathname } from "next/navigation"
 
 const Gallery = styled.div`
   display: flex;
@@ -304,7 +306,7 @@ const gallery = [
   "https://picsum.photos/400",
 ]
 
-const PhygitalDetails: NextPageWithLayout = () => {
+const PhygitalDetails: NextPageWithLayout = (page) => {
   const [fullscreen, setFullscreen] = useState(false)
 
   const prevRef = useRef<HTMLButtonElement>(null)
@@ -313,13 +315,26 @@ const PhygitalDetails: NextPageWithLayout = () => {
 
   useOutsideClick(fullScreenRef, () => setFullscreen(false))
 
+  const pathname = usePathname()
+  const tokenId = pathname?.split('/')?.pop()
+
+  const {
+    data: getPhygitalData,
+    isLoading: getPhygitalLoading,
+    refetch: getPhygitalRefetch,
+  } = useGetPhygitalNftQuery({
+    tokenId: (tokenId as string),
+  }, {
+    skip: !tokenId,
+  })
+
   return (
     <AnimatePresence mode="popLayout">
       <Container>
         <Details>
           <ImageContainer layoutId="image-expand">
             <Image
-              src="https://picsum.photos/400"
+              src={getPhygitalData?.normalized_metadata?.image && getPhygitalData?.normalized_metadata?.image !== "BLOB" ? getPhygitalData?.normalized_metadata?.image : "/no-image.png"}
               alt=""
               fill
               sizes="100vw"
@@ -331,7 +346,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
 
           <Content>
             <div className="content-head">
-              <h2>RTFKT x Nike Dunk Genesis CRYPTOKICKS</h2>
+              <h2>{getPhygitalData?.name}</h2>
 
               <div className="content-head-actions">
                 <IconRefresh />
@@ -346,24 +361,20 @@ const PhygitalDetails: NextPageWithLayout = () => {
               Created by:{" "}
               <a
                 rel="noreferrer"
-                href={`https://google.com`}
+                href={`https://mumbai.polygonscan.com/address/${getPhygitalData?.minter_address ?? ''}`}
                 target="_blank"
               >
-                RTFKT
+                {getPhygitalData?.minter_address}
               </a>
             </span>
 
             <small>Description:</small>
 
             <p>
-              Introducing the first RTFKT x Nike Sneaker NFT, the RTFKT X Nike Dunk
-              Genesis CRYPTOKICKS Sneaker 🧪.
-              <br /> When equipped with a RTFKT Skin Vial NFT, the look of the RTFKT
-              x NIKE DUNK GENESIS CRYPTOKICKS changes according to the traits of the
-              vial.
+              {getPhygitalData?.normalized_metadata?.description}
             </p>
 
-            <Actions>
+            {/* <Actions>
               <Button
                 size="medium"
                 label="Mint NFT"
@@ -374,11 +385,11 @@ const PhygitalDetails: NextPageWithLayout = () => {
                 <p>Value:</p>
                 <p>1.2 ETH</p>
               </TextInput>
-            </Actions>
+            </Actions> */}
           </Content>
         </Details>
 
-        <Gallery>
+        {/* <Gallery>
           <h2>Gallery</h2>
 
           <GalleryContent>
@@ -431,7 +442,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
               </button>
             </GalleryAction>
           </GalleryContent>
-        </Gallery>
+        </Gallery> */}
 
         {fullscreen && (
           <ContainerFullScreen
@@ -445,7 +456,7 @@ const PhygitalDetails: NextPageWithLayout = () => {
               className="fullscreen-image"
             >
               <Image
-                src="https://picsum.photos/400"
+                src={getPhygitalData?.normalized_metadata?.image && getPhygitalData?.normalized_metadata?.image !== "BLOB" ? getPhygitalData?.normalized_metadata?.image : "/no-image.png"}
                 alt=""
                 fill
                 sizes="100vw"
@@ -461,17 +472,16 @@ const PhygitalDetails: NextPageWithLayout = () => {
   );
 };
 
-PhygitalDetails.getLayout = (page: ReactElement) => (
+PhygitalDetails.getLayout = (page: ReactElement) =>
   <Layout.Layout title="NFT Details">
     <Head>
       <title>NFT Details | SPACE</title>
       <meta name="description" content="SPACE NFT Details" />
     </Head>
-
     <LayoutGroup>
       {page}
     </LayoutGroup>
   </Layout.Layout>
-);
+;
 
 export default PhygitalDetails;
