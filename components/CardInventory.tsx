@@ -1,6 +1,4 @@
-import { Popover, Card as CustomCard } from "@space-metaverse-ag/space-ui";
-import { rgba } from "@space-metaverse-ag/space-ui/helpers";
-import { Dots, DragPoint } from "@space-metaverse-ag/space-ui/icons";
+import truncate from "helpers/truncate";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
@@ -8,50 +6,38 @@ interface CardInventoryProps {
   id: string
   name: string
   cover: string
-  author: {
-    url: string
-    name: string
-  }
+  author: string
 }
 
-const Button = styled.div`
-  top: .5rem;
-  right: .5rem;
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  display: flex;
-  position: absolute;
-  transition: ${({ theme }) => theme.transitions.ease};
-  align-items: center;
-  border-radius: ${({ theme }) => theme.radius.full};
-  justify-content: center;
-  background-color: ${({ theme }) => rgba(theme.colors.dark[600], '.24')};
-
-  &:hover {
-    background-color: ${({ theme }) => rgba(theme.colors.dark[600], '.48')};
-  }
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
+const Card = styled.div`
+  width: 16rem;
   position: relative;
-
-  .is-popover + div {
-    top: 2rem;
-    right: .5rem;
-  }
-`;
-
-const Card = styled(CustomCard)`
-  width: 100%;
+  cursor: pointer;
+  border: ${({ theme }) => `1px solid ${theme.colors.dark['200']}`};
+  transition: ${({ theme }) => theme.transitions.ease};
+  border-radius: ${({ theme }) => theme.radius['2xl']};
 
   img {
-    height: 14.25rem;
+    height: 5rem;
+    width: 100%;
+    min-height: 12rem;
+    object-fit: cover;
+    border-radius: ${({ theme }) => `${theme.radius['2xl']} ${theme.radius['2xl']} 0 0`};
+  }
+  
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.dark['300']};
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.dark[100]};
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.dark[200]};
   }
 `
 
 const Content = styled.div`
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+
   p {
     color: ${({ theme }) => theme.colors.dark[600]};
     margin-top: .75rem;
@@ -87,41 +73,18 @@ const CardInventory: React.FC<CardInventoryProps> = ({
   } = useRouter();
 
   return (
-    <Wrapper>
-      <Popover
-        options={[
-          {
-            icon: DragPoint,
-            label: "Details",
-            callback: async () =>
-              await push(`/space-inventory/details/${id}`),
-          },
-        ]}
-        className="is-popover"
-      >
-        <Button>
-          <Dots stroke="#fff" />
-        </Button>
-      </Popover>
-
-      <Card image={cover}>
-        <Content>
-          <h2>{name}</h2>
-
-          <p>
-            Created by:{" "}
-
-            <a
-              rel="noopener noreferrer"
-              href={author.url}
-              target="_blank"
-            >
-              {author.name}
-            </a>
-          </p>
-        </Content>
-      </Card>
-    </Wrapper>
+    <Card onClick={async () => await push(`/space-inventory/details/${id}`)}>
+      <img src={cover} alt={name} />
+      <Content>
+        <h2>{name}</h2>
+        <p>
+          Created by:
+        </p>
+        <p>
+          {truncate(author)}
+        </p>
+      </Content>
+    </Card>
   )
 }
 
