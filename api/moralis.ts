@@ -41,7 +41,7 @@ interface GetPhygitalNftsRequest {
   address: string
 }
 
-interface GetPhygitalNftsResponse {
+export interface GetPhygitalNftsResponse {
   cursor: number
   page: number
   page_size: number
