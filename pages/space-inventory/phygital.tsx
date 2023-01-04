@@ -1,10 +1,11 @@
-import { type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import CardInventory from 'components/CardInventory'
 import Layout from "layouts/layout";
 import Head from "next/head";
 import styled from "styled-components";
 import type { NextPageWithLayout } from "../../types";
-import { useGetPhygitalNftsQuery } from "api/moralis";
+import { GetPhygitalNftsResponse } from "api/moralis";
+import { useGetWalletsQuery } from "api/account";
 
 const Wrapper = styled.div`
   gap: 1rem;
@@ -14,17 +15,39 @@ const Wrapper = styled.div`
 `;
 
 const Phygital: NextPageWithLayout = () => {
+  const [nfts, setNfts] = useState<GetPhygitalNftsResponse["result"]>([]);
+
   const {
-    data: getPhygitalsData,
-    isLoading: getPhygitalsLoading,
-    refetch: getPhygitalsRefetch,
-  } = useGetPhygitalNftsQuery({
-    address: "0x3C000EBf6a0f75a3b830aEB1C2eDC33738e9A3Ea"
-  })
+    data: getWalletsData,
+    isLoading: getWalletsLoading,
+    isSuccess: getWalletsSuccess,
+    refetch: getWalletsRefetch,
+  } = useGetWalletsQuery({})
+
+  useEffect(() => {
+    if (getWalletsData?.wallets && getWalletsSuccess) {
+      const wallets = getWalletsData.wallets;
+      const nfts = [];
+      wallets.forEach(async (wallet) => {
+        const response = await fetch(`https://deep-index.moralis.io/api/v2/${wallet}/nft/?chain=mumbai&format=decimal&token_addresses=${process.env.NEXT_PUBLIC_PHYGITAL_CONTRACT}&normalizeMetadata=true`, {
+          headers: {
+            'X-API-KEY': process.env.NEXT_PUBLIC_MORALIS_API_KEY as string,
+            'accept': 'application/json'
+          }
+        })
+        if (response.ok) {
+          const data: GetPhygitalNftsResponse = await response.json();
+          if (data.result.length > 0) {
+            nfts.push(...data.result)
+          }
+        }
+      })
+    }
+  }, [getWalletsData, getWalletsSuccess])
 
   return (
     <Wrapper>
-      {getPhygitalsData?.result?.map((nft) => {
+      {nfts?.map((nft) => {
         return (
           <CardInventory
             key={nft.token_id}
