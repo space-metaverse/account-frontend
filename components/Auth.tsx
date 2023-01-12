@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { parseCookies } from 'nookies'
 import { useAppDispatch } from 'redux/hooks'
 import { setAccountUsername } from 'redux/slices/account'
 
@@ -45,15 +46,15 @@ const Auth: React.FC = () => {
     })
 
   useEffect(() => {
-    const localImmerToken = localStorage.getItem('immerToken')
+    const cookies = parseCookies()
+
+    const localImmerToken = cookies.immerToken
+
     if (!localImmerToken) {
       const urlSearchParams = new URLSearchParams(window.location.search)
       const loginCode = urlSearchParams.get('loginCode')
-      if (loginCode) {
-        setLoginCode(loginCode)
-      } else {
-        window.location.href = `${getAuthURL()}/?redirect=${window.location.href}`
-      }
+      if (loginCode) setLoginCode(loginCode)
+      else window.location.href = `${getAuthURL()}/?redirect=${window.location.href}`
     } else {
       setImmerToken(localImmerToken)
     }
