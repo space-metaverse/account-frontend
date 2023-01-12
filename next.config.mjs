@@ -22,9 +22,6 @@ export default {
     ]
   },
 
-  experimental: {
-    transpilePackages: ['@space-metaverse-ag/space-ui']
-  },
-
+  transpilePackages: ['@space-metaverse-ag/space-ui'],
   reactStrictMode: true
 }

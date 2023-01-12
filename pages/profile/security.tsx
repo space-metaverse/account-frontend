@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { ref, string } from 'yup'
 
 import type { NextPageWithLayout } from '../../types'
+import { usePostChangePasswordMutation } from 'api/auth'
 
 const Label = styled.label`
   ${({ theme }) => theme.fonts.size.sm};
@@ -16,6 +17,7 @@ const Label = styled.label`
   margin-bottom: 1.5rem;
   letter-spacing: 1px;
   text-transform: uppercase;
+  padding-bottom: 2rem;
 `
 
 const shape = {
@@ -38,14 +40,25 @@ const Security: NextPageWithLayout = () => {
   const [fields, setFields] = useState(initialFields)
   const [errors, setErrors] = useState(initialFields)
 
+  const [
+    postChangePassword,
+    {
+      isLoading: isPostChangePasswordLoading,
+      isSuccess: isPostChangePasswordSuccess,
+      error: isPostChangePasswordError,
+      data: postChangePasswordData
+    }
+  ] = usePostChangePasswordMutation()
+
   const submit = async (): Promise<void> => {
     await validate.request(fields, shape)
       .then(() => {
         setErrors(initialFields)
 
-        /**
-         * Send request to backend.
-         */
+        postChangePassword({
+          oldPassword: fields.password,
+          newPassword: fields.newPassword
+        })
       })
       .catch((err: Error) => {
         const messages = validate.error(err)
