@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { parseCookies } from 'nookies'
 
 interface VerifyCodeRequest {
   loginCode: string
@@ -61,6 +62,8 @@ const getBaseURL = (): string => {
   }
 }
 
+const cookies = parseCookies()
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURL() }),
@@ -88,7 +91,7 @@ export const authApi = createApi({
         url: '/sendSMSCode',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         },
         body: {
           phoneNumber: phoneNumber.includes('+') ? phoneNumber : `+${phoneNumber}`,
@@ -100,7 +103,7 @@ export const authApi = createApi({
         url: '/verifySMSCode',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         },
         body: {
           code

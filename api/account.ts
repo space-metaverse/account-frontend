@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { parseCookies } from 'nookies'
 
 interface GetOrderRequest {
   id: string
@@ -131,6 +132,8 @@ const getBaseURl = (): string => {
   }
 }
 
+const cookies = parseCookies()
+
 export const accountApi = createApi({
   reducerPath: 'accountApi',
   baseQuery: fetchBaseQuery({ baseUrl: getBaseURl() }),
@@ -140,7 +143,7 @@ export const accountApi = createApi({
         url: '/me',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -149,7 +152,7 @@ export const accountApi = createApi({
         url: '/me',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         },
         body: {
           firstName,
@@ -163,7 +166,7 @@ export const accountApi = createApi({
         url: `/orders/${id}`,
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -172,7 +175,7 @@ export const accountApi = createApi({
         url: '/orders',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -181,7 +184,7 @@ export const accountApi = createApi({
         url: '/wallet/nonce',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -194,7 +197,7 @@ export const accountApi = createApi({
           address
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -203,7 +206,7 @@ export const accountApi = createApi({
         url: '/wallet/wallets',
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -215,7 +218,7 @@ export const accountApi = createApi({
           primaryWallet
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
@@ -227,7 +230,7 @@ export const accountApi = createApi({
           address
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         }
       })
     }),
