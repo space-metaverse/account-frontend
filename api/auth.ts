@@ -115,7 +115,7 @@ export const authApi = createApi({
         url: '/changePassword',
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('immerToken') as string}`
+          Authorization: `Bearer ${cookies.immerToken}`
         },
         body: {
           oldPassword,
