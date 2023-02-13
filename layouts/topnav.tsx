@@ -1,6 +1,7 @@
 import { TopNav } from '@space-metaverse-ag/space-ui'
 import { Logout as IconLogout } from '@space-metaverse-ag/space-ui/icons'
 import { useGetMeQuery } from 'api/account'
+import { destroyCookie } from 'nookies'
 import { useAppSelector } from 'redux/hooks'
 
 const routes = [
@@ -55,7 +56,7 @@ const Topnav: React.FC = () => {
       username: username as string,
     })
 
-    window.localStorage.removeItem('immerToken')
+    destroyCookie(null, 'immerToken')
 
     location.reload()
   }

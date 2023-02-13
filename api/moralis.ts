@@ -72,13 +72,13 @@ export const moralisApi = createApi({
         },
         headers: {
           'X-API-KEY': process.env.NEXT_PUBLIC_MORALIS_API_KEY,
-          'accept': 'application/json'
+          accept: 'application/json'
         }
       })
     }),
     getPhygitalNft: builder.query<NFT, GetPhygitalNftRequest>({
       query: ({ tokenId }) => ({
-        url: `/nft/${process.env.NEXT_PUBLIC_PHYGITAL_CONTRACT}/${tokenId}`,
+        url: `/nft/${process.env.NEXT_PUBLIC_PHYGITAL_CONTRACT as string}/${tokenId}`,
         method: 'GET',
         params: {
           chain: 'mumbai',
@@ -88,7 +88,7 @@ export const moralisApi = createApi({
         },
         headers: {
           'X-API-KEY': process.env.NEXT_PUBLIC_MORALIS_API_KEY,
-          'accept': 'application/json'
+          accept: 'application/json'
         }
       })
     }),

@@ -29,10 +29,10 @@ const Phygital: NextPageWithLayout = () => {
       const wallets = getWalletsData.wallets;
       const nfts = [];
       wallets.forEach(async (wallet) => {
-        const response = await fetch(`https://deep-index.moralis.io/api/v2/${wallet}/nft/?chain=mumbai&format=decimal&token_addresses=${process.env.NEXT_PUBLIC_PHYGITAL_CONTRACT}&normalizeMetadata=true`, {
+        const response = await fetch(`https://deep-index.moralis.io/api/v2/${wallet}/nft/?chain=mumbai&format=decimal&token_addresses=${process.env.NEXT_PUBLIC_PHYGITAL_CONTRACT as string}&normalizeMetadata=true`, {
           headers: {
             'X-API-KEY': process.env.NEXT_PUBLIC_MORALIS_API_KEY as string,
-            'accept': 'application/json'
+            accept: 'application/json'
           }
         })
         if (response.ok) {
